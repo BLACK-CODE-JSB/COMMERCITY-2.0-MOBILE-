@@ -1,0 +1,8 @@
+{
+	"appId": "com.commercity.app",
+	"appName": "Commercity",
+	"webDir": "www",
+	"packageClassList": [
+		"AppPlugin"
+	]
+}
