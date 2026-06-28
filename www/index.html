@@ -296,7 +296,7 @@
 
         <!-- HERO -->
         <div class="hero-banner">
-          <img src="hero.png" alt="Hero" class="hero-img" />
+          <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80" alt="Hero" class="hero-img" />
           <div class="hero-overlay"></div>
           <div class="hero-content">
             <h1 class="hero-title">Transforma tu estilo.</h1>
@@ -313,7 +313,7 @@
         <div class="prod-grid" id="home-prod-grid">
           <!-- Reloj: sin descuento -->
           <div class="prod-card" onclick="openProductDetail('watch')">
-            <img src="product_watch.png" alt="Reloj" class="prod-img" />
+            <img src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&q=80" alt="Reloj" class="prod-img" />
             <div class="prod-info">
               <div class="prod-name">Reloj Elitret Gold</div>
               <div class="prod-price">$345.000</div>
@@ -322,7 +322,7 @@
           <!-- Zapatos: con descuento -20% -->
           <div class="prod-card" onclick="openProductDetail('sneaker')">
             <div class="prod-badge disc-badge">-20%</div>
-            <img src="product_sneaker.png" alt="Zapatos" class="prod-img" />
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" alt="Zapatos" class="prod-img" />
             <div class="prod-info">
               <div class="prod-name">Zapatos Deportivos</div>
               <div class="prod-price-old">$98.750</div>
@@ -332,7 +332,7 @@
           <!-- Auriculares: con descuento -15% -->
           <div class="prod-card" onclick="openProductDetail('earbuds')">
             <div class="prod-badge disc-badge">-15%</div>
-            <img src="product_earbuds.png" alt="Audífonos" class="prod-img" />
+            <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400&q=80" alt="Audífonos" class="prod-img" />
             <div class="prod-info">
               <div class="prod-name">Auriculares Studio Pro</div>
               <div class="prod-price-old">$456.000</div>
@@ -341,7 +341,7 @@
           </div>
           <!-- Mochila: sin descuento -->
           <div class="prod-card" onclick="openProductDetail('backpack')">
-            <img src="product_backpack.png" alt="Mochila" class="prod-img" />
+            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80" alt="Mochila" class="prod-img" />
             <div class="prod-info">
               <div class="prod-name">Mochila City Stealth</div>
               <div class="prod-price">$79.000</div>
@@ -364,9 +364,15 @@
             <button class="icon-btn icon-white" onclick="navigate('perfil')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></button>
           </div>
         </div>
-        <div class="page-section-title">
-          <span style="font-size:22px;">🛒</span>
-          <h2>Carrito de Compras</h2>
+        <div class="page-section-title" style="display:flex; align-items:center; gap:16px; margin-bottom:20px;">
+          <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h3l2.5 12h11L21 6H6" />
+              <circle cx="9" cy="19" r="1.5" />
+              <circle cx="17" cy="19" r="1.5" />
+            </svg>
+          </div>
+          <h2 style="color:#F5A623; font-weight:800; margin:0; font-size:22px; letter-spacing:-0.5px;">Carrito de Compras</h2>
         </div>
         <div class="carrito-layout">
           <div class="carrito-items-list" id="carrito-items"></div>
@@ -395,6 +401,12 @@
           <div class="perfil-ava" style="position:relative;"><span id="perfil-ava-text">J</span><img id="perfil-ava-img" src="" style="display:none; width:100%; height:100%; border-radius:50%; object-fit:cover;" /><label for="perfil-upload" style="position:absolute; bottom:-5px; right:-5px; background:var(--orange); color:#fff; border-radius:50%; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:center; width:32px; height:32px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></label><input type="file" id="perfil-upload" accept="image/*" style="display:none;" onchange="changeProfilePic(this)" /></div>
           <div class="perfil-meta">
             <div class="perfil-name">juan_giraldo</div>
+            <div class="perfil-desc-container" style="font-size:13px;color:var(--text-muted);margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+              <span class="perfil-desc" id="perfil-desc">Hola,Soy nuevo</span>
+              <button onclick="navigate('ajustes')" title="Editar descripción" style="background:none;border:none;padding:0;cursor:pointer;color:#F5A623;display:flex;align-items:center;justify-content:center;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+              </button>
+            </div>
             <div class="perfil-stars">★★★★★</div>
             <div class="perfil-counts">
               <div class="perfil-count" onclick="openFollowersModal('seguidores')" style="cursor:pointer;">
@@ -420,7 +432,7 @@
             <button class="prod-edit-btn seller-only" onclick="event.stopPropagation(); openEditProductModal('backpack')" title="Editar producto">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
             </button>
-            <img src="product_backpack.png" alt="Bolso Boutique" class="prod-img" />
+            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80" alt="Bolso Boutique" class="prod-img" />
             <div class="prod-info">
               <div class="prod-name">Bolso Boutique</div>
               <div class="prod-price-old">$138.889</div>
@@ -432,7 +444,7 @@
             <button class="prod-edit-btn seller-only" onclick="event.stopPropagation(); openEditProductModal('watch')" title="Editar producto">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
             </button>
-            <img src="product_watch.png" alt="Reloj" class="prod-img" />
+            <img src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&q=80" alt="Reloj" class="prod-img" />
             <div class="prod-info">
               <div class="prod-name">Reloj Elitret Gold</div>
               <div class="prod-price">$345.000</div>
@@ -444,7 +456,7 @@
             <button class="prod-edit-btn seller-only" onclick="event.stopPropagation(); openEditProductModal('sneaker')" title="Editar producto">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
             </button>
-            <img src="product_sneaker.png" alt="Zapatos" class="prod-img" />
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" alt="Zapatos" class="prod-img" />
             <div class="prod-info">
               <div class="prod-name">Zapatos Deportivos</div>
               <div class="prod-price-old">$98.750</div>
@@ -647,9 +659,10 @@
 
         <div class="aj-section">
           <h3 class="aj-section-ttl">Información personal</h3>
-          <p class="aj-section-sub">Actualiza tu usuario y correo electrónico</p>
+          <p class="aj-section-sub">Actualiza tu usuario, correo electrónico y descripción</p>
           <div class="input-group"><label>Usuario</label><input type="text" value="juan_Giraldo" id="aj-user" /></div>
           <div class="input-group"><label>Correo electrónico</label><input type="email" value="Juan_commercity@gmail.com" id="aj-email" /></div>
+          <div class="input-group"><label>Descripción del perfil</label><textarea id="aj-desc" class="textarea-input" style="min-height:60px;">Hola,Soy nuevo</textarea></div>
           <button class="btn-orange" style="width:auto;padding:10px 20px;" onclick="savePersonalInfo()">Guardar Cambios</button>
         </div>
 
@@ -749,7 +762,7 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
               <span>Perfil</span>
             </button>
-            <button class="chat-pill-btn chat-pill-reportar" title="Reportar">
+            <button class="chat-pill-btn chat-pill-reportar" title="Reportar" onclick="openReportModal()">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
               <span>Reportar</span>
             </button>
@@ -758,7 +771,7 @@
         </div>
         <div class="chat-body" id="chat-body">
           <div class="chat-prod-card">
-            <img src="product_backpack.png" alt="Bolso" class="chat-prod-img" />
+            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80" alt="Bolso" class="chat-prod-img" />
             <div class="chat-prod-info">
               <div class="chat-prod-name">Bolso Boutique</div>
               <div class="chat-prod-price">$319.000 COP</div>
@@ -843,8 +856,8 @@
       <div class="pd-header-new">
         <span class="pd-brand-new">Commercity</span>
         <div class="pd-header-actions">
+          <button class="btn-ghost" style="padding:4px 10px; font-size:11px; border:1px solid rgba(255,255,255,0.2); border-radius:16px; margin-right:8px;" onclick="openReportModal()">Reportar</button>
           <button class="btn-back-sm-new" onclick="closePd()">← Volver</button>
-          <button class="icon-btn-tiny-new">⋮</button>
         </div>
       </div>
       <div class="pd-main-row">
@@ -894,6 +907,28 @@
           </div>
           <button class="btn-orange-new" onclick="addToCart()">Agregar al carrito</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- REPORT MODAL -->
+  <div class="modal-overlay" id="report-modal" onclick="closeReportOnOverlay(event)">
+    <div class="modal-box" style="padding:20px; max-width:400px; width:90%; background:#1E1E1E; border:1px solid rgba(255,255,255,0.1); border-radius:12px;">
+      <div style="margin-bottom: 16px;">
+        <label style="font-size: 11px; font-weight: 600; color: #fff; letter-spacing: 0.5px; margin-bottom: 6px; display: block;">MOTIVO</label>
+        <textarea id="report-reason" placeholder="Describe el motivo del reporte..." style="width: 100%; min-height: 80px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; color: #fff; font-family: inherit; font-size: 13px; resize: none;"></textarea>
+      </div>
+      <div style="margin-bottom: 24px;">
+        <label style="font-size: 11px; font-weight: 600; color: #fff; letter-spacing: 0.5px; margin-bottom: 6px; display: block;">EVIDENCIA</label>
+        <div style="width: 100%; height: 80px; background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.2); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;">
+          <span style="font-size: 16px; margin-bottom: 4px; color: var(--orange);">📤</span>
+          <span style="font-size: 12px; color: #aaa;">Haz click para subir tus archivos aquí</span>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn-ghost" style="padding: 8px 16px; font-size: 13px; background: transparent; color: #fff; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); font-weight: 600;" onclick="closeReportModal()">Cancelar</button>
+        <button class="btn-primary" style="padding: 8px 16px; font-size: 13px; background: var(--orange); color: #000; border-radius: 20px; border: none; font-weight: 600;" onclick="submitReportModal()">Enviar reporte</button>
       </div>
     </div>
   </div>

@@ -678,6 +678,13 @@ function savePersonalInfo() {
   localStorage.setItem('commercity_user', user);
   localStorage.setItem('commercity_email', email);
   
+  const desc = document.getElementById('aj-desc')?.value.trim();
+  if (desc !== undefined) {
+    localStorage.setItem('commercity_desc', desc || 'Hola,Soy nuevo');
+    const perfilDesc = document.getElementById('perfil-desc');
+    if (perfilDesc) perfilDesc.textContent = desc || 'Hola,Soy nuevo';
+  }
+  
   const perfilName = document.querySelector('.perfil-name');
   if (perfilName) perfilName.textContent = user;
   
@@ -821,6 +828,7 @@ loadProfilePic();
 function loadPersonalInfo() {
   const user = localStorage.getItem('commercity_user');
   const email = localStorage.getItem('commercity_email');
+  const desc = localStorage.getItem('commercity_desc');
   if (user) {
     const perfilName = document.querySelector('.perfil-name');
     if (perfilName) perfilName.textContent = user;
@@ -830,6 +838,12 @@ function loadPersonalInfo() {
   if (email) {
     const ajEmail = document.getElementById('aj-email');
     if (ajEmail) ajEmail.value = email;
+  }
+  if (desc) {
+    const ajDesc = document.getElementById('aj-desc');
+    if (ajDesc) ajDesc.value = desc;
+    const perfilDesc = document.getElementById('perfil-desc');
+    if (perfilDesc) perfilDesc.textContent = desc;
   }
 
   const addr = localStorage.getItem('commercity_addr');
@@ -1155,5 +1169,30 @@ function adminAction(action, modalId) {
 
   if (modalId) {
     document.getElementById(modalId).classList.remove('open');
+  }
+}
+
+// =========================================================
+// REPORT MODAL
+// =========================================================
+function openReportModal() {
+  document.getElementById('report-modal').classList.add('open');
+}
+function closeReportModal() {
+  document.getElementById('report-modal').classList.remove('open');
+}
+function closeReportOnOverlay(e) {
+  if (e.target === document.getElementById('report-modal')) closeReportModal();
+}
+function submitReportModal() {
+  const reason = document.getElementById('report-reason')?.value.trim();
+  if (!reason) {
+    toast('⚠️ Ingresa el motivo del reporte');
+    return;
+  }
+  toast('✅ Reporte enviado exitosamente');
+  closeReportModal();
+  if (document.getElementById('report-reason')) {
+    document.getElementById('report-reason').value = '';
   }
 }
