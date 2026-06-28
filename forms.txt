@@ -1,0 +1,68 @@
+<form onsubmit="handleAddProduct(event)">
+        <div class="two-col-row">
+          <div class="input-group" style="flex:2;">
+            <label>Nombre del producto</label>
+            <input type="text" placeholder="Ej: Zapatos Rojos" required id="np-name" />
+          </div>
+          <div class="input-group" style="flex:1;">
+            <label>Imagen</label>
+            <label class="btn-ghost" style="padding:11px;font-size:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+              <span id="img-upload-text">+ Cargar Imagen</span>
+              <input type="file" accept="image/*" style="display:none;" id="np-image" onchange="previewUpload(this)" />
+            </label><img id="np-image-preview" src="" style="display:none; width:100%; max-height:100px; object-fit:cover; border-radius:8px; margin-top:8px;" /></div></div><div class="input-group"><label>Descripción completa</label>
+          <textarea id="np-desc" placeholder="Describe el producto..." class="textarea-input"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <div class="input-group" style="flex:1;min-width:100px;"><label>Precio $</label><input type="number" placeholder="150000" required id="np-price" /></div>
+          <div class="input-group" style="flex:1;min-width:80px;"><label>Stock</label><input type="number" placeholder="10" required id="np-stock" /></div>
+          <div class="input-group" style="flex:1;min-width:100px;">
+            <label>Estado</label>
+            <select id="np-status" class="select-input"><option>Disponible</option><option>Agotado</option><option>Pausado</option></select>
+          </div>
+        </div>
+        <div class="two-col-row">
+          <div class="input-group"><label>Descuento %</label><input type="number" placeholder="Ej: 10" id="np-disc" /></div>
+          <div class="input-group"><label>Categoría</label><input type="text" placeholder="Ej: Ropa" id="np-cat" /></div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" onclick="closeAddProd()">Cancelar</button>
+          <button type="submit" class="btn-primary">Agregar Producto</button>
+        </div>
+      </form>
+
+<form onsubmit="handleEditProduct(event)">
+        <div class="two-col-row">
+          <div class="input-group" style="flex:2;">
+            <label>Nombre del producto</label>
+            <input type="text" placeholder="Ej: Zapatos Rojos" required id="ep-name" />
+          </div>
+          <div class="input-group" style="flex:1;">
+            <label>Imagen</label>
+            <label class="btn-ghost" style="padding:11px;font-size:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+              <span id="ep-img-upload-text">+ Cambiar Imagen</span>
+              <input type="file" accept="image/*" style="display:none;" id="ep-image" onchange="previewEditUpload(this)" />
+            </label>
+            <img id="ep-image-preview" src="" style="display:none; width:100%; max-height:100px; object-fit:cover; border-radius:8px; margin-top:8px;" />
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Descripción completa</label>
+          <textarea id="ep-desc" placeholder="Describe el producto..." class="textarea-input"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <div class="input-group" style="flex:1;min-width:100px;"><label>Precio $</label><input type="number" placeholder="150000" required id="ep-price" /></div>
+          <div class="input-group" style="flex:1;min-width:80px;"><label>Stock</label><input type="number" placeholder="10" id="ep-stock" /></div>
+          <div class="input-group" style="flex:1;min-width:100px;">
+            <label>Estado</label>
+            <select id="ep-status" class="select-input"><option>Disponible</option><option>Agotado</option><option>Pausado</option></select>
+          </div>
+        </div>
+        <div class="two-col-row">
+          <div class="input-group"><label>Descuento %</label><input type="number" placeholder="Ej: 10" id="ep-disc" /></div>
+          <div class="input-group"><label>Categoría</label><input type="text" placeholder="Ej: Ropa" id="ep-cat" /></div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" onclick="closeEditProd()">Cancelar</button>
+          <button type="submit" class="btn-primary">Guardar Cambios</button>
+        </div>
+      </form>

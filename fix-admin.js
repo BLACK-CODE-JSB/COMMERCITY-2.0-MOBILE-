@@ -4,8 +4,7 @@ const path = require('path');
 const indexFile = path.join(__dirname, 'www', 'index.html');
 let html = fs.readFileSync(indexFile, 'utf8');
 
-// 1. Fix the Reports Layout & add "this" to adminAction
-html = html.replace(/<div class="admin-card-right">\s*<div class="admin-card-sub" style="margin-right:12px;">(.*?)<\/div>\s*<span class="badge (.*?)" style="margin-right:12px;">(.*?)<\/span>\s*<button class="btn-ghost" style="padding:4px 8px;" onclick="event\.stopPropagation\(\);\s*(.*?)">(.*?)<\/button>\s*<\/div>/g, 
+html = html.replace(/<div class="admin-card-right">\s*<div class="admin-card-sub" style="margin-right:12px;">(.*?)<\/div>\s*<span class="badge (.*?)" style="margin-right:12px;">(.*?)<\/span>\s*<button class="btn-ghost" style="padding:4px 8px;" onclick="event\.stopPropagation\(\);\s*(.*?)">(.*?)<\/button>\s*<\/div>/g,
 function(match, date, badgeClass, badgeText, onclickAttr, btnText) {
     return `<div class="admin-card-right">
                 <div class="admin-card-sub">${date}</div>
@@ -14,8 +13,6 @@ function(match, date, badgeClass, badgeText, onclickAttr, btnText) {
               </div>`;
 });
 
-// Oh wait, moving the date to left is better:
-// Let's replace the whole reports section cards
 let reportsSectionRegex = /(<div class="admin-section" id="admin-sec-reportes">[\s\S]*?<\/div>\s*<\/div>)/;
 let reportsSection = html.match(reportsSectionRegex);
 if(reportsSection) {
@@ -35,11 +32,8 @@ if(reportsSection) {
     html = html.replace(reportsSectionRegex, repHtml);
 }
 
-
-// Fix users and products buttons to pass this context
 html = html.replace(/adminAction\('(.*?)', (.*?)\)/g, "currentAdminTarget=this.closest('.admin-list-card') || currentAdminTarget; adminAction('$1', $2)");
 
-// Fix onclick for the list cards to save currentAdminTarget
 html = html.replace(/onclick="openAdminUserDetail\(/g, `onclick="currentAdminTarget=this; openAdminUserDetail(`);
 html = html.replace(/onclick="openAdminProductDetail\(/g, `onclick="currentAdminTarget=this; openAdminProductDetail(`);
 html = html.replace(/onclick="openAdminReportDetail\(/g, `onclick="currentAdminTarget=this; openAdminReportDetail(`);
@@ -54,11 +48,10 @@ if(!appJs.includes('let currentAdminTarget = null;')) {
     appJs = `let currentAdminTarget = null;\n` + appJs;
 }
 
-// update adminAction
 const adminActionRegex = /function adminAction\(action, modalId\) \{[\s\S]*?\}/;
 const newAdminAction = `function adminAction(action, modalId) {
   toast(action + " realizado con éxito");
-  
+
   if (currentAdminTarget) {
      let badge = currentAdminTarget.querySelector('.badge:not(.outline)');
      if (badge) {

@@ -6,11 +6,9 @@ let currentAdminTarget = null;
    COMMERCITY — app.js (Complete Rewrite)
    ========================================================= */
 
-// ---------- ELECTRON IPC (if running as desktop app) ----------
 let ipcRenderer;
 try { ipcRenderer = require('electron').ipcRenderer; } catch(e) {}
 
-// ---------- CONSTANTS ----------
 const AUTH_PAGES = ['login','registro','recuperar','restablecer','terminos'];
 const APP_PAGES  = ['home','carrito','perfil','tienda','pedidos','historial','ajustes','mensajes','chat','admin','ajustes-admin'];
 
@@ -34,15 +32,27 @@ const ORDER_DATA = [
   { buyer:'Marco Rossi',   ava:'MR', color:'#374151', addr:'Cra 10 # 5-30',                          city:'Cali, Valle del Cauca',    prod:'iPad Pro 11"',       qty:1, total:'$2.799.000', status:'Pendiente',  date:'07 diciembre, 2026' },
 ];
 
-// ---------- CART STATE ----------
-let cart = [
-  { key:'sneaker', qty:1 },
-  { key:'earbuds', qty:2 },
-];
+let cart = [];
+try {
+  const savedCart = localStorage.getItem('commercity_cart');
+  if (savedCart) {
+    cart = JSON.parse(savedCart);
+  } else {
+    cart = [
+      { key:'sneaker', qty:1 },
+      { key:'earbuds', qty:2 },
+    ];
+  }
+} catch (e) {
+  cart = [];
+}
+
+function saveCart() {
+  localStorage.setItem('commercity_cart', JSON.stringify(cart));
+}
 let pdQty = 1;
 let pdKey = null;
 
-// ---------- ROLE STATE ----------
 let isSeller = false;
 let isAdmin = false;
 
@@ -61,9 +71,30 @@ function setRole(seller, admin = false) {
   }
 }
 
-// =========================================================
-// LOADING SCREEN
-// =========================================================
+function updateProfileUI() {
+  const user = localStorage.getItem('commercity_user');
+  if (!user) return;
+  const initial = user.charAt(0).toUpperCase();
+
+  const perfilName = document.querySelector('.perfil-name');
+  if (perfilName) perfilName.textContent = user;
+
+  const avaText = document.getElementById('perfil-ava-text');
+  if (avaText) avaText.textContent = initial;
+
+  const sidebarUser = document.querySelector('.sidebar-username');
+  if (sidebarUser) sidebarUser.textContent = user;
+
+  const sidebarAvatar = document.querySelector('.sidebar-avatar');
+  if (sidebarAvatar) sidebarAvatar.textContent = initial;
+
+  const ajUser = document.getElementById('aj-user');
+  if (ajUser) ajUser.value = user;
+  const ajEmail = document.getElementById('aj-email');
+  const savedEmail = localStorage.getItem('commercity_email');
+  if (ajEmail && savedEmail) ajEmail.value = savedEmail;
+}
+
 window.addEventListener('load', () => {
   const remEmail = localStorage.getItem('commercity_rem_email');
   const remPass = localStorage.getItem('commercity_rem_pass');
@@ -80,10 +111,10 @@ window.addEventListener('load', () => {
     const ls = document.getElementById('loading-screen');
     if (ls) {
       ls.classList.add('fade-out');
-      setTimeout(() => { 
-        ls.style.display = 'none'; 
+      setTimeout(() => {
+        ls.style.display = 'none';
         if (localStorage.getItem('commercity_logged_in') === 'true') {
-          // Restore role and navigate to appropriate page based on role
+          updateProfileUI();
           const sellerStatus = localStorage.getItem('commercity_is_seller') === 'true';
           const adminStatus = localStorage.getItem('commercity_is_admin') === 'true';
           setRole(sellerStatus, adminStatus);
@@ -93,11 +124,12 @@ window.addEventListener('load', () => {
             navigate('home');
           }
         } else {
-          navigate('login'); 
+          navigate('login');
         }
       }, 500);
     } else {
       if (localStorage.getItem('commercity_logged_in') === 'true') {
+        updateProfileUI();
         const sellerStatus = localStorage.getItem('commercity_is_seller') === 'true';
         const adminStatus = localStorage.getItem('commercity_is_admin') === 'true';
         setRole(sellerStatus, adminStatus);
@@ -113,9 +145,6 @@ window.addEventListener('load', () => {
   }, 2400);
 });
 
-// =========================================================
-// NAVIGATION
-// =========================================================
 function navigate(page) {
   if (page === 'admin' && !isAdmin) {
     navigate('home');
@@ -128,7 +157,7 @@ function navigate(page) {
 
   const target = document.getElementById('page-' + page);
   const current = document.querySelector('.page.active');
-  
+
   if (current && current !== target) {
     current.classList.add('page-exit');
     setTimeout(() => {
@@ -177,21 +206,24 @@ function navigate(page) {
   if (page === 'carrito') renderCart();
 }
 
-// =========================================================
-// AUTH HANDLERS
-// =========================================================
 function handleLogin() {
   const email = document.getElementById('login-email')?.value.trim();
   const pass  = document.getElementById('login-password')?.value;
   if (!email || !pass) { toast('⚠️ Completa todos los campos'); return; }
-  
-  // Admin Login Logic
+
+  let extractedName = email.split('@')[0];
+  if (extractedName) {
+    extractedName = extractedName.charAt(0).toUpperCase() + extractedName.slice(1);
+    localStorage.setItem('commercity_user', extractedName);
+    localStorage.setItem('commercity_email', email);
+  }
+
   if (email === 'admin@gmail.com' && pass === 'admin123') {
     setRole(false, true);
     localStorage.setItem('commercity_logged_in', 'true');
     localStorage.setItem('commercity_is_seller', 'false');
     localStorage.setItem('commercity_is_admin', 'true');
-    
+
     const rem = document.getElementById('login-remember')?.checked;
     if (rem) {
       localStorage.setItem('commercity_rem_email', email);
@@ -200,20 +232,20 @@ function handleLogin() {
       localStorage.removeItem('commercity_rem_email');
       localStorage.removeItem('commercity_rem_pass');
     }
-    
+
+    updateProfileUI();
     toast('🛡️ ¡Bienvenido Administrador!');
     setTimeout(() => navigate('admin'), 900);
     return;
   }
 
-  // Mock logic: if email contains "vendedor", login as seller
   const seller = email.toLowerCase().includes('vendedor');
   setRole(seller, false);
-  
+
   localStorage.setItem('commercity_logged_in', 'true');
   localStorage.setItem('commercity_is_seller', seller);
   localStorage.setItem('commercity_is_admin', 'false');
-  
+
   const rem = document.getElementById('login-remember')?.checked;
   if (rem) {
     localStorage.setItem('commercity_rem_email', email);
@@ -222,7 +254,8 @@ function handleLogin() {
     localStorage.removeItem('commercity_rem_email');
     localStorage.removeItem('commercity_rem_pass');
   }
-  
+
+  updateProfileUI();
   toast('✅ ¡Bienvenido de vuelta!');
   setTimeout(() => navigate('home'), 900);
 }
@@ -233,13 +266,17 @@ function handleRegistro() {
   const p = document.getElementById('reg-password')?.value;
   const wantToSell = document.getElementById('reg-seller')?.checked;
   if (!u || !e || !p) { toast('⚠️ Completa todos los campos'); return; }
-  
+
+  localStorage.setItem('commercity_user', u);
+  localStorage.setItem('commercity_email', e);
+
   setRole(wantToSell, false);
-  
+
   localStorage.setItem('commercity_logged_in', 'true');
   localStorage.setItem('commercity_is_seller', wantToSell);
   localStorage.setItem('commercity_is_admin', 'false');
-  
+
+  updateProfileUI();
   toast('✅ ¡Cuenta creada exitosamente!');
   setTimeout(() => navigate('home'), 900);
 }
@@ -276,9 +313,6 @@ function togglePwd(id, btn) {
   btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
 }
 
-// =========================================================
-// NOTIFICATIONS
-// =========================================================
 function toggleNotifs(e) {
   if (e) e.stopPropagation();
   const panel = document.getElementById('notifs-panel');
@@ -297,9 +331,6 @@ function clearNotifs(e) {
   toast('🗑️ Notificaciones limpiadas');
 }
 
-// =========================================================
-// CATEGORIES
-// =========================================================
 function toggleCatMenu(e) {
   if (e) e.stopPropagation();
   const dd = document.getElementById('cat-dropdown');
@@ -310,9 +341,6 @@ function closeCatMenu() {
   if (dd) dd.classList.remove('open');
 }
 
-// =========================================================
-// PRODUCT DETAIL
-// =========================================================
 function openProductDetail(key) {
   const p = PRODUCTS[key];
   if (!p) return;
@@ -322,12 +350,12 @@ function openProductDetail(key) {
   document.getElementById('pd-img').alt = p.name;
   document.getElementById('pd-name').textContent = p.name;
   document.getElementById('pd-cat').textContent = p.cat || 'Categoría';
-  
+
   const priceEl = document.getElementById('pd-price');
   const oldPriceEl = document.getElementById('pd-price-old');
-  
+
   priceEl.textContent = '$' + p.price.toLocaleString('es-CO');
-  
+
   if (p.disc && p.disc > 0) {
     const oldP = Math.round(p.price / (1 - p.disc / 100));
     oldPriceEl.textContent = '$' + oldP.toLocaleString('es-CO');
@@ -347,7 +375,7 @@ function openProductDetail(key) {
   if (avaEl && p.vendor) {
     avaEl.textContent = p.vendor.charAt(0).toUpperCase();
   }
-  
+
   document.getElementById('pd-qty').textContent = 1;
 
   document.getElementById('pd-modal').classList.add('open');
@@ -366,14 +394,12 @@ function addToCart() {
   const existing = cart.find(c => c.key === pdKey);
   if (existing) existing.qty += pdQty;
   else cart.push({ key: pdKey, qty: pdQty });
+  saveCart();
   closePd();
   updateCartBadge();
   toast('🛒 ¡Producto agregado al carrito!');
 }
 
-// =========================================================
-// CART
-// =========================================================
 function updateCartBadge() {
   const total = cart.reduce((s, c) => s + c.qty, 0);
   const badge = document.getElementById('sidebar-cart-badge');
@@ -426,11 +452,13 @@ function renderCart() {
 
 function cartQty(idx, d) {
   if (cart[idx]) { cart[idx].qty = Math.max(1, cart[idx].qty + d); }
+  saveCart();
   renderCart(); updateCartBadge();
 }
 
 function cartRemove(idx) {
   cart.splice(idx, 1);
+  saveCart();
   renderCart(); updateCartBadge();
   toast('🗑️ Producto eliminado del carrito');
 }
@@ -466,9 +494,6 @@ function getCartTotal() {
   }, 0);
 }
 
-// =========================================================
-// PASARELA DE PAGO
-// =========================================================
 function openPasarela() {
   if (cart.length === 0) { toast('⚠️ Tu carrito está vacío'); return; }
   const total = getCartTotal();
@@ -517,8 +542,8 @@ function processPago() {
     document.getElementById('card-holder').readOnly = true;
     document.getElementById('pas-pay-area').style.display = 'none';
     document.getElementById('pas-done-area').style.display = 'block';
-    // Clear cart
     cart = [];
+    saveCart();
     updateCartBadge();
     renderCart();
     toast('✅ ¡Pago realizado con éxito!');
@@ -530,9 +555,6 @@ function downloadReceipt() {
   closePas();
 }
 
-// =========================================================
-// ORDER DETAIL
-// =========================================================
 function openOrderDetail(idx) {
   const o = ORDER_DATA[idx];
   if (!o) return;
@@ -550,9 +572,6 @@ function openOrderDetail(idx) {
 function closeOd() { document.getElementById('od-modal').classList.remove('open'); }
 function closeOdOnOverlay(e) { if (e.target === document.getElementById('od-modal')) closeOd(); }
 
-// =========================================================
-// FILTER TABS
-// =========================================================
 function filterTab(btn, tbodyId, status) {
   btn.closest('.filter-tabs').querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -565,12 +584,8 @@ function filterTab(btn, tbodyId, status) {
 function filterHTab(btn, status) {
   btn.closest('.filter-tabs').querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  // (historial data is static for now)
 }
 
-// =========================================================
-// ADD PRODUCT MODAL
-// =========================================================
 function openAddProductModal() { document.getElementById('add-prod-modal').classList.add('open'); }
 function closeAddProd() { document.getElementById('add-prod-modal').classList.remove('open'); }
 function closeAddProdOnOverlay(e) { if (e.target === document.getElementById('add-prod-modal')) closeAddProd(); }
@@ -579,7 +594,15 @@ function handleAddProduct(e) {
   e.preventDefault();
   const name  = document.getElementById('np-name')?.value.trim();
   const price = document.getElementById('np-price')?.value;
-  if (!name || !price) { toast('⚠️ Completa los campos requeridos'); return; }
+  const stock = document.getElementById('np-stock')?.value;
+  const cat   = document.getElementById('np-cat')?.value.trim();
+  const desc  = document.getElementById('np-desc')?.value.trim() || '';
+  const disc  = parseInt(document.getElementById('np-disc')?.value) || 0;
+
+  if (!name) { toast('⚠️ Ingresa el nombre del producto'); return; }
+  if (!price || parseInt(price) <= 0) { toast('⚠️ Ingresa un precio válido'); return; }
+  if (!stock || parseInt(stock) < 0) { toast('⚠️ Ingresa el stock del producto'); return; }
+  if (!cat) { toast('⚠️ Ingresa la categoría del producto'); return; }
 
   const newId = 'prod_' + Date.now();
   const fmt = '$' + parseInt(price).toLocaleString('es-CO');
@@ -591,16 +614,15 @@ function handleAddProduct(e) {
     imgHtml = `<img src="${imgUrl}" class="prod-img" />`;
   }
 
-  // Add to global PRODUCTS dict so we can view details and add to cart
   PRODUCTS[newId] = {
     name: name,
     price: parseInt(price),
-    cat: 'Otros',
-    stock: 10,
-    disc: 0,
+    cat: cat,
+    stock: parseInt(stock),
+    disc: disc,
     img: imgUrl,
     vendor: 'Mi Tienda',
-    desc: 'Producto añadido recientemente.'
+    desc: desc || 'Producto añadido recientemente.'
   };
 
   const html = `
@@ -641,9 +663,6 @@ function previewUpload(input) {
   }
 }
 
-// =========================================================
-// CHAT
-// =========================================================
 function openChat(name, ava, color) {
   const nameEl = document.getElementById('chat-name');
   const avaEl  = document.getElementById('chat-ava');
@@ -668,26 +687,23 @@ function sendMsg() {
   field.value = '';
 }
 
-// =========================================================
-// AJUSTES
-// =========================================================
 function savePersonalInfo() {
   const user = document.getElementById('aj-user').value.trim();
   const email = document.getElementById('aj-email').value.trim();
   if (!user || !email) { toast('⚠️ Completa los campos'); return; }
   localStorage.setItem('commercity_user', user);
   localStorage.setItem('commercity_email', email);
-  
+
   const desc = document.getElementById('aj-desc')?.value.trim();
   if (desc !== undefined) {
     localStorage.setItem('commercity_desc', desc || 'Hola,Soy nuevo');
     const perfilDesc = document.getElementById('perfil-desc');
     if (perfilDesc) perfilDesc.textContent = desc || 'Hola,Soy nuevo';
   }
-  
+
   const perfilName = document.querySelector('.perfil-name');
   if (perfilName) perfilName.textContent = user;
-  
+
   toast('✅ Información personal guardada');
 }
 function saveAddress() {
@@ -726,9 +742,6 @@ function confirmDelete() {
   }
 }
 
-// =========================================================
-// MORE MENU (hamburger drawer)
-// =========================================================
 function toggleMoreMenu() {
   document.getElementById('more-drawer')?.classList.toggle('active');
   document.getElementById('more-overlay')?.classList.toggle('active');
@@ -738,9 +751,6 @@ function closeMoreMenu() {
   document.getElementById('more-overlay')?.classList.remove('active');
 }
 
-// =========================================================
-// TOAST
-// =========================================================
 function toast(msg) {
   let el = document.getElementById('app-toast');
   if (!el) {
@@ -754,32 +764,21 @@ function toast(msg) {
   el._t = setTimeout(() => el.classList.remove('show'), 2600);
 }
 
-// =========================================================
-// WINDOW CONTROLS
-// =========================================================
 function minimizeWindow() { if (ipcRenderer) ipcRenderer.send('minimize-window'); }
 function maximizeWindow() { if (ipcRenderer) ipcRenderer.send('maximize-window'); }
 function closeWindow()    { if (ipcRenderer) ipcRenderer.send('close-window'); }
 
-// =========================================================
-// GLOBAL CLICK — close dropdowns on outside click
-// =========================================================
 document.addEventListener('click', (e) => {
-  // Notifications
   const panel = document.getElementById('notifs-panel');
   if (panel?.classList.contains('open')) {
     if (!panel.contains(e.target) && !e.target.closest('button[onclick*="toggleNotifs"]')) closeNotifs();
   }
-  // Categories
   const catDd = document.getElementById('cat-dropdown');
   if (catDd?.classList.contains('open')) {
     if (!e.target.closest('.cat-wrap')) closeCatMenu();
   }
 });
 
-// =========================================================
-// RESIZE — show/hide sidebar
-// =========================================================
 window.addEventListener('resize', () => {
   const active = document.querySelector('.page.active');
   if (!active) return;
@@ -822,7 +821,6 @@ function loadProfilePic() {
   }
 }
 
-// Ensure the profile pic is loaded right away if available
 loadProfilePic();
 
 function loadPersonalInfo() {
@@ -883,7 +881,6 @@ function sendChatMessage() {
   input.value = '';
 }
 
-// Infinite scroll simulation for Explorar
 let homePageLoaded = 0;
 const EXTRA_PRODUCTS = [
   { id: 'cam1', name: 'Cámara DSLR Pro', price: '$2.500.000', img: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80', badge: 'Nuevo' },
@@ -916,9 +913,6 @@ document.getElementById('page-home').addEventListener('scroll', function(e) {
 });
 
 
-// =========================================================
-// FOLLOWERS / FOLLOWING MODAL
-// =========================================================
 const FOLLOWERS_DATA = [
   { name: 'Nath', type: 'Persona', color: '#F5A623', letter: 'N', verified: true },
   { name: 'Andrea Valdiri', type: 'Persona', color: '#be185d', letter: 'A', verified: false },
@@ -948,7 +942,6 @@ function openFollowersModal(tab) {
   currentFollowTab = tab || 'seguidores';
   document.getElementById('followers-modal').classList.add('open');
   renderFollowersList(currentFollowTab);
-  // Update active tab
   document.getElementById('tab-seguidores').classList.toggle('active', currentFollowTab === 'seguidores');
   document.getElementById('tab-siguiendo').classList.toggle('active', currentFollowTab === 'siguiendo');
 }
@@ -988,9 +981,6 @@ function renderFollowersList(tab) {
   }).join('');
 }
 
-// =========================================================
-// EDIT PRODUCT MODAL (solo perfil vendedor)
-// =========================================================
 let editProductKey = null;
 
 function openEditProductModal(key) {
@@ -1005,7 +995,6 @@ function openEditProductModal(key) {
   document.getElementById('ep-disc').value  = p.disc || '';
   document.getElementById('ep-cat').value   = p.cat || '';
 
-  // Reset image preview
   const preview = document.getElementById('ep-image-preview');
   if (preview) { preview.style.display = 'none'; preview.src = ''; }
   document.getElementById('ep-img-upload-text').textContent = '+ Cambiar Imagen';
@@ -1028,22 +1017,25 @@ function handleEditProduct(e) {
 
   const name  = document.getElementById('ep-name')?.value.trim();
   const desc  = document.getElementById('ep-desc')?.value.trim();
-  const price = parseInt(document.getElementById('ep-price')?.value) || 0;
-  const stock = parseInt(document.getElementById('ep-stock')?.value) || 0;
+  const priceRaw = document.getElementById('ep-price')?.value;
+  const stockRaw = document.getElementById('ep-stock')?.value;
   const disc  = parseInt(document.getElementById('ep-disc')?.value) || 0;
   const cat   = document.getElementById('ep-cat')?.value.trim();
 
-  if (!name || !price) { toast('⚠️ Completa los campos requeridos'); return; }
+  if (!name) { toast('⚠️ Ingresa el nombre del producto'); return; }
+  if (!priceRaw || parseInt(priceRaw) <= 0) { toast('⚠️ Ingresa un precio válido'); return; }
+  if (stockRaw === '' || stockRaw === null || stockRaw === undefined || parseInt(stockRaw) < 0) { toast('⚠️ Ingresa el stock del producto'); return; }
+  if (!cat) { toast('⚠️ Ingresa la categoría del producto'); return; }
 
-  // Update the product in memory
+  const price = parseInt(priceRaw);
+  const stock = parseInt(stockRaw);
+
   PRODUCTS[editProductKey] = { ...PRODUCTS[editProductKey], name, desc, price, stock, disc, cat };
 
-  // Update the card in the profile grid
   const grid = document.getElementById('perfil-prod-grid');
   if (grid) {
     const cards = grid.querySelectorAll('.prod-card');
     cards.forEach(card => {
-      // Find the card that matches (by onclick attribute)
       if (card.getAttribute('onclick') && card.getAttribute('onclick').includes(editProductKey)) {
         const nameEl = card.querySelector('.prod-name');
         const priceEl = card.querySelector('.prod-price');
@@ -1082,9 +1074,6 @@ function previewEditUpload(input) {
   }
 }
 
-// =========================================================
-// ADMIN PANEL MVP
-// =========================================================
 
 function switchAdminTab(tabId) {
   document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -1150,7 +1139,7 @@ function adminAction(actionName, modalIdToClose) {
 
 function adminAction(action, modalId) {
   toast(action + " realizado con éxito");
-  
+
   if (currentAdminTarget) {
      let badge = currentAdminTarget.querySelector('.badge:not(.outline)');
      if (badge) {
@@ -1172,9 +1161,6 @@ function adminAction(action, modalId) {
   }
 }
 
-// =========================================================
-// REPORT MODAL
-// =========================================================
 function openReportModal() {
   document.getElementById('report-modal').classList.add('open');
 }

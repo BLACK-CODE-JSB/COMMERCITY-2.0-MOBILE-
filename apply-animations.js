@@ -9,13 +9,10 @@ let html = fs.readFileSync(indexFile, 'utf8');
 let appJs = fs.readFileSync(appFile, 'utf8');
 let css = fs.readFileSync(styleFile, 'utf8');
 
-// --- 1. Fix Notifs Panel to be a bottom sheet ---
-// Add notifs-overlay if not exists
 if (!html.includes('id="notifs-overlay"')) {
   html = html.replace('<div class="notifs-panel"', '<div class="notifs-overlay" id="notifs-overlay" onclick="closeNotifs()"></div>\n<div class="notifs-panel"');
 }
 
-// Update CSS for notifs-panel and animations
 css = css.replace(/\.notifs-panel\s*\{[^}]*\}/g, '');
 css = css.replace(/\.notifs-panel\.open\s*\{[^}]*\}/g, '');
 css = css.replace(/\.notifs-overlay\s*\{[^}]*\}/g, '');
@@ -39,13 +36,11 @@ css += `
 }
 `;
 
-// Update app.js to handle overlay
 if (!appJs.includes(`document.getElementById('notifs-overlay').classList`)) {
   appJs = appJs.replace(/const panel = document\.getElementById\('notifs-panel'\);\s*if \(panel\) panel\.classList\.toggle\('open'\);/g, `const panel = document.getElementById('notifs-panel');\n  const overlay = document.getElementById('notifs-overlay');\n  if (panel) { panel.classList.toggle('open'); if (overlay) overlay.classList.toggle('open'); }`);
   appJs = appJs.replace(/const panel = document\.getElementById\('notifs-panel'\);\s*if \(panel\) panel\.classList\.remove\('open'\);/g, `const panel = document.getElementById('notifs-panel');\n  const overlay = document.getElementById('notifs-overlay');\n  if (panel) panel.classList.remove('open');\n  if (overlay) overlay.classList.remove('open');`);
 }
 
-// --- 2. Add App-like Animations for Pages ---
 if (!css.includes('.page-enter')) {
   css += `
 .page { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow-y: auto; overflow-x: hidden; z-index: 1; background: var(--bg); display: none; }
@@ -64,7 +59,6 @@ if (!css.includes('.page-enter')) {
 `;
 }
 
-// Modify navigate function in app.js for animations
 const navRegex = /function navigate\(page\)\s*\{[\s\S]*?\/\/ Render cart if navigating there\s*if \(page === 'carrito'\) renderCart\(\);\s*\}/;
 
 if (!appJs.includes('page-enter')) {
@@ -76,7 +70,7 @@ if (!appJs.includes('page-enter')) {
 
   const target = document.getElementById('page-' + page);
   const current = document.querySelector('.page.active');
-  
+
   if (current && current !== target) {
     current.classList.add('page-exit');
     setTimeout(() => {

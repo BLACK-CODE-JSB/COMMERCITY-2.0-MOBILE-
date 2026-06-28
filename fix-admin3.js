@@ -4,7 +4,6 @@ const path = require('path');
 const indexFile = path.join(__dirname, 'www', 'index.html');
 let html = fs.readFileSync(indexFile, 'utf8');
 
-// 1. Cambiar el botón "Volver" del panel de administración a solo flecha (icono SVG)
 html = html.replace(
   /<button id="btn-admin-volver" class="btn-ghost" style="padding: 4px 12px; color: var\(--text\);" onclick="navigate\('home'\)">← Volver<\/button>/g,
   `<button id="btn-admin-volver" class="icon-btn" style="width:34px;height:34px;" onclick="navigate('home')">
@@ -14,15 +13,12 @@ html = html.replace(
   </button>`
 );
 
-// 2. Reorganizar los reportes - usar función para reemplazar cada reporte individualmente
 function improveReportCard(match) {
-  // Determinar tipo y color del badge
   const isUser = match.includes('Usuario');
   const badgeType = isUser ? 'Usuario' : 'Producto';
   const badgeColor = isUser ? 'badge-red' : '';
   const badgeStyle = isUser ? '' : 'color:#3b82f6;border-color:#3b82f6;';
-  
-  // Extraer título del reporte
+
   let title, motive;
   if (isUser) {
     if (match.includes('Julian Guerrero')) {
@@ -36,14 +32,13 @@ function improveReportCard(match) {
     title = 'Teclado Gamer Pro';
     motive = 'Producto defectuoso';
   }
-  
-  // Extraer estado y fecha
+
   const isResuelto = match.includes('Resuelto');
   const estado = isResuelto ? 'Resuelto' : 'Pendiente';
   const badgeEstado = isResuelto ? 'badge-green' : 'badge-red';
   const btnText = isResuelto ? 'Ver' : 'Responder';
   const btnColor = isResuelto ? '' : '';
-  
+
   return `<div class="admin-list-card admin-rep-card" onclick="currentAdminTarget=this; openAdminReportDetail('${badgeType}', '${title.includes('Mario') ? 'Mario Alberto - Vendedor' : title}', '${isUser ? 'Sistema' : 'Cliente'}', '${match.includes('Comportamiento') ? 'Comportamiento inusual' : match.includes('defectuoso') ? 'Producto defectuoso' : match.includes('irrespetuosa') ? 'El vendedor me trató de forma irrespetuosa y utilizó lenguaje ofensivo durante nuestra conversación.' : ''}', '${match.includes('24 Oct') ? '24 Oct, 2026' : match.includes('22 Oct') ? '22 Oct, 2026' : '20 Oct, 2026'}', '${estado}')">
               <div class="admin-card-left" style="flex:1; flex-direction:column; align-items:flex-start;">
                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
@@ -60,7 +55,6 @@ function improveReportCard(match) {
             </div>`;
 }
 
-// Reemplazar cada reporte individualmente con su contenido completo
 const reporteJulián = `<div class="admin-list-card admin-rep-card" onclick="currentAdminTarget=this; openAdminReportDetail\('Usuario', 'Julian Guerrero', 'Sistema', 'Comportamiento inusual', '24 Oct, 2026', 'Pendiente'\)">
               <div class="admin-card-left" style="flex:1;">
                 <span class="badge badge-red outline" style="margin-right:12px;">Usuario</span>

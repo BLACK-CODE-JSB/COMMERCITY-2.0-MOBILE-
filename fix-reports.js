@@ -4,7 +4,6 @@ const path = require('path');
 const indexFile = path.join(__dirname, 'www', 'index.html');
 let html = fs.readFileSync(indexFile, 'utf8');
 
-// Reemplazar la sección completa de REPORTES
 const reportesOriginal = `<div class="admin-section" id="admin-sec-reportes">
           <div class="admin-section-header">
             <h3>Gestión de Reportes</h3>
@@ -30,7 +29,7 @@ const reportesOriginal = `<div class="admin-section" id="admin-sec-reportes">
                 <button class="btn-ghost" style="padding:4px 8px;" onclick="event.stopPropagation(); currentAdminTarget=this.closest('.admin-list-card'); currentAdminTarget=this.closest('.admin-list-card') || currentAdminTarget; adminAction('Responder', null); openAdminReportDetail('Usuario', 'Julian Guerrero', 'Sistema', 'Comportamiento inusual', '24 Oct, 2026', 'Pendiente')">Responder</button>
               </div>
             </div>
-            
+
             <div class="admin-list-card admin-rep-card" onclick="currentAdminTarget=this; openAdminReportDetail('Producto', 'Teclado Gamer Pro', 'Cliente', 'Producto defectuoso', '22 Oct, 2026', 'Resuelto')">
               <div class="admin-card-left" style="flex:1;">
                 <span class="badge outline" style="color:#3b82f6;border-color:#3b82f6;margin-right:12px;">Producto</span>
@@ -118,7 +117,6 @@ const reportesNueva = `<div class="admin-section" id="admin-sec-reportes">
           </div>
         </div>`;
 
-// Usar una función para hacer el reemplazo
 html = html.replace(reportesOriginal, reportesNueva);
 
 fs.writeFileSync(indexFile, html, 'utf8');

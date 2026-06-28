@@ -1,8 +1,3 @@
-/* =========================================================
-   COMMERCITY â€” style.css (Complete Rewrite)
-   ========================================================= */
-
-/* ---------- VARIABLES ---------- */
 :root {
   --bg: #0a0a0f;
   --bg-card: #111118;
@@ -26,8 +21,7 @@
   --shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
 
-/* ---------- RESET ---------- */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; width: 100%; max-width: 100vw; overflow-x: hidden !important; overflow-y: hidden; }
 body { font-family: var(--font-body); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
 .main-content { max-width: 100%; overflow-x: hidden; }
@@ -35,46 +29,78 @@ a { cursor: pointer; }
 button { cursor: pointer; font-family: var(--font-body); }
 input, select, textarea { font-family: var(--font-body); }
 
-/* =========================================================
-   LOADING SCREEN
-   ========================================================= */
 #loading-screen {
   position: fixed; inset: 0; z-index: 9999;
-  background: radial-gradient(ellipse at center, #111118 0%, #0a0a0f 100%);
-  display: flex; align-items: center; justify-content: center;
-  transition: opacity 0.5s ease;
+  background: radial-gradient(circle at center, #1a1a24 0%, #050508 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: opacity 0.6s cubic-bezier(0.8, 0, 0.2, 1);
 }
-#loading-screen.fade-out { opacity: 0; pointer-events: none; }
+#loading-screen.fade-out { opacity: 0; pointer-events: none; transform: scale(1.05); }
+
+.cyber-loading {
+  position: relative; width: 120px; height: 120px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 30px;
+}
+.cyber-ring {
+  position: absolute; inset: 0;
+  border: 2px solid transparent;
+  border-top-color: var(--orange);
+  border-bottom-color: var(--orange);
+  border-radius: 50%;
+  animation: spinRing 2s linear infinite;
+  box-shadow: 0 0 15px rgba(245, 166, 35, 0.3), inset 0 0 15px rgba(245, 166, 35, 0.3);
+}
+.cyber-ring-inner {
+  inset: 15px;
+  border-top-color: transparent; border-bottom-color: transparent;
+  border-left-color: #ffd666; border-right-color: #ffd666;
+  animation: spinRingReverse 1.5s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+  box-shadow: 0 0 10px rgba(255, 214, 102, 0.4);
+}
+.cyber-logo {
+  font-size: 32px;
+  color: var(--orange);
+  text-shadow: 0 0 10px var(--orange);
+  animation: pulseCyber 1.5s infinite alternate;
+}
+
+@keyframes spinRing { 100% { transform: rotate(360deg); } }
+@keyframes spinRingReverse { 100% { transform: rotate(-360deg); } }
+@keyframes pulseCyber { 
+  0% { transform: scale(0.9); opacity: 0.8; } 
+  100% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 20px var(--orange); } 
+}
 
 .loading-content { text-align: center; }
-.loading-hexagon {
-  font-size: 64px;
-  background: linear-gradient(135deg, var(--orange), #ffd666);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  display: block; margin-bottom: 16px;
-}
-@keyframes pulse-hex { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
 .loading-brand {
   font-family: var(--font); font-size: 32px; font-weight: 800;
-  background: linear-gradient(135deg, var(--orange), #ffd666);
+  background: linear-gradient(135deg, #F5A623, #ffd700, #F5A623);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  letter-spacing: -0.5px;
+  filter: drop-shadow(0 0 10px rgba(245,166,35,0.5));
+  letter-spacing: 4px; text-transform: uppercase;
+  margin-bottom: 20px;
 }
-.loading-sub { font-size: 13px; color: var(--text-muted); margin: 6px 0 28px; }
-.loading-bar-wrap {
-  width: 200px; height: 3px; background: var(--bg-input); border-radius: 99px; margin: 0 auto 14px; overflow: hidden;
+.loading-bar-wrap.futuristic-bar {
+  width: 220px; height: 4px; background: rgba(255,255,255,0.05);
+  border-radius: 0; margin: 0 auto 14px; position: relative;
+  overflow: visible; box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
-.loading-bar {
-  height: 100%; width: 0; border-radius: 99px;
-  background: linear-gradient(90deg, var(--orange), #ffd666);
-  animation: load-fill 1.8s cubic-bezier(0.4,0,0.2,1) forwards;
+.loading-bar.cyber-bar {
+  height: 100%; width: 0;
+  background: var(--orange);
+  box-shadow: 0 0 10px var(--orange), 0 0 20px var(--orange);
+  animation: load-fill-cyber 1.8s cubic-bezier(0.4,0,0.2,1) forwards;
 }
-@keyframes load-fill { 0% { width:0; } 60% { width:80%; } 100% { width:100%; } }
-.loading-label { font-size: 12px; color: var(--text-muted); }
+@keyframes load-fill-cyber { 
+  0% { width:0; opacity: 0; } 
+  20% { opacity: 1; }
+  60% { width:80%; } 
+  100% { width:100%; } 
+}
+.loading-label { font-size: 11px; color: var(--orange); letter-spacing: 3px; text-transform: uppercase; animation: flashText 1s infinite alternate; }
+@keyframes flashText { 0% { opacity: 0.4; } 100% { opacity: 1; text-shadow: 0 0 8px var(--orange); } }
 
-/* =========================================================
-   TITLEBAR
-   ========================================================= */
 #titlebar {
   display: none;
   position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
@@ -91,9 +117,6 @@ input, select, textarea { font-family: var(--font-body); }
 .btn-max { background: #00ca4e; }
 .btn-close { background: #ff605c; }
 
-/* =========================================================
-   APP SHELL
-   ========================================================= */
 #app {
   position: fixed; inset: 0;
   top: var(--titlebar-h);
@@ -103,14 +126,26 @@ input, select, textarea { font-family: var(--font-body); }
 .page {
   display: none; position: absolute; inset: 0;
   overflow-y: auto; overflow-x: hidden;
-  animation: fadeIn 0.25s ease;
+  background: var(--bg);
+  z-index: 1;
 }
-.page.active { display: block; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+.page.active { display: block; z-index: 2; }
+.page.page-enter {
+  animation: pageEnter 0.35s ease forwards;
+}
+.page.page-exit {
+  animation: pageExit 0.35s ease forwards;
+  z-index: 1;
+}
+@keyframes pageEnter { 
+  from { opacity: 0; transform: translateY(10px); } 
+  to { opacity: 1; transform: translateY(0); } 
+}
+@keyframes pageExit { 
+  from { opacity: 1; transform: scale(1); } 
+  to { opacity: 0; transform: scale(0.98); } 
+}
 
-/* =========================================================
-   BUTTONS
-   ========================================================= */
 .btn-primary {
   width: 100%; padding: 14px 20px; border: none; border-radius: var(--radius-sm);
   background: linear-gradient(135deg, var(--orange), #ffb840);
@@ -200,7 +235,6 @@ input, select, textarea { font-family: var(--font-body); }
 .link { color: var(--orange); text-decoration: none; transition: opacity 0.2s; }
 .link:hover { opacity: 0.75; }
 
-/* CommerCity brand logo shown top-left on each page */
 .page-brand-logo {
   font-family: var(--font);
   font-size: 13px;
@@ -213,12 +247,8 @@ input, select, textarea { font-family: var(--font-body); }
   -webkit-text-fill-color: transparent;
 }
 
-/* Admin topbar style */
 .admin-topbar { background: rgba(10,10,15,0.98); border-bottom: 1px solid rgba(255,255,255,0.12); }
 
-/* =========================================================
-   INPUTS
-   ========================================================= */
 @keyframes focusPulse {
   0% { box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.5); }
   70% { box-shadow: 0 0 0 5px rgba(245, 166, 35, 0); }
@@ -294,10 +324,6 @@ input, select, textarea { font-family: var(--font-body); }
 .two-col-row { display: flex; gap: 12px; }
 .two-col-row .input-group { flex: 1; }
 
-/* =========================================================
-   AUTH PAGES
-   ========================================================= */
-/* LOGIN â€” Split Layout */
 .auth-split {
   display: flex; min-height: 100vh; width: 100%;
 }
@@ -348,7 +374,6 @@ input, select, textarea { font-family: var(--font-body); }
 }
 .auth-card-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; }
 
-/* Centered auth pages */
 .auth-center-bg {
   min-height: 100vh; background: var(--bg);
   display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px;
@@ -359,7 +384,6 @@ input, select, textarea { font-family: var(--font-body); }
   font-size: 12px; color: var(--text-muted);
 }
 
-/* TERMS PAGE */
 .tc-page { min-height: 100vh; background: var(--bg); }
 .tc-topbar {
   display: flex; align-items: center; justify-content: space-between;
@@ -387,9 +411,6 @@ input, select, textarea { font-family: var(--font-body); }
 .tc-item-title { font-weight: 700; color: var(--orange); margin-bottom: 6px; font-size: 14px; }
 .tc-item-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
 
-/* =========================================================
-   SIDEBAR (desktop only)
-   ========================================================= */
 #sidebar {
   width: var(--sidebar-w); background: var(--bg-sidebar);
   border-right: 1px solid var(--border);
@@ -446,17 +467,11 @@ input, select, textarea { font-family: var(--font-body); }
 }
 .sidebar-username { font-size: 13px; font-weight: 600; }
 
-/* =========================================================
-   MAIN CONTENT AREA
-   ========================================================= */
 .main-content {
   flex: 1; overflow-y: auto; padding: 0 0 var(--bnav-h);
   width: 100%; min-height: 100%;
 }
 
-/* =========================================================
-   TOP BAR (HOME)
-   ========================================================= */
 .app-topbar-header {
   padding: 12px 20px 0;
   background: rgba(10,10,15,0.95);
@@ -499,7 +514,6 @@ input, select, textarea { font-family: var(--font-body); }
 .tb-search input::placeholder { color: var(--text-muted); }
 .tb-right { display: flex; gap: 8px; flex-shrink: 0; }
 
-/* INNER TOP BAR (pages other than home) */
 .inner-topbar {
   display: flex; align-items: center; justify-content: space-between;
   padding: 14px 20px; border-bottom: 1px solid var(--border);
@@ -522,11 +536,6 @@ input, select, textarea { font-family: var(--font-body); }
   padding: 20px 20px 4px;
 }
 .page-sub { font-size: 13px; color: var(--text-muted); padding: 0 20px 16px; }
-
-/* =========================================================
-   NOTIFICATIONS PANEL
-   ========================================================= */
-
 
 .notifs-head {
   display: flex; align-items: center; justify-content: space-between;
@@ -562,9 +571,6 @@ input, select, textarea { font-family: var(--font-body); }
 }
 .notifs-footer-lnk:hover { opacity: 0.7; }
 
-/* =========================================================
-   HERO BANNER
-   ========================================================= */
 .hero-banner {
   position: relative; margin: 16px 16px 0; border-radius: var(--radius);
   overflow: hidden; max-height: 160px; min-height: 120px;
@@ -584,9 +590,6 @@ input, select, textarea { font-family: var(--font-body); }
 }
 .hero-sub { font-size: clamp(11px, 1.4vw, 14px); color: rgba(255,255,255,0.7); line-height: 1.5; }
 
-/* =========================================================
-   PRODUCT GRID & CARDS
-   ========================================================= */
 .section-hdr {
   display: flex; align-items: center; justify-content: space-between;
   padding: 20px 20px 12px;
@@ -619,13 +622,11 @@ input, select, textarea { font-family: var(--font-body); }
   font-size: 10px; padding: 0; backdrop-filter: none; 
 }
 
-/* Precio tachado (precio original) */
 .prod-price-old {
   font-size: 12px; color: #007bff; text-decoration: line-through;
   margin-bottom: 2px;
 }
 
-/* BotÃ³n lÃ¡piz editar (solo vendedor) */
 .prod-edit-btn {
   position: absolute; top: 10px; right: 10px; z-index: 3;
   width: 32px; height: 32px; border-radius: 50%;
@@ -636,15 +637,11 @@ input, select, textarea { font-family: var(--font-body); }
 }
 .prod-edit-btn:hover { transform: scale(1.05); }
 
-/* Hover en contadores de perfil */
 .perfil-count:hover .perfil-count-n { color: var(--orange); }
 .perfil-count:hover .perfil-count-l { color: var(--orange); }
 .perfil-count { transition: opacity 0.2s; border-radius: 8px; padding: 4px 8px; margin: -4px -8px; }
 .perfil-count:hover { background: var(--orange-dim); }
 
-/* =========================================================
-   FOLLOWERS / FOLLOWING MODAL
-   ========================================================= */
 .followers-box {
   max-width: 400px; padding: 0; overflow: hidden;
   border-radius: var(--radius);
@@ -696,9 +693,6 @@ input, select, textarea { font-family: var(--font-body); }
 
 .load-more-hint { text-align: center; padding: 16px; color: var(--text-muted); font-size: 13px; }
 
-/* =========================================================
-   CARRITO PAGE
-   ========================================================= */
 .carrito-layout { padding: 0 20px 20px; }
 .carrito-items-list { margin-bottom: 20px; }
 .cart-item {
@@ -732,9 +726,6 @@ input, select, textarea { font-family: var(--font-body); }
 .discount-row { color: var(--success); }
 .total-row { font-size: 18px; font-weight: 800; font-family: var(--font); color: var(--orange); }
 
-/* =========================================================
-   PERFIL PAGE
-   ========================================================= */
 .perfil-hero {
   display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;
   padding: 24px 20px;
@@ -754,9 +745,6 @@ input, select, textarea { font-family: var(--font-body); }
 .perfil-count-l { font-size: 11px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; }
 .perfil-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; width: 100%; }
 
-/* =========================================================
-   TIENDA PAGE
-   ========================================================= */
 .tienda-welcome-card {
   margin: 20px; padding: 20px; background: var(--bg-card);
   border: 1px solid var(--border); border-radius: var(--radius);
@@ -778,9 +766,6 @@ input, select, textarea { font-family: var(--font-body); }
 .tienda-stat-val { font-family: var(--font); font-size: 20px; font-weight: 800; }
 .bank-card { margin: 0 20px 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
 
-/* =========================================================
-   FILTER TABS
-   ========================================================= */
 .filter-tabs { display: flex; gap: 8px; padding: 0 20px 20px; flex-wrap: wrap; }
 .ftab {
   padding: 8px 16px; border-radius: 8px; border: 1.5px solid var(--border);
@@ -790,9 +775,6 @@ input, select, textarea { font-family: var(--font-body); }
 .ftab:hover { border-color: var(--orange); color: var(--text); }
 .ftab.active { background: var(--orange-dim); border-color: var(--orange); color: var(--orange); font-weight: 700; }
 
-/* =========================================================
-   TABLE
-   ========================================================= */
 .table-responsive { padding: 0 20px 20px; overflow-x: auto; }
 .data-table { width: 100%; border-collapse: collapse; min-width: 560px; }
 .data-table thead tr {
@@ -812,7 +794,6 @@ input, select, textarea { font-family: var(--font-body); }
   font-size: 12px; font-weight: 700; color: white;
 }
 
-/* BADGES */
 .badge {
   display: inline-flex; align-items: center; justify-content: center;
   padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; white-space: nowrap;
@@ -821,9 +802,6 @@ input, select, textarea { font-family: var(--font-body); }
 .badge-green { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
 .badge-red { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
 
-/* =========================================================
-   AJUSTES
-   ========================================================= */
 .aj-section {
   margin: 0 20px 20px; padding: 20px; background: var(--bg-card);
   border: 1px solid var(--border); border-radius: var(--radius);
@@ -840,16 +818,13 @@ input, select, textarea { font-family: var(--font-body); }
   background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.2); border-radius: var(--radius);
 }
 
-/* =========================================================
-   MENSAJES
-   ========================================================= */
 .mensajes-header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 16px 20px; border-bottom: 1px solid var(--border);
   position: sticky; top: 0; z-index: 50;
   background: rgba(10,10,15,0.95); backdrop-filter: blur(12px);
 }
-/* Search bar in messages list */
+
 .msgs-search-bar {
   display: flex; align-items: center; gap: 10px;
   margin: 10px 16px 4px;
@@ -882,12 +857,9 @@ input, select, textarea { font-family: var(--font-body); }
 .chat-li-time { font-size: 11px; color: var(--text-muted); }
 .unread-dot { width: 8px; height: 8px; background: var(--orange); border-radius: 50%; }
 
-/* =========================================================
-   CHAT PAGE
-   ========================================================= */
 .page#page-chat { display: none; flex-direction: column; }
 .page#page-chat.active { display: flex; }
-/* Hide bottom nav on chat page */
+
 .page#page-chat.active ~ #bottom-nav,
 body:has(#page-chat.active) #bottom-nav { display: none !important; }
 .chat-page-wrap { display: flex; flex-direction: column; height: 100%; }
@@ -897,7 +869,7 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
   background: rgba(10,10,15,0.97); backdrop-filter: blur(12px);
   position: sticky; top: 0; z-index: 50; flex-shrink: 0;
 }
-/* Back arrow button */
+
 .chat-back-btn {
   background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
   color: var(--text); width: 34px; height: 34px; border-radius: 10px;
@@ -905,7 +877,7 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
   cursor: pointer; flex-shrink: 0; transition: background 0.2s;
 }
 .chat-back-btn:hover { background: rgba(255,255,255,0.13); }
-/* Center: avatar + name */
+
 .chat-topbar-center {
   display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;
 }
@@ -913,7 +885,7 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
   font-family: var(--font); font-size: 14px; font-weight: 700;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-/* Right: action pill buttons */
+
 .chat-topbar-actions { display: flex; gap: 6px; flex-shrink: 0; }
 .chat-pill-btn {
   display: flex; align-items: center; gap: 4px;
@@ -1022,9 +994,6 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
   transform: scale(1.05);
 }
 
-/* =========================================================
-   BOTTOM NAV
-   ========================================================= */
 .bottom-nav {
   display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
   height: var(--bnav-h); background: rgba(13,13,20,0.97);
@@ -1046,9 +1015,6 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
   width: 32px; height: 2px; background: var(--orange); border-radius: 0 0 4px 4px;
 }
 
-/* =========================================================
-   HAMBURGER DRAWER
-   ========================================================= */
 .more-overlay {
   display: none; position: fixed; inset: 0; z-index: 200;
   background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
@@ -1078,9 +1044,6 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
 .more-divider { height: 1px; background: var(--border); margin: 8px 0; }
 .more-logout { color: var(--danger); }
 
-/* =========================================================
-   MODALS
-   ========================================================= */
 .modal-overlay {
   display: none; position: fixed; inset: 0; z-index: 500;
   background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
@@ -1100,7 +1063,6 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
 .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
 .modal-actions button { flex: 1; }
 
-/* PRODUCT DETAIL */
 .pd-box {
   background: var(--bg-card); border: 1px solid var(--border);
   border-radius: var(--radius); width: 100%; max-width: 860px;
@@ -1137,7 +1099,6 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
 .qty-btn:hover { color: var(--orange); }
 .qty-num { min-width: 24px; text-align: center; font-weight: 700; }
 
-/* ORDER DETAIL */
 .od-box { max-width: 420px; }
 .od-row { margin-bottom: 16px; }
 .od-lbl { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 6px; }
@@ -1151,7 +1112,6 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
 }
 .od-total-row span:last-child { font-size: 18px; color: var(--orange); }
 
-/* PASARELA */
 .pas-box { max-width: 420px; }
 .pas-total-row {
   display: flex; justify-content: space-between; align-items: center;
@@ -1160,9 +1120,6 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
 .pas-amount { font-family: var(--font); font-size: 22px; font-weight: 800; color: var(--orange); }
 .pas-section-lbl { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.8px; margin-bottom: 14px; }
 
-/* =========================================================
-   TOAST
-   ========================================================= */
 #app-toast {
   position: fixed; bottom: calc(var(--bnav-h) + 12px); left: 50%; transform: translateX(-50%) translateY(20px);
   background: var(--bg-card); border: 1px solid var(--border);
@@ -1173,9 +1130,6 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
 }
 #app-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* =========================================================
-   RESPONSIVE â€” MOBILE
-   ========================================================= */
 @media (min-width: 861px) {
   :root { --titlebar-h: 38px; --bnav-h: 0px; }
   #titlebar { display: flex; }
@@ -1238,9 +1192,6 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
   .tc-main-title { font-size: 15px; }
 } .seller-only { display: none !important; } body.role-seller .seller-only { display: flex !important; } body.role-seller button.seller-only { display: block !important; } body.role-seller .buyer-only { display: none !important; }
 
-/* =========================================================
-   NUEVO DISEÃ‘O MODAL PRODUCTO (pd-box-new)
-   ========================================================= */
 .pd-box-new {
   background: #111116; border-radius: 16px; width: 90%; max-width: 500px;
   max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column;
@@ -1354,7 +1305,6 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
 }
 .btn-orange-new:hover { transform: scale(1.05); }
 
-/* Ajustes Responsive */
 @media (max-width: 480px) {
   .pd-main-row { flex-direction: column; }
   .pd-img-wrap-new { height: 200px; }
@@ -1364,9 +1314,6 @@ body:has(#page-chat.active) #bottom-nav { display: none !important; }
 
 .cart-dot { position: absolute; top: -2px; right: -6px; width: 10px; height: 10px; background: var(--orange); border-radius: 50%; border: 2px solid #1e1e24; display: none; }
 
-/* =========================================================
-   ADMIN PANEL STYLES
-   ========================================================= */
 .admin-only { display: none !important; }
 body.role-admin .admin-only { display: flex !important; }
 body.role-admin .seller-only { display: none !important; }
@@ -1427,7 +1374,7 @@ body.role-admin .seller-only { display: none !important; }
    display: flex; align-items: center; justify-content: center; font-size: 18px;
  }
 
- /* Reportes reorganizados - mejor organizaciÃ³n */
+ 
  .admin-rep-card .admin-card-left {
    flex: 1;
    flex-direction: column;
@@ -1444,15 +1391,11 @@ body.role-admin .seller-only { display: none !important; }
    line-height: 1.4;
  }
 
-
-/* Fix topbar icons visibility */
 .icon-btn svg {
   width: 28px !important;
   height: 28px !important;
   stroke-width: 2.5 !important;
 }
-
-
 
 #page-admin.active ~ #bottom-nav { display: none !important; }
 
@@ -1488,9 +1431,6 @@ body.role-admin .seller-only { display: none !important; }
   to { transform: translateX(-30px); opacity: 0; }
 }
 
-/* =========================================================
-   ADMIN SETTINGS PAGE (ajustes-admin)
-   ========================================================= */
 .admin-settings-page {
   min-height: 100vh;
   background: var(--bg);
@@ -1556,7 +1496,6 @@ body.role-admin .seller-only { display: none !important; }
   padding: 22px;
 }
 
-/* Hide bottom nav on admin pages */
 #page-ajustes-admin.active ~ #bottom-nav,
 body:has(#page-ajustes-admin.active) #bottom-nav { display: none !important; }
 

@@ -1,17 +1,13 @@
 const fs = require('fs');
 
-// 1. Update index.html
 let html = fs.readFileSync('www/index.html', 'utf8');
 
-// For Sidebar Cart
 html = html.replace('<span class="nav-icon">🛒</span> Carrito', '<span class="nav-icon" style="position:relative">🛒<span class="cart-dot" id="nav-cart-dot" style="display:none;right:-2px;top:0;"></span></span> Carrito');
 
-// For Bottom Nav Cart
 html = html.replace('<span class="bnav-ico">🛒</span><span class="bnav-lbl">Carrito</span>', '<span class="bnav-ico" style="position:relative">🛒<span class="cart-dot" id="bnav-cart-dot" style="display:none;"></span></span><span class="bnav-lbl">Carrito</span>');
 
 fs.writeFileSync('www/index.html', html);
 
-// 2. Update app.js
 let js = fs.readFileSync('www/app.js', 'utf8');
 
 const updateCartBadgeReplacement = `function updateCartBadge() {

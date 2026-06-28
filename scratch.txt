@@ -1,0 +1,174 @@
+function handleLogin() {
+  const email = document.getElementById('login-email')?.value.trim();
+  const pass  = document.getElementById('login-password')?.value;
+  if (!email || !pass) { toast('⚠️ Completa todos los campos'); return; }
+  
+  let extractedName = email.split('@')[0];
+  if (extractedName) {
+    extractedName = extractedName.charAt(0).toUpperCase() + extractedName.slice(1);
+    localStorage.setItem('commercity_user', extractedName);
+    localStorage.setItem('commercity_email', email);
+  }
+  
+  // Admin Login Logic
+  if (email === 'admin@gmail.com' && pass === 'admin123') {
+    setRole(false, true);
+    localStorage.setItem('commercity_logged_in', 'true');
+    localStorage.setItem('commercity_is_seller', 'false');
+    localStorage.setItem('commercity_is_admin', 'true');
+    
+    const rem = document.getElementById('login-remember')?.checked;
+    if (rem) {
+      localStorage.setItem('commercity_rem_email', email);
+      localStorage.setItem('commercity_rem_pass', pass);
+    } else {
+      localStorage.removeItem('commercity_rem_email');
+      localStorage.removeItem('commercity_rem_pass');
+    }
+    
+    updateProfileUI();
+    toast('🛡️ ¡Bienvenido Administrador!');
+    setTimeout(() => navigate('admin'), 900);
+    return;
+  }
+
+  // Mock logic: if email contains "vendedor", login as seller
+  const seller = email.toLowerCase().includes('vendedor');
+  setRole(seller, false);
+  
+  localStorage.setItem('commercity_logged_in', 'true');
+  localStorage.setItem('commercity_is_seller', seller);
+  localStorage.setItem('commercity_is_admin', 'false');
+  
+  const rem = document.getElementById('login-remember')?.checked;
+  if (rem) {
+    localStorage.setItem('commercity_rem_email', email);
+    localStorage.setItem('commercity_rem_pass', pass);
+  } else {
+    localStorage.removeItem('commercity_rem_email');
+    localStorage.removeItem('commercity_rem_pass');
+  }
+  
+  updateProfileUI();
+  toast('✅ ¡Bienvenido de vuelta!');
+  setTimeout(() => navigate('home'), 900);
+}
+
+function processPago() {
+  const num  = document.getElementById('card-num')?.value.replace(/-/g,'');
+  const name = document.getElementById('card-holder')?.value.trim();
+  if (!num || num.length < 8 || !name) { toast('⚠️ Completa los datos de pago'); return; }
+
+  const btn = document.getElementById('pay-btn');
+  btn.textContent = '⏳ Procesando...';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    const fmt = document.getElementById('pas-amount').textContent;
+    document.getElementById('pas-title').textContent = '¡Pago Exitoso! ✅';
+    document.getElementById('pas-lbl').textContent = 'Total ya pagado';
+    document.getElementById('card-num').readOnly = true;
+    document.getElementById('card-holder').readOnly = true;
+    document.getElementById('pas-pay-area').style.display = 'none';
+    document.getElementById('pas-done-area').style.display = 'block';
+    // Clear cart
+    cart = [];
+    saveCart();
+    updateCartBadge();
+    renderCart();
+    toast('✅ ¡Pago realizado con éxito!');
+  }, 1600);
+}
+
+function handleAddProduct(e) {
+  e.preventDefault();
+  const name  = document.getElementById('np-name')?.value.trim();
+  const price = document.getElementById('np-price')?.value;
+  if (!name || !price) { toast('⚠️ Completa los campos requeridos'); return; }
+
+  const newId = 'prod_' + Date.now();
+  const fmt = '$' + parseInt(price).toLocaleString('es-CO');
+  const imgInput = document.getElementById('np-image');
+  let imgHtml = '<div style="width:100%;aspect-ratio:1;background:var(--bg-input);display:flex;align-items:center;justify-content:center;font-size:48px;">📦</div>';
+  let imgUrl = '';
+  if (imgInput && imgInput.files && imgInput.files[0]) {
+    imgUrl = URL.createObjectURL(imgInput.files[0]);
+    imgHtml = `<img src="${imgUrl}" class="prod-img" />`;
+  }
+
+  // Add to global PRODUCTS dict so we can view details and add to cart
+  PRODUCTS[newId] = {
+    name: name,
+    price: parseInt(price),
+    cat: 'Otros',
+    stock: 10,
+    disc: 0,
+    img: imgUrl,
+    vendor: 'Mi Tienda',
+    desc: 'Producto añadido recientemente.'
+  };
+
+  const html = `
+    <div class="prod-card" style="animation:fadeIn 0.3s ease;" onclick="openProductDetail('${newId}')">
+      ${imgHtml}
+      <div class="prod-info">
+        <div class="prod-name">${name}</div>
+        <div class="prod-price">${fmt}</div>
+      </div>
+    </div>`;
+
+  const grid = document.getElementById('perfil-prod-grid');
+  if (grid) grid.insertAdjacentHTML('afterbegin', html);
+
+  closeAddProd();
+  e.target.reset();
+  document.getElementById('img-upload-text').textContent = '+ Cargar Imagen';
+  const preview = document.getElementById('np-image-preview');
+  if (preview) { preview.style.display = 'none'; preview.src = ''; }
+  toast('✅ ¡Producto agregado exitosamente!');
+}
+
+function handleEditProduct(e) {
+  e.preventDefault();
+  if (!editProductKey) return;
+
+  const name  = document.getElementById('ep-name')?.value.trim();
+  const desc  = document.getElementById('ep-desc')?.value.trim();
+  const price = parseInt(document.getElementById('ep-price')?.value) || 0;
+  const stock = parseInt(document.getElementById('ep-stock')?.value) || 0;
+  const disc  = parseInt(document.getElementById('ep-disc')?.value) || 0;
+  const cat   = document.getElementById('ep-cat')?.value.trim();
+
+  if (!name || !price) { toast('⚠️ Completa los campos requeridos'); return; }
+
+  // Update the product in memory
+  PRODUCTS[editProductKey] = { ...PRODUCTS[editProductKey], name, desc, price, stock, disc, cat };
+
+  // Update the card in the profile grid
+  const grid = document.getElementById('perfil-prod-grid');
+  if (grid) {
+    const cards = grid.querySelectorAll('.prod-card');
+    cards.forEach(card => {
+      // Find the card that matches (by onclick attribute)
+      if (card.getAttribute('onclick') && card.getAttribute('onclick').includes(editProductKey)) {
+        const nameEl = card.querySelector('.prod-name');
+        const priceEl = card.querySelector('.prod-price');
+        const oldPriceEl = card.querySelector('.prod-price-old');
+        const badgeEl = card.querySelector('.prod-badge.disc-badge');
+        if (nameEl) nameEl.textContent = name;
+        if (priceEl) priceEl.textContent = '$' + price.toLocaleString('es-CO');
+        if (disc > 0) {
+          const originalPrice = Math.round(price / (1 - disc / 100));
+          if (oldPriceEl) {
+            oldPriceEl.textContent = '$' + originalPrice.toLocaleString('es-CO');
+            oldPriceEl.style.display = '';
+          }
+          if (badgeEl) badgeEl.textContent = '-' + disc + '%';
+        }
+      }
+    });
+  }
+
+  closeEditProd();
+  toast('✅ ¡Producto actualizado exitosamente!');
+}
