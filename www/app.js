@@ -431,18 +431,25 @@ function renderCart() {
     const final = base - damt;
     return `
       <div class="cart-item">
-        <img src="${p.img}" alt="${p.name}" class="cart-item-img" />
-        <div class="cart-item-info">
-          <div class="cart-item-name">${p.name}</div>
-          <div class="cart-item-cat">${p.cat}</div>
-          ${damt > 0 ? `<div class="cart-item-old">$${base.toLocaleString('es-CO')}</div>` : ''}
-          <div class="cart-item-price">$${final.toLocaleString('es-CO')}</div>
+        <div class="cart-item-main">
+          <img src="${p.img}" alt="${p.name}" class="cart-item-img" />
+          <div class="cart-item-info">
+            <div class="cart-item-name">${p.name}</div>
+            <div class="cart-item-cat">${p.cat}</div>
+            <div class="cart-item-prices">
+              <span class="cart-item-price">$${final.toLocaleString('es-CO')}</span>
+              ${damt > 0 ? `<span class="cart-item-old">$${base.toLocaleString('es-CO')}</span>` : ''}
+            </div>
+          </div>
         </div>
+        <button class="trash-btn" onclick="cartRemove(${idx})" title="Eliminar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+        </button>
         <div class="cart-item-right">
-          <button class="qty-btn-sm" onclick="cartQty(${idx},-1)">−</button>
+          <span class="qty-label">CANTIDAD</span>
+          <button class="qty-btn-sm" onclick="cartQty(${idx},-1)">-</button>
           <span class="qty-val">${item.qty}</span>
           <button class="qty-btn-sm" onclick="cartQty(${idx},1)">+</button>
-          <button class="trash-btn" onclick="cartRemove(${idx})" title="Eliminar">🗑️</button>
         </div>
       </div>`;
   }).join('');
@@ -497,11 +504,23 @@ function getCartTotal() {
 function openPasarela() {
   if (cart.length === 0) { toast('⚠️ Tu carrito está vacío'); return; }
   const total = getCartTotal();
+  const iva = Math.round(total * 0.19);
+  const subtotal = total - iva;
+
   const fmt = '$' + total.toLocaleString('es-CO');
+  const fmtSub = '$' + subtotal.toLocaleString('es-CO');
+  const fmtIva = '$' + iva.toLocaleString('es-CO');
 
   document.getElementById('pas-title').textContent = 'Pasarela de Pago';
   document.getElementById('pas-lbl').textContent = 'Total a pagar';
   document.getElementById('pas-amount').textContent = fmt;
+  document.getElementById('pas-subtotal').textContent = fmtSub;
+  document.getElementById('pas-iva').textContent = fmtIva;
+  
+  document.getElementById('pas-subtotal-row').style.display = 'flex';
+  document.getElementById('pas-iva-row').style.display = 'flex';
+  document.getElementById('pas-total-row').style.display = 'none';
+
   document.getElementById('pay-btn-amt').textContent = fmt;
   document.getElementById('pas-pay-area').style.display = 'block';
   document.getElementById('pas-done-area').style.display = 'none';
@@ -538,6 +557,9 @@ function processPago() {
     const fmt = document.getElementById('pas-amount').textContent;
     document.getElementById('pas-title').textContent = '¡Pago Exitoso! ✅';
     document.getElementById('pas-lbl').textContent = 'Total ya pagado';
+    document.getElementById('pas-subtotal-row').style.display = 'none';
+    document.getElementById('pas-iva-row').style.display = 'none';
+    document.getElementById('pas-total-row').style.display = 'flex';
     document.getElementById('card-num').readOnly = true;
     document.getElementById('card-holder').readOnly = true;
     document.getElementById('pas-pay-area').style.display = 'none';
@@ -1181,4 +1203,19 @@ function submitReportModal() {
   if (document.getElementById('report-reason')) {
     document.getElementById('report-reason').value = '';
   }
+}
+
+
+// Interactive Stars Logic
+function rateProfile(rating) {
+  const starsContainer = document.getElementById('perfil-stars');
+  if(!starsContainer) return;
+  const stars = starsContainer.querySelectorAll('.star');
+  stars.forEach((star, index) => {
+    if(index < rating) {
+      star.classList.add('filled');
+    } else {
+      star.classList.remove('filled');
+    }
+  });
 }
