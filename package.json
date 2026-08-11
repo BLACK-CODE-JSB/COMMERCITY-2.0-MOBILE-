@@ -1,6 +1,6 @@
 {
   "name": "commercity-mobile",
-  "version": "1.29.7",
+  "version": "1.29.8",
   "private": true,
   "scripts": {
     "start": "live-server ."

@@ -31,73 +31,124 @@ input, select, textarea { font-family: var(--font-body); }
 
 #loading-screen {
   position: fixed; inset: 0; z-index: 9999;
-  background: radial-gradient(circle at center, #1a1a24 0%, #050508 100%);
+  background: radial-gradient(circle at center, #1a1829 0%, #050508 100%);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  transition: opacity 0.6s cubic-bezier(0.8, 0, 0.2, 1);
+  transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  overflow: hidden;
+  animation: smoothFadeIn 0.4s ease-out forwards;
 }
-#loading-screen.fade-out { opacity: 0; pointer-events: none; transform: scale(1.05); }
+#loading-screen.fade-out { opacity: 0; pointer-events: none; transform: scale(1.04); }
+
+@keyframes smoothFadeIn {
+  0% { opacity: 0; transform: scale(1.04); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.intro-skip-btn {
+  position: absolute; top: 24px; right: 24px; z-index: 10;
+  background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text); padding: 8px 16px; border-radius: 20px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s ease;
+}
+.intro-skip-btn:hover { background: var(--orange); color: #000; border-color: var(--orange); }
+
+.arara-particles .particle {
+  position: absolute; border-radius: 50%; background: var(--orange);
+  opacity: 0.25; animation: floatParticle 5s infinite ease-in-out; will-change: transform;
+}
+.p1 { width: 100px; height: 100px; top: 10%; left: 15%; }
+.p2 { width: 140px; height: 140px; bottom: 15%; right: 10%; }
+.p3 { width: 80px; height: 80px; top: 40%; right: 20%; }
+.p4 { width: 110px; height: 110px; bottom: 25%; left: 20%; }
+.p5 { width: 60px; height: 60px; top: 20%; right: 40%; }
+
+@keyframes floatParticle {
+  0%, 100% { transform: translateY(0); opacity: 0.2; }
+  50% { transform: translateY(-20px); opacity: 0.4; }
+}
 
 .cyber-loading {
-  position: relative; width: 120px; height: 120px;
+  position: relative; width: 130px; height: 130px;
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  animation: logoPop 0.35s cubic-bezier(0.1, 0.9, 0.2, 1) forwards; will-change: transform;
 }
+@keyframes logoPop {
+  0% { transform: scale(0.3); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 .cyber-ring {
   position: absolute; inset: 0;
   border: 2px solid transparent;
-  border-top-color: var(--orange);
-  border-bottom-color: var(--orange);
-  border-radius: 50%;
-  animation: spinRing 2s linear infinite;
-  box-shadow: 0 0 15px rgba(245, 166, 35, 0.3), inset 0 0 15px rgba(245, 166, 35, 0.3);
+  border-top-color: var(--orange); border-bottom-color: var(--orange);
+  border-radius: 50%; animation: spinRing 1.5s linear infinite; will-change: transform;
 }
 .cyber-ring-inner {
-  inset: 15px;
+  inset: 16px;
   border-top-color: transparent; border-bottom-color: transparent;
   border-left-color: #ffd666; border-right-color: #ffd666;
-  animation: spinRingReverse 1.5s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
-  box-shadow: 0 0 10px rgba(255, 214, 102, 0.4);
+  animation: spinRingReverse 1.2s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite; will-change: transform;
+}
+.cyber-ring-outer {
+  inset: -10px;
+  border: 1px dashed rgba(245, 166, 35, 0.3);
+  border-radius: 50%; animation: spinRing 3s linear infinite; will-change: transform;
 }
 .cyber-logo {
-  font-size: 32px;
-  color: var(--orange);
-  text-shadow: 0 0 10px var(--orange);
-  animation: pulseCyber 1.5s infinite alternate;
+  font-size: 42px; color: var(--orange);
+  text-shadow: 0 0 15px var(--orange);
 }
 
 @keyframes spinRing { 100% { transform: rotate(360deg); } }
 @keyframes spinRingReverse { 100% { transform: rotate(-360deg); } }
-@keyframes pulseCyber { 
-  0% { transform: scale(0.9); opacity: 0.8; } 
-  100% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 20px var(--orange); } 
+
+.loading-content { text-align: center; z-index: 2; }
+.loading-brand {
+  font-family: var(--font); font-size: 34px; font-weight: 800;
+  color: var(--orange);
+  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 2px;
+}
+.loading-sub {
+  font-size: 11px; font-weight: 700; letter-spacing: 4px; color: var(--text-muted);
+  margin-bottom: 16px; text-transform: uppercase;
 }
 
-.loading-content { text-align: center; }
-.loading-brand {
-  font-family: var(--font); font-size: 32px; font-weight: 800;
-  background: linear-gradient(135deg, #F5A623, #ffd700, #F5A623);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 10px rgba(245,166,35,0.5));
-  letter-spacing: 4px; text-transform: uppercase;
-  margin-bottom: 20px;
+.arara-equalizer {
+  display: flex; align-items: flex-end; justify-content: center; gap: 4px;
+  height: 28px; margin-bottom: 16px;
 }
+.eq-bar {
+  width: 4px; background: var(--orange); border-radius: 2px;
+  animation: eqPulse 0.4s ease-in-out infinite alternate; will-change: height;
+}
+.b1 { height: 10px; animation-delay: 0.05s; }
+.b2 { height: 24px; animation-delay: 0.15s; }
+.b3 { height: 16px; animation-delay: 0.1s; }
+.b4 { height: 28px; animation-delay: 0.2s; }
+.b5 { height: 20px; animation-delay: 0.05s; }
+.b6 { height: 26px; animation-delay: 0.25s; }
+.b7 { height: 12px; animation-delay: 0.15s; }
+.b8 { height: 24px; animation-delay: 0.3s; }
+
+@keyframes eqPulse {
+  0% { height: 6px; opacity: 0.4; }
+  100% { height: 26px; opacity: 1; }
+}
+
 .loading-bar-wrap.futuristic-bar {
-  width: 220px; height: 4px; background: rgba(255,255,255,0.05);
-  border-radius: 0; margin: 0 auto 14px; position: relative;
-  overflow: visible; box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  width: 240px; height: 5px; background: rgba(255,255,255,0.08);
+  border-radius: 3px; margin: 0 auto 12px; position: relative;
+  overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 .loading-bar.cyber-bar {
-  height: 100%; width: 0;
-  background: var(--orange);
-  box-shadow: 0 0 10px var(--orange), 0 0 20px var(--orange);
-  animation: load-fill-cyber 1.8s cubic-bezier(0.4,0,0.2,1) forwards;
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--orange), #ffd700);
+  box-shadow: 0 0 12px var(--orange);
+  transition: width 0.1s linear;
 }
-@keyframes load-fill-cyber { 
-  0% { width:0; opacity: 0; } 
-  20% { opacity: 1; }
-  60% { width:80%; } 
-  100% { width:100%; } 
-}
+.loading-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
 .loading-label { font-size: 11px; color: var(--orange); letter-spacing: 3px; text-transform: uppercase; animation: flashText 1s infinite alternate; }
 @keyframes flashText { 0% { opacity: 0.4; } 100% { opacity: 1; text-shadow: 0 0 8px var(--orange); } }
 

@@ -95,7 +95,59 @@ function updateProfileUI() {
   if (ajEmail && savedEmail) ajEmail.value = savedEmail;
 }
 
+let introTimer = null;
+let introAudioPlayed = false;
+
+function skipIntro() {
+  if (introTimer) clearInterval(introTimer);
+  const audio = document.getElementById('intro-audio');
+  if (audio) { audio.pause(); audio.currentTime = 0; }
+  
+  const ls = document.getElementById('loading-screen');
+  if (ls && ls.style.display !== 'none') {
+    ls.classList.add('fade-out');
+    setTimeout(() => {
+      ls.style.display = 'none';
+      finishAppInit();
+    }, 400);
+  }
+}
+
+function finishAppInit() {
+  if (localStorage.getItem('commercity_logged_in') === 'true') {
+    updateProfileUI();
+    const sellerStatus = localStorage.getItem('commercity_is_seller') === 'true';
+    const adminStatus = localStorage.getItem('commercity_is_admin') === 'true';
+    setRole(sellerStatus, adminStatus);
+    if (adminStatus) {
+      navigate('admin');
+    } else {
+      navigate('home');
+    }
+  } else {
+    navigate('login');
+  }
+}
+
+// RF109: Limpieza de carritos inactivos tras 7 días (604,800,000 ms)
+function checkCartExpiration() {
+  try {
+    const lastTime = localStorage.getItem('commercity_cart_time');
+    if (lastTime) {
+      const diff = Date.now() - parseInt(lastTime, 10);
+      const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+      if (diff > SEVEN_DAYS_MS) {
+        cart = [];
+        localStorage.removeItem('commercity_cart');
+        localStorage.removeItem('commercity_cart_time');
+      }
+    }
+  } catch(e) {}
+}
+
 window.addEventListener('load', () => {
+  checkCartExpiration();
+
   const remEmail = localStorage.getItem('commercity_rem_email');
   const remPass = localStorage.getItem('commercity_rem_pass');
   if (remEmail && remPass) {
@@ -107,42 +159,57 @@ window.addEventListener('load', () => {
     if (elRem) elRem.checked = true;
   }
 
-  setTimeout(() => {
-    const ls = document.getElementById('loading-screen');
-    if (ls) {
-      ls.classList.add('fade-out');
-      setTimeout(() => {
-        ls.style.display = 'none';
-        if (localStorage.getItem('commercity_logged_in') === 'true') {
-          updateProfileUI();
-          const sellerStatus = localStorage.getItem('commercity_is_seller') === 'true';
-          const adminStatus = localStorage.getItem('commercity_is_admin') === 'true';
-          setRole(sellerStatus, adminStatus);
-          if (adminStatus) {
-            navigate('admin');
-          } else {
-            navigate('home');
-          }
-        } else {
-          navigate('login');
-        }
-      }, 500);
-    } else {
-      if (localStorage.getItem('commercity_logged_in') === 'true') {
-        updateProfileUI();
-        const sellerStatus = localStorage.getItem('commercity_is_seller') === 'true';
-        const adminStatus = localStorage.getItem('commercity_is_admin') === 'true';
-        setRole(sellerStatus, adminStatus);
-        if (adminStatus) {
-          navigate('admin');
-        } else {
-          navigate('home');
-        }
-      } else {
-        navigate('login');
+  const audio = document.getElementById('intro-audio');
+  const progressBar = document.getElementById('intro-progress');
+  const label = document.getElementById('intro-label');
+
+  let duration = 3.2; // Duración por defecto si no se leen metadatos de audio
+
+  if (audio) {
+    audio.loop = false;
+    
+    // Al terminar la pista de audio completamente, avanzar suavemente
+    audio.onended = () => {
+      skipIntro();
+    };
+
+    audio.onloadedmetadata = () => {
+      if (audio.duration && !isNaN(audio.duration)) {
+        duration = audio.duration;
       }
+    };
+
+    audio.volume = 1.0;
+    audio.currentTime = 0;
+    audio.play().catch(err => {
+      console.log('Autoplay handled silently:', err);
+    });
+  }
+
+  // Actualizador continuo de barra de progreso y etiquetas
+  const intervalMs = 50;
+  introTimer = setInterval(() => {
+    let pct = 0;
+    if (audio && audio.duration && !isNaN(audio.duration) && audio.duration > 0) {
+      pct = Math.min(100, (audio.currentTime / audio.duration) * 100);
+    } else {
+      let elapsed = (parseInt(progressBar?.dataset?.elapsed || '0') + intervalMs);
+      if (progressBar) progressBar.dataset.elapsed = elapsed;
+      pct = Math.min(100, (elapsed / (duration * 1000)) * 100);
     }
-  }, 2400);
+
+    if (progressBar) progressBar.style.width = pct + '%';
+    if (label) {
+      if (pct < 35) label.textContent = 'Iniciando CommerCity...';
+      else if (pct < 75) label.textContent = 'Cargando comunidad y productos...';
+      else label.textContent = '¡Bienvenido!';
+    }
+
+    if (pct >= 100) {
+      clearInterval(introTimer);
+      setTimeout(() => skipIntro(), 300);
+    }
+  }, intervalMs);
 });
 
 function navigate(page) {
@@ -265,7 +332,10 @@ function handleRegistro() {
   const e = document.getElementById('reg-email')?.value.trim();
   const p = document.getElementById('reg-password')?.value;
   const wantToSell = document.getElementById('reg-seller')?.checked;
+  const acceptedTerms = document.getElementById('reg-terms')?.checked;
+
   if (!u || !e || !p) { toast('⚠️ Completa todos los campos'); return; }
+  if (!acceptedTerms) { toast('⚠️ Debes aceptar los Términos y Condiciones'); return; }
 
   localStorage.setItem('commercity_user', u);
   localStorage.setItem('commercity_email', e);
@@ -503,9 +573,19 @@ function getCartTotal() {
 
 function openPasarela() {
   if (cart.length === 0) { toast('⚠️ Tu carrito está vacío'); return; }
+  
+  // RF38: Verificar que el comprador haya registrado su dirección antes de hacer compras
+  const userAddr = localStorage.getItem('commercity_addr');
+  if (!userAddr) {
+    toast('⚠️ Registra tu dirección en Ajustes antes de comprar');
+    setTimeout(() => navigate('ajustes'), 1200);
+    return;
+  }
+
   const total = getCartTotal();
-  const iva = Math.round(total * 0.19);
-  const subtotal = total - iva;
+  // RF134: subtotal = precio / 1.19, IVA = subtotal * 0.19
+  const subtotal = Math.round(total / 1.19);
+  const iva = Math.round(subtotal * 0.19);
 
   const fmt = '$' + total.toLocaleString('es-CO');
   const fmtSub = '$' + subtotal.toLocaleString('es-CO');
@@ -1218,4 +1298,109 @@ function rateProfile(rating) {
       star.classList.remove('filled');
     }
   });
+}
+
+// RF22, RF23: Pestaña Mi Feed en Perfil de Comprador
+function switchPerfilTab(tab) {
+  const btnMisProd = document.getElementById('tab-mis-prod');
+  const btnMiFeed  = document.getElementById('tab-mi-feed');
+  const grid = document.getElementById('perfil-prod-grid');
+  if (!grid) return;
+
+  if (tab === 'mi-feed') {
+    if (btnMisProd) btnMisProd.classList.remove('active');
+    if (btnMiFeed) btnMiFeed.classList.add('active');
+
+    // Render feed de productos recomendados
+    const feedHtml = Object.keys(PRODUCTS).map(key => {
+      const p = PRODUCTS[key];
+      const fmtPrice = '$' + p.price.toLocaleString('es-CO');
+      return `
+        <div class="prod-card" style="animation:fadeIn 0.3s ease;" onclick="openProductDetail('${key}')">
+          ${p.disc > 0 ? `<div class="prod-badge disc-badge">-${p.disc}%</div>` : ''}
+          <img src="${p.img}" alt="${p.name}" class="prod-img" style="object-fit:cover;" />
+          <div class="prod-info">
+            <div class="prod-name">${p.name}</div>
+            <div class="prod-price">${fmtPrice}</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Por ${p.vendor}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    grid.innerHTML = feedHtml;
+  } else {
+    if (btnMiFeed) btnMiFeed.classList.remove('active');
+    if (btnMisProd) btnMisProd.classList.add('active');
+
+    // Render mis productos (vendedor)
+    grid.innerHTML = `
+      <div class="prod-card" onclick="openProductDetail('backpack')">
+        <div class="prod-badge disc-badge">-10%</div>
+        <button class="prod-edit-btn seller-only" onclick="event.stopPropagation(); openEditProductModal('backpack')" title="Editar producto">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        </button>
+        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80" alt="Bolso Boutique" class="prod-img" />
+        <div class="prod-info">
+          <div class="prod-name">Bolso Boutique</div>
+          <div class="prod-price-old">$138.889</div>
+          <div class="prod-price">$125.000</div>
+        </div>
+      </div>
+      <div class="prod-card" onclick="openProductDetail('watch')">
+        <button class="prod-edit-btn seller-only" onclick="event.stopPropagation(); openEditProductModal('watch')" title="Editar producto">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        </button>
+        <img src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&q=80" alt="Reloj" class="prod-img" />
+        <div class="prod-info">
+          <div class="prod-name">Reloj Elitret Gold</div>
+          <div class="prod-price">$345.000</div>
+        </div>
+      </div>
+      <div class="prod-card" onclick="openProductDetail('sneaker')">
+        <div class="prod-badge disc-badge">-20%</div>
+        <button class="prod-edit-btn seller-only" onclick="event.stopPropagation(); openEditProductModal('sneaker')" title="Editar producto">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        </button>
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" alt="Zapatos" class="prod-img" />
+        <div class="prod-info">
+          <div class="prod-name">Zapatos Deportivos</div>
+          <div class="prod-price-old">$98.750</div>
+          <div class="prod-price">$79.000</div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+// RF84, RF103: Calificación de Vendedores tras realizar compra
+let currentRatingValue = 5;
+let currentVendorTarget = 'Alex Rivera';
+
+function openRatingModal(vendorName) {
+  currentVendorTarget = vendorName || 'Alex Rivera';
+  const nameEl = document.getElementById('rate-vendor-name');
+  if (nameEl) nameEl.textContent = currentVendorTarget;
+  setVendorRating(5);
+  document.getElementById('rating-modal')?.classList.add('open');
+}
+
+function closeRatingModal() {
+  document.getElementById('rating-modal')?.classList.remove('open');
+}
+
+function setVendorRating(val) {
+  currentRatingValue = val;
+  const stars = document.querySelectorAll('#star-rating-select span');
+  stars.forEach((star, idx) => {
+    star.style.opacity = idx < val ? '1' : '0.3';
+    star.style.transform = idx < val ? 'scale(1.1)' : 'scale(1)';
+  });
+}
+
+function submitVendorRating() {
+  toast(`⭐ ¡Gracias! Has calificado a ${currentVendorTarget} con ${currentRatingValue} estrellas`);
+  closeRatingModal();
+  if (document.getElementById('rate-comment')) {
+    document.getElementById('rate-comment').value = '';
+  }
 }
