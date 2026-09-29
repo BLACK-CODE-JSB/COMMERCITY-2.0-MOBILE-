@@ -12,17 +12,17 @@ try { ipcRenderer = require('electron').ipcRenderer; } catch(e) {}
 const AUTH_PAGES = ['login','registro','recuperar','restablecer','terminos'];
 const APP_PAGES  = ['home','carrito','perfil','tienda','pedidos','historial','ajustes','mensajes','chat','admin','ajustes-admin'];
 
-const PRODUCTS = {
-  watch:   { name:'Reloj Elitret Gold',    cat:'Relojes',     price:345000, stock:18, disc:0,  img:'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&q=80', vendor:'Juan_Giraldo', desc:'Elegante reloj dorado de colección limitada. Ideal para ocasiones especiales o como regalo de lujo.' },
-  sneaker: { name:'Zapatos Deportivos',    cat:'Calzado',     price:79000,  stock:45, disc:20, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80',  vendor:'Juan_Giraldo', desc:'Zapatillas de alto rendimiento con amortiguación avanzada, ideales para competencias de media distancia. Diseño ergonómico y materiales transpirables.' },
-  earbuds: { name:'Auriculares Studio Pro',cat:'Tecnología',  price:388000, stock:12, disc:15, img:'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400&q=80',  vendor:'Juan_Giraldo', desc:'Auriculares inalámbricos con cancelación activa de ruido y calidad de sonido studio.' },
-  backpack:{ name:'Mochila City Stealth',  cat:'Accesorios',  price:79000,  stock:30, disc:0,  img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80', vendor:'Juan_Giraldo', desc:'Mochila urbana resistente al agua, con compartimentos para laptop y accesorios.' },
-  cam1: { name:'Cámara DSLR Pro', cat:'Tecnología', price:2500000, stock:5, disc:0, img:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80', vendor:'FotoMundo', desc:'Cámara profesional DSLR para fotografía de alta calidad.' },
-  lentes1: { name:'Gafas de Sol Clásicas', cat:'Accesorios', price:120000, stock:20, disc:10, img:'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&q=80', vendor:'StyleCo', desc:'Gafas de sol con protección UV400 y diseño clásico.' },
-  reloj2: { name:'Smartwatch V2', cat:'Tecnología', price:450000, stock:15, disc:0, img:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80', vendor:'TechHub', desc:'Reloj inteligente con monitor de ritmo cardíaco y notificaciones.' },
-  zapatos2: { name:'Tenis Urbanos', cat:'Calzado', price:180000, stock:35, disc:0, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80', vendor:'ZapaTrend', desc:'Tenis cómodos para el uso diario en la ciudad.' },
-  bolso2: { name:'Bolso de Cuero', cat:'Accesorios', price:350000, stock:8, disc:0, img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80', vendor:'LeatherCraft', desc:'Bolso de cuero genuino hecho a mano.' },
-  audifonos2: { name:'Auriculares In-Ear', cat:'Tecnología', price:299000, stock:25, disc:10, img:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80', vendor:'AudioMaster', desc:'Auriculares in-ear con sonido estéreo y bajos profundos.' }
+let PRODUCTS = {
+  watch:   { id:'watch', name:'Reloj Elitret Gold',    cat:'Relojes',     price:345000, stock:18, disc:0,  img:'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&q=80', vendor:'Juan_Giraldo', desc:'Elegante reloj dorado de colección limitada. Ideal para ocasiones especiales o como regalo de lujo.' },
+  sneaker: { id:'sneaker', name:'Zapatos Deportivos',    cat:'Calzado',     price:79000,  stock:45, disc:20, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80',  vendor:'Juan_Giraldo', desc:'Zapatillas de alto rendimiento con amortiguación avanzada, ideales para competencias de media distancia.' },
+  earbuds: { id:'earbuds', name:'Auriculares Studio Pro',cat:'Tecnología',  price:388000, stock:12, disc:15, img:'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400&q=80',  vendor:'Juan_Giraldo', desc:'Auriculares inalámbricos con cancelación activa de ruido y calidad de sonido studio.' },
+  backpack:{ id:'backpack', name:'Mochila City Stealth',  cat:'Accesorios',  price:79000,  stock:30, disc:0,  img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80', vendor:'Juan_Giraldo', desc:'Mochila urbana resistente al agua, con compartimentos para laptop y accesorios.' },
+  cam1: { id:'cam1', name:'Cámara DSLR Pro', cat:'Tecnología', price:2500000, stock:5, disc:0, img:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80', vendor:'FotoMundo', desc:'Cámara profesional DSLR para fotografía de alta calidad.' },
+  lentes1: { id:'lentes1', name:'Gafas de Sol Clásicas', cat:'Accesorios', price:120000, stock:20, disc:10, img:'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&q=80', vendor:'StyleCo', desc:'Gafas de sol con protección UV400 y diseño clásico.' },
+  reloj2: { id:'reloj2', name:'Smartwatch V2', cat:'Tecnología', price:450000, stock:15, disc:0, img:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80', vendor:'TechHub', desc:'Reloj inteligente con monitor de ritmo cardíaco y notificaciones.' },
+  zapatos2: { id:'zapatos2', name:'Tenis Urbanos', cat:'Calzado', price:180000, stock:35, disc:0, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80', vendor:'ZapaTrend', desc:'Tenis cómodos para el uso diario en la ciudad.' },
+  bolso2: { id:'bolso2', name:'Bolso de Cuero', cat:'Accesorios', price:350000, stock:8, disc:0, img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80', vendor:'LeatherCraft', desc:'Bolso de cuero genuino hecho a mano.' },
+  audifonos2: { id:'audifonos2', name:'Auriculares In-Ear', cat:'Tecnología', price:299000, stock:25, disc:10, img:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80', vendor:'AudioMaster', desc:'Auriculares in-ear con sonido estéreo y bajos profundos.' }
 };
 
 const ORDER_DATA = [
@@ -93,6 +93,11 @@ function updateProfileUI() {
   const ajEmail = document.getElementById('aj-email');
   const savedEmail = localStorage.getItem('commercity_email');
   if (ajEmail && savedEmail) ajEmail.value = savedEmail;
+
+  const serverInput = document.getElementById('aj-server-url');
+  if (serverInput && window.CommerCityAPI) {
+    serverInput.value = window.CommerCityAPI.getBaseUrl();
+  }
 }
 
 let introTimer = null;
@@ -114,6 +119,7 @@ function skipIntro() {
 }
 
 function finishAppInit() {
+  loadCatalog();
   if (localStorage.getItem('commercity_logged_in') === 'true') {
     updateProfileUI();
     const sellerStatus = localStorage.getItem('commercity_is_seller') === 'true';
@@ -270,26 +276,66 @@ function navigate(page) {
   closeMoreMenu();
   closeCatMenu();
   updateCartBadge();
+  if (page === 'home') loadCatalog();
   if (page === 'carrito') renderCart();
+  if (page === 'mensajes') loadChatConversaciones();
+  if (page !== 'chat' && window.chatPollingTimer) {
+    clearInterval(window.chatPollingTimer);
+    window.chatPollingTimer = null;
+  }
 }
 
-function handleLogin() {
-  const email = document.getElementById('login-email')?.value.trim();
-  const pass  = document.getElementById('login-password')?.value;
+async function handleLogin() {
+  const emailInput = document.getElementById('login-email');
+  const passInput  = document.getElementById('login-password');
+  const email = emailInput?.value.trim();
+  const pass  = passInput?.value;
   if (!email || !pass) { toast('⚠️ Completa todos los campos'); return; }
 
-  let extractedName = email.split('@')[0];
-  if (extractedName) {
-    extractedName = extractedName.charAt(0).toUpperCase() + extractedName.slice(1);
-    localStorage.setItem('commercity_user', extractedName);
-    localStorage.setItem('commercity_email', email);
-  }
+  const btn = document.querySelector('#page-login .btn-primary');
+  const oldText = btn ? btn.textContent : 'Entrar →';
+  if (btn) { btn.disabled = true; btn.textContent = 'Autenticando...'; }
 
-  if (email === 'admin@gmail.com' && pass === 'admin123') {
-    setRole(false, true);
+  try {
+    let res = null;
+    if (window.CommerCityAPI) {
+      res = await window.CommerCityAPI.auth.login(email, pass);
+    } else {
+      const isAndroid = (window.Capacitor && window.Capacitor.getPlatform() === 'android');
+      const base = isAndroid ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
+      const r = await fetch(`${base}/api/usuarios/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: pass })
+      });
+      res = await r.json();
+      if (!r.ok) throw new Error(res.mensaje || res.error || 'Credenciales inválidas');
+    }
+
+    if (!res || !res.token) {
+      throw new Error(res?.mensaje || 'No se recibió token de autenticación del servidor');
+    }
+
+    // 1. Guardar token JWT y datos de sesión en almacenamiento del cliente
+    const token = res.token;
+    const usuario = res.usuario || {};
+    if (window.CommerCityAPI) {
+      window.CommerCityAPI.setSession(token, usuario);
+    }
+    localStorage.setItem('commercity_auth_token', token);
     localStorage.setItem('commercity_logged_in', 'true');
-    localStorage.setItem('commercity_is_seller', 'false');
-    localStorage.setItem('commercity_is_admin', 'true');
+
+    // 2. Extraer roles de usuario (normalizado a mayúsculas)
+    const rawRoles = usuario.roles || (usuario.rol ? [usuario.rol] : []);
+    const roles = Array.isArray(rawRoles) ? rawRoles.map(r => String(r).toUpperCase()) : [];
+    const isSeller = roles.includes('VENDEDOR');
+    const isAdmin = roles.includes('ADMINISTRADOR') || roles.includes('ADMIN');
+
+    setRole(isSeller, isAdmin);
+    localStorage.setItem('commercity_is_seller', isSeller ? 'true' : 'false');
+    localStorage.setItem('commercity_is_admin', isAdmin ? 'true' : 'false');
+    localStorage.setItem('commercity_user', usuario.nombre || usuario.nombre_completo || email.split('@')[0]);
+    localStorage.setItem('commercity_email', usuario.email || email);
 
     const rem = document.getElementById('login-remember')?.checked;
     if (rem) {
@@ -301,33 +347,26 @@ function handleLogin() {
     }
 
     updateProfileUI();
-    toast('🛡️ ¡Bienvenido Administrador!');
-    setTimeout(() => navigate('admin'), 900);
-    return;
+    toast(isAdmin ? '🛡️ ¡Bienvenido Administrador!' : '✅ ¡Bienvenido de vuelta!');
+
+    // Refrescar catálogo en vivo
+    loadCatalog();
+
+    setTimeout(() => navigate(isAdmin ? 'admin' : 'home'), 800);
+  } catch (apiErr) {
+    console.error('[Auth] Error al iniciar sesión en API:', apiErr);
+    const msg = apiErr.message || 'Error de conexión con el servidor API';
+    if (msg.includes('Credenciales') || msg.includes('401') || msg.includes('inválid')) {
+      toast('⚠️ Credenciales inválidas. Verifica tu correo y contraseña.');
+    } else {
+      toast(`⚠️ Conexión rechazada: ${msg}`);
+    }
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = oldText; }
   }
-
-  const seller = email.toLowerCase().includes('vendedor');
-  setRole(seller, false);
-
-  localStorage.setItem('commercity_logged_in', 'true');
-  localStorage.setItem('commercity_is_seller', seller);
-  localStorage.setItem('commercity_is_admin', 'false');
-
-  const rem = document.getElementById('login-remember')?.checked;
-  if (rem) {
-    localStorage.setItem('commercity_rem_email', email);
-    localStorage.setItem('commercity_rem_pass', pass);
-  } else {
-    localStorage.removeItem('commercity_rem_email');
-    localStorage.removeItem('commercity_rem_pass');
-  }
-
-  updateProfileUI();
-  toast('✅ ¡Bienvenido de vuelta!');
-  setTimeout(() => navigate('home'), 900);
 }
 
-function handleRegistro() {
+async function handleRegistro() {
   const u = document.getElementById('reg-username')?.value.trim();
   const e = document.getElementById('reg-email')?.value.trim();
   const p = document.getElementById('reg-password')?.value;
@@ -337,11 +376,42 @@ function handleRegistro() {
   if (!u || !e || !p) { toast('⚠️ Completa todos los campos'); return; }
   if (!acceptedTerms) { toast('⚠️ Debes aceptar los Términos y Condiciones'); return; }
 
+  // 1. Registro vía API
+  try {
+    if (window.CommerCityAPI) {
+      const res = await window.CommerCityAPI.auth.registro({
+        nombre: u,
+        email: e,
+        password: p,
+        solicita_vendedor: !!wantToSell
+      });
+      if (res && res.token) {
+        window.CommerCityAPI.setSession(res.token, res.usuario);
+        setRole(!!wantToSell, false);
+        localStorage.setItem('commercity_user', u);
+        localStorage.setItem('commercity_email', e);
+        localStorage.setItem('commercity_logged_in', 'true');
+        localStorage.setItem('commercity_is_seller', wantToSell ? 'true' : 'false');
+        localStorage.setItem('commercity_is_admin', 'false');
+
+        updateProfileUI();
+        toast('✅ ¡Cuenta creada exitosamente en servidor!');
+        setTimeout(() => navigate('home'), 900);
+        return;
+      }
+    }
+  } catch (apiErr) {
+    console.warn('API error en registro:', apiErr);
+    if (apiErr.message && apiErr.message.includes('registrado')) {
+      toast('⚠️ El correo electrónico ya está registrado.');
+      return;
+    }
+  }
+
+  // 2. Fallback
   localStorage.setItem('commercity_user', u);
   localStorage.setItem('commercity_email', e);
-
   setRole(wantToSell, false);
-
   localStorage.setItem('commercity_logged_in', 'true');
   localStorage.setItem('commercity_is_seller', wantToSell);
   localStorage.setItem('commercity_is_admin', 'false');
@@ -368,6 +438,9 @@ function handleRestablecer() {
 }
 
 function handleLogout() {
+  if (window.CommerCityAPI) {
+    window.CommerCityAPI.clearSession();
+  }
   setRole(false, false);
   localStorage.removeItem('commercity_logged_in');
   localStorage.removeItem('commercity_is_seller');
@@ -411,13 +484,148 @@ function closeCatMenu() {
   if (dd) dd.classList.remove('open');
 }
 
+let currentCatalogCategory = 'todos';
+let currentCatalogQuery = '';
+let searchDebounceTimer = null;
+
+async function loadCatalog(category = currentCatalogCategory, query = currentCatalogQuery) {
+  currentCatalogCategory = category || 'todos';
+  currentCatalogQuery = query || '';
+
+  const grid = document.getElementById('home-prod-grid');
+  if (grid && (!PRODUCTS || Object.keys(PRODUCTS).length <= 4)) {
+    // Solo mostrar spinner si el grid está vacío o no tiene productos
+    const loadingHtml = `
+      <div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">
+        <div style="display:inline-block;width:26px;height:26px;border:3px solid rgba(245,166,35,0.2);border-top-color:var(--orange);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:8px;"></div>
+        <div>Cargando productos de la API...</div>
+      </div>`;
+    grid.innerHTML = loadingHtml;
+  }
+
+  try {
+    let res = null;
+    if (window.CommerCityAPI) {
+      res = await window.CommerCityAPI.productos.listar(currentCatalogCategory, currentCatalogQuery);
+    } else {
+      const isAndroid = (window.Capacitor && window.Capacitor.getPlatform() === 'android');
+      const base = isAndroid ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
+      const token = localStorage.getItem('commercity_auth_token');
+      const params = new URLSearchParams();
+      if (currentCatalogCategory && currentCatalogCategory !== 'todos') params.append('categoria', currentCatalogCategory);
+      if (currentCatalogQuery) params.append('q', currentCatalogQuery);
+      const queryStr = params.toString() ? `?${params.toString()}` : '';
+      const r = await fetch(`${base}/api/productos${queryStr}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        }
+      });
+      res = await r.json();
+    }
+
+    let items = [];
+    if (res) {
+      if (Array.isArray(res.data)) items = res.data;
+      else if (Array.isArray(res.productos)) items = res.productos;
+      else if (Array.isArray(res)) items = res;
+    }
+
+    if (items && items.length > 0) {
+      // Registrar cada producto en el diccionario dinámico PRODUCTS
+      items.forEach((p, idx) => {
+        const id = String(p.id !== undefined ? p.id : (p.producto_id || `prod_${idx}`));
+        const rawImg = p.imagen || p.imagen_url || p.img || '';
+        const fullImg = window.CommerCityAPI 
+          ? window.CommerCityAPI.getProductImageUrl(rawImg)
+          : (rawImg.startsWith('http') || rawImg.startsWith('data:') ? rawImg : `http://10.0.2.2:3000/${String(rawImg).replace(/^\//, '')}`);
+
+        PRODUCTS[id] = {
+          id: id,
+          name: p.nombre || p.name || 'Producto CommerCity',
+          cat: p.categoria || p.cat || 'General',
+          price: Number(p.precio !== undefined ? p.precio : (p.price || 0)),
+          stock: Number(p.stock !== undefined ? p.stock : 10),
+          disc: Number(p.descuento || p.disc || p.descuento_porcentaje || 0),
+          img: fullImg,
+          vendor: p.vendedor || p.vendor || 'CommerCity Oficial',
+          desc: p.descripcion || p.desc || 'Producto verificado disponible en la plataforma.'
+        };
+      });
+
+      const catalogList = items.map((p, idx) => PRODUCTS[String(p.id !== undefined ? p.id : (p.producto_id || `prod_${idx}`))]);
+      renderHomeProducts(catalogList);
+    } else {
+      if (grid) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px 16px;color:var(--text-muted);font-size:14px;">🛍️ No se encontraron productos para esta búsqueda.</div>';
+      }
+    }
+  } catch (err) {
+    console.warn('[Catálogo] Error al obtener catálogo en vivo:', err);
+    // Contingencia: Renderizar productos en memoria si la conexión falla temporalmente
+    renderHomeProducts(Object.values(PRODUCTS));
+  }
+}
+
+function renderHomeProducts(productList) {
+  const grid = document.getElementById('home-prod-grid');
+  if (!grid) return;
+
+  if (!productList || productList.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px 16px;color:var(--text-muted);font-size:14px;">🛍️ Catálogo vacío</div>';
+    return;
+  }
+
+  const defaultImg = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80';
+  grid.innerHTML = productList.map(p => {
+    const fmtPrice = '$' + Number(p.price).toLocaleString('es-CO');
+    const hasDisc = p.disc && Number(p.disc) > 0;
+    const oldPrice = hasDisc ? Math.round(p.price / (1 - p.disc / 100)) : 0;
+    const fmtOld = '$' + oldPrice.toLocaleString('es-CO');
+    const imgSrc = p.img || defaultImg;
+
+    return `
+      <div class="prod-card" onclick="openProductDetail('${p.id}')">
+        ${hasDisc ? `<div class="prod-badge disc-badge">-${p.disc}%</div>` : ''}
+        <img src="${imgSrc}" alt="${p.name}" class="prod-img" onerror="this.onerror=null;this.src='${defaultImg}';" />
+        <div class="prod-info">
+          <div class="prod-name">${p.name}</div>
+          ${hasDisc ? `<div class="prod-price-old">${fmtOld}</div>` : ''}
+          <div class="prod-price">${fmtPrice}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterCategory(catName) {
+  closeCatMenu();
+  const btn = document.querySelector('.cat-btn');
+  if (btn) {
+    btn.textContent = (catName === 'todos' ? 'Categorías' : catName) + ' ▾';
+  }
+  loadCatalog(catName, currentCatalogQuery);
+}
+
+function handleSearch(val) {
+  if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(() => {
+    loadCatalog(currentCatalogCategory, val ? val.trim() : '');
+  }, 300);
+}
+
 function openProductDetail(key) {
   const p = PRODUCTS[key];
   if (!p) return;
   pdKey = key; pdQty = 1;
 
-  document.getElementById('pd-img').src = p.img;
-  document.getElementById('pd-img').alt = p.name;
+  const defaultImg = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80';
+  const imgEl = document.getElementById('pd-img');
+  if (imgEl) {
+    imgEl.src = p.img || defaultImg;
+    imgEl.alt = p.name;
+    imgEl.onerror = () => { imgEl.src = defaultImg; };
+  }
   document.getElementById('pd-name').textContent = p.name;
   document.getElementById('pd-cat').textContent = p.cat || 'Categoría';
 
@@ -571,7 +779,7 @@ function getCartTotal() {
   }, 0);
 }
 
-function openPasarela() {
+async function openPasarela() {
   if (cart.length === 0) { toast('⚠️ Tu carrito está vacío'); return; }
   
   // RF38: Verificar que el comprador haya registrado su dirección antes de hacer compras
@@ -582,10 +790,35 @@ function openPasarela() {
     return;
   }
 
-  const total = getCartTotal();
-  // RF134: subtotal = precio / 1.19, IVA = subtotal * 0.19
-  const subtotal = Math.round(total / 1.19);
-  const iva = Math.round(subtotal * 0.19);
+  let subtotal = 0;
+  let iva = 0;
+  let total = 0;
+
+  // 1. Intentar cálculo fiscal oficial desde el Servidor (RF134 / SRS Backend)
+  try {
+    if (window.CommerCityAPI && window.CommerCityAPI.getToken()) {
+      // Sincronizar carrito local con backend antes de pedir resumen
+      await window.CommerCityAPI.carrito.vaciar();
+      for (const item of cart) {
+        await window.CommerCityAPI.carrito.agregar(item.key, item.qty);
+      }
+      const resumen = await window.CommerCityAPI.pedidos.resumen();
+      if (resumen && typeof resumen.subtotal === 'number') {
+        subtotal = resumen.subtotal;
+        iva = resumen.iva;
+        total = resumen.total;
+      }
+    }
+  } catch (err) {
+    console.warn('Cálculo fiscal offline/fallback...', err);
+  }
+
+  // Fallback si no hay conexión al backend
+  if (!total) {
+    total = getCartTotal();
+    subtotal = Math.round(total / 1.19);
+    iva = Math.round(subtotal * 0.19);
+  }
 
   const fmt = '$' + total.toLocaleString('es-CO');
   const fmtSub = '$' + subtotal.toLocaleString('es-CO');
@@ -624,19 +857,39 @@ function fmtCard(input) {
   input.value = v.match(/.{1,4}/g)?.join('-') || v;
 }
 
-function processPago() {
+async function processPago() {
   const num  = document.getElementById('card-num')?.value.replace(/-/g,'');
   const name = document.getElementById('card-holder')?.value.trim();
   if (!num || num.length < 8 || !name) { toast('⚠️ Completa los datos de pago'); return; }
 
   const btn = document.getElementById('pay-btn');
-  btn.textContent = '⏳ Procesando...';
+  btn.textContent = '⏳ Procesando con Servidor...';
   btn.disabled = true;
 
+  let comprobante = 'REC-' + Math.floor(1000 + Math.random() * 9000);
+
+  // 1. Confirmar pago y asentar pedido en Backend
+  try {
+    if (window.CommerCityAPI && window.CommerCityAPI.getToken()) {
+      const resp = await window.CommerCityAPI.pedidos.confirmarPago({
+        metodo_pago: 'Tarjeta Crédito/Débito',
+        datos_transaccion: {
+          numero_enmascarado: '**** **** **** ' + num.slice(-4),
+          titular: name
+        },
+        direccion_entrega: localStorage.getItem('commercity_addr') || 'Dirección no especificada'
+      });
+      if (resp && resp.comprobante) {
+        comprobante = resp.comprobante;
+      }
+    }
+  } catch (err) {
+    console.warn('Aviso: Pago procesado en contingencia local:', err);
+  }
+
   setTimeout(() => {
-    const fmt = document.getElementById('pas-amount').textContent;
     document.getElementById('pas-title').textContent = '¡Pago Exitoso! ✅';
-    document.getElementById('pas-lbl').textContent = 'Total ya pagado';
+    document.getElementById('pas-lbl').textContent = 'Total ya pagado (' + comprobante + ')';
     document.getElementById('pas-subtotal-row').style.display = 'none';
     document.getElementById('pas-iva-row').style.display = 'none';
     document.getElementById('pas-total-row').style.display = 'flex';
@@ -648,8 +901,8 @@ function processPago() {
     saveCart();
     updateCartBadge();
     renderCart();
-    toast('✅ ¡Pago realizado con éxito!');
-  }, 1600);
+    toast('✅ ¡Pago realizado con éxito! Comprobante: ' + comprobante);
+  }, 1200);
 }
 
 function downloadReceipt() {
@@ -961,26 +1214,318 @@ function loadPersonalInfo() {
   if (bBank) { const e=document.getElementById('bank-select'); if(e) e.value = bBank; }
   if (bType) { const e=document.getElementById('bank-type'); if(e) e.value = bType; }
   if (bNum)  { const e=document.getElementById('bank-number'); if(e) e.value = bNum; }
+
+  const serverInput = document.getElementById('aj-server-url');
+  if (serverInput && window.CommerCityAPI) {
+    serverInput.value = window.CommerCityAPI.getBaseUrl();
+  }
 }
 loadPersonalInfo();
 
-function sendChatMessage() {
+function saveApiServerConfig() {
+  const input = document.getElementById('aj-server-url');
+  if (!input) return;
+  const val = input.value.trim();
+  if (val) {
+    if (window.CommerCityAPI) {
+      window.CommerCityAPI.setCustomApiUrl(val);
+    } else {
+      localStorage.setItem('commercity_custom_api_url', val);
+    }
+    toast('✅ Conexión actualizada: ' + val);
+    loadCatalog();
+  } else {
+    if (window.CommerCityAPI) {
+      window.CommerCityAPI.setCustomApiUrl('');
+    } else {
+      localStorage.removeItem('commercity_custom_api_url');
+    }
+    toast('🔄 Modo automático restaurado');
+    if (input && window.CommerCityAPI) input.value = window.CommerCityAPI.getBaseUrl();
+    loadCatalog();
+  }
+}
+
+async function testApiServerConnection() {
+  const statusEl = document.getElementById('aj-server-status');
+  if (statusEl) statusEl.textContent = '⏳ Probando conexión con backend...';
+  try {
+    const base = window.CommerCityAPI ? window.CommerCityAPI.getBaseUrl() : 'http://10.0.2.2:3000';
+    const res = await fetch(`${base}/api/health`, { method: 'GET' });
+    if (res.ok) {
+      const data = await res.json();
+      toast('🟢 Conexión exitosa con la API CommerCity');
+      if (statusEl) statusEl.innerHTML = `<span style="color:#22c55e;">🟢 En línea: ${data.service || 'CommerCity API'} (v${data.version || '2.0'})</span>`;
+    } else {
+      throw new Error(`HTTP ${res.status}`);
+    }
+  } catch (e) {
+    toast('🔴 Error de conexión: ' + e.message);
+    if (statusEl) statusEl.innerHTML = `<span style="color:#ef4444;">🔴 Fuera de línea (${e.message})</span>`;
+  }
+}
+
+function openServerModal() {
+  const modal = document.getElementById('server-modal');
+  const input = document.getElementById('modal-server-url');
+  if (input && window.CommerCityAPI) {
+    input.value = window.CommerCityAPI.getBaseUrl();
+  }
+  const status = document.getElementById('modal-server-status');
+  if (status) status.textContent = 'Estado: Listo para conectar';
+  if (modal) modal.classList.add('open');
+}
+
+function closeServerModal() {
+  const modal = document.getElementById('server-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function closeServerModalOnOverlay(e) {
+  if (e.target.id === 'server-modal' || e.target.classList.contains('modal-overlay')) {
+    closeServerModal();
+  }
+}
+
+function saveModalServerConfig() {
+  const input = document.getElementById('modal-server-url');
+  if (!input) return;
+  const val = input.value.trim();
+  if (val) {
+    if (window.CommerCityAPI) {
+      window.CommerCityAPI.setCustomApiUrl(val);
+    } else {
+      localStorage.setItem('commercity_custom_api_url', val);
+    }
+    toast('✅ URL del servidor guardada');
+  } else {
+    if (window.CommerCityAPI) {
+      window.CommerCityAPI.setCustomApiUrl('');
+    } else {
+      localStorage.removeItem('commercity_custom_api_url');
+    }
+    toast('🔄 Modo automático restaurado');
+  }
+  loadCatalog();
+  closeServerModal();
+}
+
+async function testModalServerConnection() {
+  const statusEl = document.getElementById('modal-server-status');
+  if (statusEl) statusEl.textContent = '⏳ Probando conexión con el backend...';
+  try {
+    const input = document.getElementById('modal-server-url');
+    const targetUrl = (input?.value.trim()) || (window.CommerCityAPI ? window.CommerCityAPI.getBaseUrl() : 'http://10.0.2.2:3000');
+    const res = await fetch(`${targetUrl.replace(/\/+$/, '')}/api/health`, { method: 'GET' });
+    if (res.ok) {
+      const data = await res.json();
+      toast('🟢 Conexión exitosa');
+      if (statusEl) statusEl.innerHTML = `<span style="color:#22c55e;">🟢 En línea: ${data.service || 'CommerCity API'}</span>`;
+    } else {
+      throw new Error(`HTTP ${res.status}`);
+    }
+  } catch (e) {
+    toast('🔴 Conexión fallida: ' + e.message);
+    if (statusEl) statusEl.innerHTML = `<span style="color:#ef4444;">🔴 Error: ${e.message}</span>`;
+  }
+}
+
+// =========================================================
+// CHAT EN TIEMPO REAL & CONVERSACIONES
+// =========================================================
+let currentChatPartner = { id: 3, name: 'Alex Rivera', ava: 'A', color: '#7c3aed' };
+window.chatPollingTimer = null;
+let lastChatMsgCount = 0;
+let chatConversationsCache = [];
+
+function getAvatarColor(str) {
+  const colors = ['#7c3aed', '#be185d', '#0891b2', '#059669', '#d97706', '#dc2626'];
+  let hash = 0;
+  for (let i = 0; i < (str || '').length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  return colors[Math.abs(hash) % colors.length];
+}
+
+async function loadChatConversaciones() {
+  const container = document.getElementById('chat-list-container');
+  if (!container) return;
+
+  try {
+    if (window.CommerCityAPI && window.CommerCityAPI.getToken()) {
+      const data = await window.CommerCityAPI.chat.conversaciones();
+      if (data && data.conversaciones && data.conversaciones.length > 0) {
+        chatConversationsCache = data.conversaciones;
+        renderConversationsList(data.conversaciones);
+        return;
+      }
+    }
+  } catch (err) {
+    console.warn('Carga de conversaciones en contingencia local:', err.message);
+  }
+
+  // Fallback con datos precargados si no hay respuesta de API
+  chatConversationsCache = [
+    { partner_id: 3, nombre: 'Alex Rivera (Vendedor)', ultimo_mensaje: 'Sí, aún tenemos disponibilidad para entrega', fecha: '10:42', no_leidos: 1 },
+    { partner_id: 4, nombre: 'Elena Sanz (Vendedora)', ultimo_mensaje: 'Garantía oficial de 12 meses por defecto', fecha: 'Ayer', no_leidos: 0 },
+    { partner_id: 486, nombre: 'Soporte CommerCity', ultimo_mensaje: 'Tu cuenta ha sido verificada exitosamente', fecha: 'Lun', no_leidos: 0 }
+  ];
+  renderConversationsList(chatConversationsCache);
+}
+
+function renderConversationsList(list) {
+  const container = document.getElementById('chat-list-container');
+  if (!container) return;
+
+  if (list.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);font-size:13px;">No hay conversaciones activas.</div>';
+    return;
+  }
+
+  container.innerHTML = list.map(c => {
+    const initials = (c.nombre || 'U').split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+    const color = getAvatarColor(c.nombre);
+    const unreadClass = c.no_leidos > 0 ? 'unread' : '';
+    const dateFormatted = c.fecha ? (c.fecha.includes('T') ? new Date(c.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : c.fecha) : '';
+    return `
+      <div class="chat-li ${unreadClass}" onclick="openChat('${c.nombre.replace(/'/g, "\\'")}', '${initials}', '${color}', ${c.partner_id || 3})">
+        <div class="chat-li-ava" style="background:${color};">${initials}</div>
+        <div class="chat-li-body">
+          <div class="chat-li-name">${c.nombre}</div>
+          <div class="chat-li-preview">${c.ultimo_mensaje || 'Toca para abrir chat...'}</div>
+        </div>
+        <div class="chat-li-meta">
+          <div class="chat-li-time">${dateFormatted}</div>
+          ${c.no_leidos > 0 ? '<div class="unread-dot"></div>' : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterChatConversations(q) {
+  const term = (q || '').toLowerCase();
+  const filtered = chatConversationsCache.filter(c => 
+    (c.nombre && c.nombre.toLowerCase().includes(term)) ||
+    (c.ultimo_mensaje && c.ultimo_mensaje.toLowerCase().includes(term))
+  );
+  renderConversationsList(filtered);
+}
+
+function openChat(name, ava, color, partnerId = 3) {
+  currentChatPartner = {
+    id: partnerId || 3,
+    name: name || 'Usuario CommerCity',
+    ava: ava || 'U',
+    color: color || '#7c3aed'
+  };
+
+  const nameEl = document.getElementById('chat-name');
+  const avaEl = document.getElementById('chat-ava');
+  if (nameEl) nameEl.textContent = currentChatPartner.name;
+  if (avaEl) {
+    avaEl.textContent = currentChatPartner.ava;
+    avaEl.style.background = currentChatPartner.color;
+  }
+
+  navigate('chat');
+  lastChatMsgCount = 0;
+
+  // Cargar historial de mensajes de inmediato
+  loadChatMessages(currentChatPartner.id, false);
+
+  // Iniciar Polling en tiempo real continuo cada 1.5 segundos
+  if (window.chatPollingTimer) clearInterval(window.chatPollingTimer);
+  window.chatPollingTimer = setInterval(() => {
+    loadChatMessages(currentChatPartner.id, true);
+  }, 1500);
+}
+
+async function loadChatMessages(partnerId, isPolling = false) {
+  const body = document.getElementById('chat-body');
+  if (!body) return;
+
+  try {
+    if (window.CommerCityAPI && window.CommerCityAPI.getToken()) {
+      const res = await window.CommerCityAPI.chat.mensajes(partnerId);
+      if (res && res.mensajes) {
+        // Evitar refrescar el DOM si no hay mensajes nuevos para evitar parpadeos
+        if (isPolling && res.mensajes.length === lastChatMsgCount) {
+          return;
+        }
+
+        lastChatMsgCount = res.mensajes.length;
+
+        // Mantener la tarjeta de producto de muestra en la cabecera del chat
+        let html = `
+          <div class="chat-prod-card">
+            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80" alt="Bolso" class="chat-prod-img" />
+            <div class="chat-prod-info">
+              <div class="chat-prod-name">Producto en consulta</div>
+              <div class="chat-prod-price">Chat directo seguro con el vendedor</div>
+            </div>
+          </div>
+        `;
+
+        if (res.mensajes.length === 0) {
+          html += `
+            <div style="text-align:center;padding:24px;color:var(--text-muted);font-size:13px;">
+              💬 Inicia la conversación con <strong>${currentChatPartner.name}</strong>. Escribe un mensaje abajo.
+            </div>
+          `;
+        } else {
+          html += res.mensajes.map(m => {
+            const time = m.enviado_at ? (m.enviado_at.includes('T') ? new Date(m.enviado_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : m.enviado_at) : 'Ahora';
+            const isMine = !!m.is_mine;
+            return `
+              <div class="msg-wrap ${isMine ? 'outgoing' : 'incoming'}">
+                <div class="msg-bubble">${m.mensaje}</div>
+                <div class="msg-time">${time}</div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        body.innerHTML = html;
+        body.scrollTop = body.scrollHeight;
+        return;
+      }
+    }
+  } catch (err) {
+    if (!isPolling) console.warn('Error al cargar mensajes de chat:', err);
+  }
+}
+
+async function sendChatMessage() {
   const input = document.getElementById('chat-msg-input');
   if (!input) return;
   const val = input.value.trim();
   if (!val) return;
+
+  const partnerId = currentChatPartner.id || 3;
+  input.value = '';
+
+  // Inserción optimista inmediata en la UI
   const body = document.getElementById('chat-body');
   if (body) {
-    const html = `
+    const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const bubbleHtml = `
       <div class="msg-wrap outgoing">
         <div class="msg-bubble">${val}</div>
-        <div class="msg-time">Ahora</div>
+        <div class="msg-time">${timeNow}</div>
       </div>
     `;
-    body.insertAdjacentHTML('beforeend', html);
+    body.insertAdjacentHTML('beforeend', bubbleHtml);
     body.scrollTop = body.scrollHeight;
+    lastChatMsgCount++;
   }
-  input.value = '';
+
+  // Envío a la base de datos central a través de la API
+  try {
+    if (window.CommerCityAPI && window.CommerCityAPI.getToken()) {
+      await window.CommerCityAPI.chat.enviar(partnerId, val);
+    }
+  } catch (err) {
+    console.warn('Mensaje enviado en memoria local (servidor no disponible):', err.message);
+  }
 }
 
 let homePageLoaded = 0;

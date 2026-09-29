@@ -1,12 +1,13 @@
 {
   "name": "commercity-mobile",
-  "version": "1.29.8",
+  "version": "1.29.11",
   "private": true,
   "scripts": {
     "start": "live-server ."
   },
   "devDependencies": {
-    "live-server": "^1.2.2"
+    "live-server": "^1.2.2",
+    "puppeteer": "^25.10.0"
   },
   "dependencies": {
     "@capacitor/android": "^8.4.0",

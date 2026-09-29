@@ -1,0 +1,2797 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRS — CommerCity Mobile v2.0 | THE BLACK CODE JSB</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent2: #0f3460;
+    --accent3: #533483;
+    --text: #1a1a2e;
+    --text-light: #4a4a6a;
+    --border: #d0d0e0;
+    --bg-light: #f8f8fc;
+    --bg-table-head: #1a1a2e;
+    --bg-table-alt: #f0f0f8;
+    --code-bg: #0d1117;
+    --code-text: #e6edf3;
+    --success: #2ea043;
+    --warning: #fb8f44;
+    --info: #388bfd;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.7;
+    color: var(--text);
+    background: white;
+  }
+
+  /* =================== COVER PAGE =================== */
+  .cover {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 40%, #0f3460 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(233,69,96,0.15) 0%, transparent 70%);
+  }
+
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: -80px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(83,52,131,0.2) 0%, transparent 70%);
+  }
+
+  .cover-logo-area {
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .cover-org-badge {
+    display: inline-block;
+    background: rgba(233,69,96,0.2);
+    border: 1px solid rgba(233,69,96,0.5);
+    color: #ff6b87;
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    border-radius: 30px;
+    margin-bottom: 24px;
+  }
+
+  .cover h1 {
+    font-size: 36pt;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .cover h1 span {
+    color: #e94560;
+  }
+
+  .cover .cover-subtitle {
+    font-size: 14pt;
+    font-weight: 300;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .cover-divider {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #e94560, #533483);
+    margin: 0 auto 50px;
+    border-radius: 2px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .cover-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .cover-meta-item {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 16px 20px;
+    text-align: left;
+  }
+
+  .cover-meta-item .label {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 4px;
+  }
+
+  .cover-meta-item .value {
+    font-size: 10pt;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .cover-author-box {
+    margin-top: 50px;
+    background: rgba(233,69,96,0.12);
+    border: 1px solid rgba(233,69,96,0.35);
+    border-radius: 12px;
+    padding: 20px 36px;
+    position: relative;
+    z-index: 2;
+    max-width: 500px;
+  }
+
+  .cover-author-box .author-label {
+    font-size: 7.5pt;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ff6b87;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .cover-author-box .author-name {
+    font-size: 16pt;
+    font-weight: 700;
+    color: white;
+  }
+
+  .cover-footer {
+    position: absolute;
+    bottom: 30px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 8pt;
+    color: rgba(255,255,255,0.3);
+    z-index: 2;
+  }
+
+  /* =================== CONTENT =================== */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 60px;
+  }
+
+  /* TOC Page */
+  .toc-page {
+    page-break-after: always;
+    padding: 60px 60px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .toc-title {
+    font-size: 22pt;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid var(--accent);
+  }
+
+  .toc-subtitle {
+    font-size: 9pt;
+    color: var(--text-light);
+    margin-bottom: 36px;
+  }
+
+  .toc-section {
+    margin-bottom: 6px;
+  }
+
+  .toc-section a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--text);
+    padding: 5px 0;
+    border-bottom: 1px dotted var(--border);
+    font-size: 10pt;
+  }
+
+  .toc-section a:hover {
+    color: var(--accent);
+  }
+
+  .toc-num {
+    font-weight: 700;
+    color: var(--accent);
+    margin-right: 12px;
+    min-width: 32px;
+  }
+
+  .toc-label { flex: 1; }
+
+  .toc-page-num {
+    font-size: 9pt;
+    color: var(--text-light);
+    font-weight: 500;
+  }
+
+  .toc-sub {
+    padding-left: 36px;
+  }
+
+  .toc-sub a {
+    font-size: 9.5pt;
+    color: var(--text-light);
+    border-bottom: 1px dotted #e0e0ef;
+  }
+
+  /* Headings */
+  h1.doc-h1 {
+    font-size: 26pt;
+    font-weight: 900;
+    color: var(--primary);
+    margin-top: 60px;
+    margin-bottom: 8px;
+    padding-bottom: 14px;
+    border-bottom: 4px solid var(--accent);
+    page-break-before: always;
+  }
+
+  h1.doc-h1:first-of-type {
+    page-break-before: avoid;
+    margin-top: 0;
+  }
+
+  h2.doc-h2 {
+    font-size: 15pt;
+    font-weight: 800;
+    color: var(--primary);
+    margin-top: 40px;
+    margin-bottom: 12px;
+    padding-left: 14px;
+    border-left: 4px solid var(--accent);
+  }
+
+  h3.doc-h3 {
+    font-size: 11.5pt;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-top: 28px;
+    margin-bottom: 10px;
+  }
+
+  h4.doc-h4 {
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: var(--accent3);
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin-bottom: 12px;
+    text-align: justify;
+  }
+
+  ul, ol {
+    margin: 10px 0 14px 24px;
+  }
+
+  li {
+    margin-bottom: 5px;
+  }
+
+  /* Section number badge */
+  .sec-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-size: 8pt;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+    letter-spacing: 0.5px;
+  }
+
+  /* Callout boxes */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    border-left: 4px solid;
+    font-size: 10pt;
+  }
+
+  .callout-info {
+    background: #eff6ff;
+    border-color: var(--info);
+    color: #1e40af;
+  }
+
+  .callout-warning {
+    background: #fffbeb;
+    border-color: var(--warning);
+    color: #92400e;
+  }
+
+  .callout-success {
+    background: #f0fdf4;
+    border-color: var(--success);
+    color: #14532d;
+  }
+
+  .callout-danger {
+    background: #fff0f0;
+    border-color: var(--accent);
+    color: #7f1d1d;
+  }
+
+  .callout strong { font-weight: 700; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre, code {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 9pt;
+  }
+
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 16px 0;
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+
+  code {
+    background: #f0f0f8;
+    color: #c0392b;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 9pt;
+  }
+
+  pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-size: 9.5pt;
+  }
+
+  thead tr {
+    background: var(--bg-table-head);
+    color: white;
+  }
+
+  thead th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 8.5pt;
+    letter-spacing: 0.3px;
+  }
+
+  tbody tr:nth-child(even) {
+    background: var(--bg-table-alt);
+  }
+
+  tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 2px solid var(--primary);
+  }
+
+  /* RF/RNF cards */
+  .req-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    page-break-inside: avoid;
+  }
+
+  .req-card .req-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+
+  .req-id {
+    background: var(--accent);
+    color: white;
+    font-weight: 700;
+    font-size: 9pt;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .req-id.rnf {
+    background: var(--accent2);
+  }
+
+  .req-id.rb {
+    background: var(--accent3);
+  }
+
+  .req-title {
+    font-weight: 700;
+    font-size: 10.5pt;
+    color: var(--primary);
+  }
+
+  .req-card p, .req-card ul {
+    font-size: 9.5pt;
+    color: var(--text-light);
+    margin-bottom: 0;
+  }
+
+  .req-card .req-meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  .req-meta-item {
+    font-size: 8.5pt;
+    background: var(--bg-light);
+    padding: 3px 10px;
+    border-radius: 20px;
+    color: var(--text-light);
+    font-weight: 500;
+  }
+
+  .req-meta-item span {
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  /* Architecture diagram */
+  .arch-box {
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9pt;
+    padding: 24px 28px;
+    border-radius: 10px;
+    margin: 20px 0;
+    line-height: 1.9;
+  }
+
+  /* Page info header */
+  .page-header-bar {
+    background: linear-gradient(90deg, var(--primary), var(--accent2));
+    color: white;
+    padding: 8px 20px;
+    font-size: 8pt;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Document info box */
+  .doc-info-box {
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 30px 0;
+  }
+
+  .doc-info-box .header {
+    background: var(--primary);
+    color: white;
+    padding: 10px 16px;
+    font-weight: 700;
+    font-size: 10pt;
+    letter-spacing: 0.5px;
+  }
+
+  .doc-info-box table {
+    margin: 0;
+  }
+
+  .doc-info-box table td:first-child {
+    font-weight: 700;
+    color: var(--primary);
+    width: 200px;
+    background: var(--bg-light);
+  }
+
+  /* Status badges */
+  .badge {
+    display: inline-block;
+    font-size: 8pt;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+  }
+
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-orange { background: #ffedd5; color: #9a3412; }
+  .badge-purple { background: #f3e8ff; color: #6b21a8; }
+
+  /* HR divider */
+  .section-divider {
+    border: none;
+    border-top: 2px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* Endpoint table specific */
+  .ep-verb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .ep-verb.get { background: #dcfce7; color: #166534; }
+  .ep-verb.post { background: #dbeafe; color: #1e40af; }
+  .ep-verb.patch { background: #ffedd5; color: #9a3412; }
+  .ep-verb.put { background: #f3e8ff; color: #6b21a8; }
+  .ep-verb.delete { background: #fee2e2; color: #991b1b; }
+
+  /* Signature / approval page */
+  .approval-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 50px;
+  }
+
+  .approval-box {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .approval-box .sig-line {
+    border-top: 1px solid var(--primary);
+    margin: 40px 0 8px;
+  }
+
+  .approval-box .sig-name {
+    font-weight: 700;
+    font-size: 10.5pt;
+    color: var(--primary);
+  }
+
+  .approval-box .sig-role {
+    font-size: 9pt;
+    color: var(--text-light);
+  }
+
+  /* Numbered section headers */
+  .section-number {
+    color: var(--accent);
+    font-weight: 900;
+    margin-right: 8px;
+  }
+
+  /* Print */
+  @media print {
+    body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .cover { min-height: 100vh; }
+  }
+
+  /* Flow steps */
+  .flow-step {
+    display: flex;
+    gap: 16px;
+    margin: 12px 0;
+    align-items: flex-start;
+  }
+
+  .flow-num {
+    background: var(--accent);
+    color: white;
+    font-weight: 700;
+    font-size: 9pt;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .flow-content {
+    flex: 1;
+    padding-top: 4px;
+    font-size: 10pt;
+  }
+
+  /* Risk table */
+  .risk-high { background: #fee2e2 !important; }
+  .risk-med { background: #ffedd5 !important; }
+  .risk-low { background: #dcfce7 !important; }
+
+  /* Glossary term */
+  dt {
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: 12px;
+    font-size: 10.5pt;
+  }
+
+  dd {
+    margin-left: 20px;
+    color: var(--text-light);
+    font-size: 9.5pt;
+    margin-bottom: 6px;
+  }
+
+  /* Annotation */
+  .annotation {
+    font-size: 8.5pt;
+    color: var(--text-light);
+    font-style: italic;
+    margin-top: 6px;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ==================== PORTADA ==================== -->
+<div class="cover">
+  <div class="cover-logo-area">
+    <div class="cover-org-badge">THE BLACK CODE JSB</div>
+  </div>
+
+  <h1>Commer<span>City</span><br>Mobile</h1>
+  <p class="cover-subtitle">Especificación de Requerimientos de Software<br>Sistema de Marketplace Local — Versión 2.0</p>
+
+  <div class="cover-divider"></div>
+
+  <div class="cover-meta-grid">
+    <div class="cover-meta-item">
+      <div class="label">Código Documento</div>
+      <div class="value">SRS-CCM-2026-V3</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Estándar</div>
+      <div class="value">IEEE Std 830-1998 / ISO/IEC/IEEE 29148</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Versión</div>
+      <div class="value">3.0 — Edición Completa</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Fecha de Emisión</div>
+      <div class="value">Septiembre 2026</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Organización</div>
+      <div class="value">THE BLACK CODE JSB</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Clasificación</div>
+      <div class="value">Uso Interno — Sprint 2 / Cierre</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Plataforma</div>
+      <div class="value">Android &amp; iOS (Ionic Capacitor)</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Backend</div>
+      <div class="value">Node.js / Express — MySQL 8.0</div>
+    </div>
+  </div>
+
+  <div class="cover-author-box">
+    <div class="author-label">✦ Autor y Responsable del Documento</div>
+    <div class="author-name">Jhon Jairo Parra Obando</div>
+  </div>
+
+  <div class="cover-footer">
+    SRS-CCM-2026-V3 · CommerCity Mobile · THE BLACK CODE JSB · Documento Confidencial de Uso Interno
+  </div>
+</div>
+
+<!-- ==================== TABLA DE CONTENIDOS ==================== -->
+<div class="toc-page">
+  <div class="toc-title">Tabla de Contenidos</div>
+  <p class="toc-subtitle">Documento SRS-CCM-2026-V3 — CommerCity Mobile v2.0 — Especificación Completa</p>
+
+  <div class="toc-section">
+    <a href="#s1"><span class="toc-num">1.</span><span class="toc-label">Introducción</span><span class="toc-page-num">3</span></a>
+    <div class="toc-sub">
+      <a href="#s1-1"><span class="toc-num">1.1</span><span class="toc-label">Propósito del Documento</span><span class="toc-page-num">3</span></a>
+      <a href="#s1-2"><span class="toc-num">1.2</span><span class="toc-label">Alcance del Sistema</span><span class="toc-page-num">3</span></a>
+      <a href="#s1-3"><span class="toc-num">1.3</span><span class="toc-label">Definiciones, Acrónimos y Abreviaturas</span><span class="toc-page-num">4</span></a>
+      <a href="#s1-4"><span class="toc-num">1.4</span><span class="toc-label">Referencias y Estándares Aplicables</span><span class="toc-page-num">4</span></a>
+      <a href="#s1-5"><span class="toc-num">1.5</span><span class="toc-label">Visión General del Documento</span><span class="toc-page-num">5</span></a>
+    </div>
+  </div>
+
+  <div class="toc-section">
+    <a href="#s2"><span class="toc-num">2.</span><span class="toc-label">Descripción General del Sistema</span><span class="toc-page-num">5</span></a>
+    <div class="toc-sub">
+      <a href="#s2-1"><span class="toc-num">2.1</span><span class="toc-label">Perspectiva del Producto</span><span class="toc-page-num">5</span></a>
+      <a href="#s2-2"><span class="toc-num">2.2</span><span class="toc-label">Funciones Principales del Producto</span><span class="toc-page-num">6</span></a>
+      <a href="#s2-3"><span class="toc-num">2.3</span><span class="toc-label">Perfiles de Usuario y Roles RBAC</span><span class="toc-page-num">7</span></a>
+      <a href="#s2-4"><span class="toc-num">2.4</span><span class="toc-label">Restricciones Generales</span><span class="toc-page-num">7</span></a>
+      <a href="#s2-5"><span class="toc-num">2.5</span><span class="toc-label">Suposiciones y Dependencias</span><span class="toc-page-num">8</span></a>
+    </div>
+  </div>
+
+  <div class="toc-section">
+    <a href="#s3"><span class="toc-num">3.</span><span class="toc-label">Requerimientos Funcionales (RF)</span><span class="toc-page-num">8</span></a>
+    <div class="toc-sub">
+      <a href="#s3-1"><span class="toc-num">3.1</span><span class="toc-label">Módulo de Autenticación y Cuentas</span><span class="toc-page-num">9</span></a>
+      <a href="#s3-2"><span class="toc-num">3.2</span><span class="toc-label">Módulo de Catálogo y Búsqueda</span><span class="toc-page-num">11</span></a>
+      <a href="#s3-3"><span class="toc-num">3.3</span><span class="toc-label">Módulo de Carrito de Compras</span><span class="toc-page-num">12</span></a>
+      <a href="#s3-4"><span class="toc-num">3.4</span><span class="toc-label">Módulo de Pedidos, Checkout y Pagos</span><span class="toc-page-num">13</span></a>
+      <a href="#s3-5"><span class="toc-num">3.5</span><span class="toc-label">Módulo de Tienda y Ventas (Vendedor)</span><span class="toc-page-num">15</span></a>
+      <a href="#s3-6"><span class="toc-num">3.6</span><span class="toc-label">Módulo Social, Calificaciones y Notificaciones</span><span class="toc-page-num">17</span></a>
+      <a href="#s3-7"><span class="toc-num">3.7</span><span class="toc-label">Módulo de Administración de Plataforma</span><span class="toc-page-num">18</span></a>
+      <a href="#s3-8"><span class="toc-num">3.8</span><span class="toc-label">Módulo de Mensajería y Chat</span><span class="toc-page-num">19</span></a>
+      <a href="#s3-9"><span class="toc-num">3.9</span><span class="toc-label">Módulo de Perfil y Configuración de Cuenta</span><span class="toc-page-num">20</span></a>
+    </div>
+  </div>
+
+  <div class="toc-section">
+    <a href="#s4"><span class="toc-num">4.</span><span class="toc-label">Matriz de Mapeo: Pantallas / Modales vs Endpoints API</span><span class="toc-page-num">21</span></a>
+  </div>
+
+  <div class="toc-section">
+    <a href="#s5"><span class="toc-num">5.</span><span class="toc-label">Requerimientos No Funcionales (RNF)</span><span class="toc-page-num">24</span></a>
+    <div class="toc-sub">
+      <a href="#s5-1"><span class="toc-num">5.1</span><span class="toc-label">Seguridad</span><span class="toc-page-num">24</span></a>
+      <a href="#s5-2"><span class="toc-num">5.2</span><span class="toc-label">Rendimiento y Escalabilidad</span><span class="toc-page-num">25</span></a>
+      <a href="#s5-3"><span class="toc-num">5.3</span><span class="toc-label">Disponibilidad y Tolerancia a Fallos</span><span class="toc-page-num">25</span></a>
+      <a href="#s5-4"><span class="toc-num">5.4</span><span class="toc-label">Usabilidad y Compatibilidad</span><span class="toc-page-num">25</span></a>
+      <a href="#s5-5"><span class="toc-num">5.5</span><span class="toc-label">Integridad y Consistencia de Datos</span><span class="toc-page-num">26</span></a>
+      <a href="#s5-6"><span class="toc-num">5.6</span><span class="toc-label">Mantenibilidad y Extensibilidad</span><span class="toc-page-num">26</span></a>
+    </div>
+  </div>
+
+  <div class="toc-section">
+    <a href="#s6"><span class="toc-num">6.</span><span class="toc-label">Arquitectura Técnica y Parámetros de Infraestructura</span><span class="toc-page-num">27</span></a>
+    <div class="toc-sub">
+      <a href="#s6-1"><span class="toc-num">6.1</span><span class="toc-label">Parámetros de Red y Base de Datos</span><span class="toc-page-num">27</span></a>
+      <a href="#s6-2"><span class="toc-num">6.2</span><span class="toc-label">Esquema Relacional MySQL (commercity_v2)</span><span class="toc-page-num">27</span></a>
+      <a href="#s6-3"><span class="toc-num">6.3</span><span class="toc-label">Stack Tecnológico Completo</span><span class="toc-page-num">29</span></a>
+      <a href="#s6-4"><span class="toc-num">6.4</span><span class="toc-label">Modelo de Autenticación JWT</span><span class="toc-page-num">29</span></a>
+      <a href="#s6-5"><span class="toc-num">6.5</span><span class="toc-label">Cliente HTTP Centralizado (api.js)</span><span class="toc-page-num">30</span></a>
+    </div>
+  </div>
+
+  <div class="toc-section">
+    <a href="#s7"><span class="toc-num">7.</span><span class="toc-label">Reglas de Negocio</span><span class="toc-page-num">31</span></a>
+  </div>
+
+  <div class="toc-section">
+    <a href="#s8"><span class="toc-num">8.</span><span class="toc-label">Diagrama de Flujo de Datos y Secuencias</span><span class="toc-page-num">32</span></a>
+  </div>
+
+  <div class="toc-section">
+    <a href="#s9"><span class="toc-num">9.</span><span class="toc-label">Análisis de Riesgos</span><span class="toc-page-num">33</span></a>
+  </div>
+
+  <div class="toc-section">
+    <a href="#s10"><span class="toc-num">10.</span><span class="toc-label">Criterios de Aceptación y Cierre de Sprint 2</span><span class="toc-page-num">34</span></a>
+  </div>
+
+  <div class="toc-section">
+    <a href="#s11"><span class="toc-num">11.</span><span class="toc-label">Plan de Verificación y Pruebas</span><span class="toc-page-num">35</span></a>
+  </div>
+
+  <div class="toc-section">
+    <a href="#s12"><span class="toc-num">12.</span><span class="toc-label">Historial de Revisiones y Control de Cambios</span><span class="toc-page-num">36</span></a>
+  </div>
+
+  <div class="toc-section">
+    <a href="#s13"><span class="toc-num">13.</span><span class="toc-label">Aprobaciones y Firmas</span><span class="toc-page-num">37</span></a>
+  </div>
+</div>
+
+<!-- ==================== CUERPO DEL DOCUMENTO ==================== -->
+<div class="content">
+
+  <!-- ===== SECCIÓN 1: INTRODUCCIÓN ===== -->
+  <h1 class="doc-h1" id="s1"><span class="section-number">1.</span> Introducción</h1>
+
+  <div class="doc-info-box">
+    <div class="header">📄 Información del Documento</div>
+    <table>
+      <tbody>
+        <tr><td>Código</td><td><code>SRS-CCM-2026-V3</code></td></tr>
+        <tr><td>Proyecto</td><td>CommerCity Mobile — Marketplace Local (Android &amp; iOS)</td></tr>
+        <tr><td>Organización</td><td>THE BLACK CODE JSB</td></tr>
+        <tr><td>Autor</td><td><strong>Jhon Jairo Parra Obando</strong></td></tr>
+        <tr><td>Versión del Sistema</td><td>v2.0 — Fase de Integración con API REST Central</td></tr>
+        <tr><td>Estándar</td><td>IEEE Std 830-1998 / ISO/IEC/IEEE 29148:2018</td></tr>
+        <tr><td>Estado</td><td><span class="badge badge-green">✓ Aprobado para Sprint 2</span></td></tr>
+        <tr><td>Fecha</td><td>Septiembre 2026</td></tr>
+        <tr><td>Revisión</td><td>3.0 — Edición Completa y Extendida</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="doc-h2" id="s1-1">1.1 Propósito del Documento</h2>
+
+  <p>El presente documento constituye la <strong>Especificación de Requerimientos de Software (SRS)</strong> oficial para el aplicativo móvil <strong>CommerCity Mobile v2.0</strong>, desarrollado bajo el marco de trabajo de THE BLACK CODE JSB. Su propósito es definir de manera precisa, completa, verificable y no ambigua el conjunto de requerimientos funcionales, requerimientos no funcionales, reglas de negocio, restricciones técnicas y criterios de aceptación que rigen el comportamiento del sistema.</p>
+
+  <p>Este documento establece el contrato técnico entre todos los actores involucrados en el desarrollo: equipo de frontend móvil, equipo de backend, diseñadores UX/UI, coordinador de casos de uso y los interesados del proyecto. Sirve como base para la elaboración de diagramas de casos de uso, diagramas de secuencia, casos de prueba y la planificación de sprints.</p>
+
+  <p>La versión 3.0 de este SRS incorpora la especificación completa de la transición arquitectural desde el modelo de persistencia local (prototipado) hacia el modelo real de consumo de API REST centralizada, detallando cada endpoint, contrato de datos, flujo de autenticación JWT y regla de negocio que gobierna el sistema.</p>
+
+  <div class="callout callout-info">
+    <strong>ℹ️ Audiencia Objetivo</strong>
+    Este documento está dirigido a: (1) Ingenieros de software frontend y backend, (2) Coordinadores de ingeniería y arquitectos de software, (3) Analistas y testers de calidad, (4) Directivos y stakeholders del proyecto CommerCity. La lectura técnica completa es recomendada para los roles de desarrollo; los stakeholders pueden concentrarse en las Secciones 1, 2, 7 y 10.
+  </div>
+
+  <h2 class="doc-h2" id="s1-2">1.2 Alcance del Sistema</h2>
+
+  <p><strong>CommerCity</strong> es un marketplace móvil diseñado para dinamizar el comercio local mediante la conexión directa entre compradores y vendedores dentro de un ecosistema digital urbano. El sistema permite que comerciantes locales publiquen sus productos y gestionen sus tiendas desde un dispositivo móvil, mientras que los compradores pueden explorar, comparar y adquirir productos con soporte de múltiples métodos de pago.</p>
+
+  <p>El <strong>alcance funcional</strong> del sistema CommerCity Mobile v2.0 comprende los siguientes módulos operacionales:</p>
+
+  <ul>
+    <li><strong>Autenticación y Gestión de Cuentas:</strong> Registro, inicio de sesión con JWT, recuperación de contraseña y gestión de sesiones seguras.</li>
+    <li><strong>Catálogo y Exploración:</strong> Visualización de productos por categoría, búsqueda textual, paginación y detalle de producto con stock en tiempo real.</li>
+    <li><strong>Carrito de Compras Persistente:</strong> Gestión del carrito sincronizada con el servidor, con control de stock, modificación de cantidades y expiración automática.</li>
+    <li><strong>Procesamiento de Pedidos y Checkout:</strong> Pasarela de pago con resumen fiscal calculado por el backend (IVA 19%, Comisión 10%), confirmación atómica de transacciones y comprobante de compra.</li>
+    <li><strong>Panel de Tienda para Vendedores:</strong> Gestión de inventario, publicación de productos, actualización de estados de envío y visualización de métricas financieras.</li>
+    <li><strong>Mensajería y Chat:</strong> Sistema de comunicación bidireccional entre compradores y vendedores en tiempo real.</li>
+    <li><strong>Notificaciones Operacionales:</strong> Alertas sobre estados de pedidos, mensajes nuevos y actualizaciones de plataforma.</li>
+    <li><strong>Sistema de Calificaciones y Reseñas:</strong> Valoración post-compra de vendedores con puntuación de 1 a 5 estrellas.</li>
+    <li><strong>Consola Administrativa:</strong> Panel de métricas globales, moderación de contenido y gestión de usuarios para administradores de plataforma.</li>
+  </ul>
+
+  <p><strong>Fuera del alcance</strong> de esta versión (v2.0) se encuentran: integración con pasarelas de pago externas (PSE, PayU, Stripe), logística de terceros, facturación electrónica automática DIAN, y funciones de realidad aumentada para visualización de productos.</p>
+
+  <h2 class="doc-h2" id="s1-3">1.3 Definiciones, Acrónimos y Abreviaturas</h2>
+
+  <dl>
+    <dt>SRS (Software Requirements Specification)</dt>
+    <dd>Documento formal que describe el comportamiento esperado del software, sus restricciones y requerimientos. Estándar IEEE 830-1998.</dd>
+
+    <dt>JWT (JSON Web Token)</dt>
+    <dd>Estándar RFC 7519 para la transmisión segura de información entre partes como objeto JSON. Utilizado en CommerCity para autenticación sin estado (stateless).</dd>
+
+    <dt>RBAC (Role-Based Access Control)</dt>
+    <dd>Modelo de control de acceso basado en roles que restringe el acceso a funciones del sistema según el rol asignado al usuario autenticado.</dd>
+
+    <dt>REST (Representational State Transfer)</dt>
+    <dd>Estilo arquitectural para sistemas distribuidos que utiliza HTTP como protocolo de comunicación. El backend de CommerCity expone una API RESTful.</dd>
+
+    <dt>IVA (Impuesto al Valor Agregado)</dt>
+    <dd>Impuesto indirecto del 19% aplicado sobre el valor de los productos gravados, conforme a la normativa tributaria colombiana vigente.</dd>
+
+    <dt>Capacitor</dt>
+    <dd>Runtime multiplataforma de Ionic que permite empaquetar aplicaciones web (HTML/CSS/JS) como aplicaciones nativas para Android e iOS.</dd>
+
+    <dt>DBMS (Database Management System)</dt>
+    <dd>Sistema gestor de base de datos. En CommerCity se utiliza MySQL 8.0+ como DBMS central.</dd>
+
+    <dt>RBAC</dt>
+    <dd>Control de Acceso Basado en Roles. Los roles del sistema son: COMPRADOR, VENDEDOR y ADMINISTRADOR.</dd>
+
+    <dt>API (Application Programming Interface)</dt>
+    <dd>Interfaz de programación que expone funcionalidades del backend para ser consumidas por el cliente móvil.</dd>
+
+    <dt>CDN (Content Delivery Network)</dt>
+    <dd>Red de distribución de contenidos. Utilizada para almacenar y servir imágenes de productos.</dd>
+
+    <dt>HTTPS / TLS</dt>
+    <dd>Protocolo de transferencia segura de hipertexto con cifrado Transport Layer Security. Requerido para todas las comunicaciones en producción.</dd>
+
+    <dt>Pool de Conexiones</dt>
+    <dd>Mecanismo de reutilización de conexiones de base de datos para mejorar el rendimiento. Implementado con <code>mysql2</code> en el backend.</dd>
+
+    <dt>Sprint</dt>
+    <dd>Período de trabajo de duración fija (generalmente 2 semanas) en la metodología ágil Scrum para el desarrollo iterativo del software.</dd>
+  </dl>
+
+  <h2 class="doc-h2" id="s1-4">1.4 Referencias y Estándares Aplicables</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Referencia</th>
+        <th>Descripción</th>
+        <th>Aplicación</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>IEEE Std 830-1998</td><td>Práctica Recomendada para Especificaciones de Requerimientos de Software</td><td>Estructura y formato del documento SRS</td></tr>
+      <tr><td>ISO/IEC/IEEE 29148:2018</td><td>Sistemas e Ingeniería de Software — Procesos de Ciclo de Vida — Ingeniería de Requerimientos</td><td>Definición de calidad de requerimientos</td></tr>
+      <tr><td>RFC 7519</td><td>JSON Web Token (JWT) — Internet Engineering Task Force</td><td>Especificación del mecanismo de autenticación</td></tr>
+      <tr><td>OWASP Mobile Top 10</td><td>Guía de Seguridad en Aplicaciones Móviles</td><td>Directrices de seguridad para el cliente Capacitor</td></tr>
+      <tr><td>Normativa Tributaria Colombia — Ley 1819/2016</td><td>Reforma Tributaria Estructural — IVA 19%</td><td>Base legal para el cálculo del impuesto</td></tr>
+      <tr><td>Ionic Capacitor v5 Docs</td><td>Documentación Oficial del Runtime Multiplataforma</td><td>Empaquetado nativo Android/iOS</td></tr>
+      <tr><td>MySQL 8.0 Reference Manual</td><td>Documentación Oficial de MySQL</td><td>Diseño del esquema y transacciones</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="doc-h2" id="s1-5">1.5 Visión General del Documento</h2>
+
+  <p>Este documento está organizado en trece secciones principales siguiendo la estructura recomendada por el estándar IEEE 830-1998, adaptada a las necesidades específicas del proyecto CommerCity Mobile:</p>
+
+  <ul>
+    <li>Las <strong>Secciones 1 y 2</strong> proveen el contexto, alcance y descripción general del sistema.</li>
+    <li>Las <strong>Secciones 3 y 4</strong> contienen la especificación detallada de todos los requerimientos funcionales y su mapeo con los endpoints de la API.</li>
+    <li>La <strong>Sección 5</strong> cubre los requerimientos no funcionales de calidad del sistema.</li>
+    <li>La <strong>Sección 6</strong> detalla la arquitectura técnica, esquema de base de datos y stack tecnológico.</li>
+    <li>Las <strong>Secciones 7 y 8</strong> presentan las reglas de negocio y los flujos de datos.</li>
+    <li>Las <strong>Secciones 9 a 13</strong> tratan el análisis de riesgos, criterios de aceptación, plan de pruebas, historial de cambios y aprobaciones.</li>
+  </ul>
+
+  <hr class="section-divider">
+
+  <!-- ===== SECCIÓN 2: DESCRIPCIÓN GENERAL ===== -->
+  <h1 class="doc-h1" id="s2"><span class="section-number">2.</span> Descripción General del Sistema</h1>
+
+  <h2 class="doc-h2" id="s2-1">2.1 Perspectiva del Producto</h2>
+
+  <p>CommerCity Mobile opera como un <strong>cliente desacoplado de arquitectura híbrida nativa</strong> (frontend) que se comunica con un servidor backend centralizado a través de una API REST. El sistema sigue el patrón arquitectural <em>Client-Server</em> con separación estricta de responsabilidades:</p>
+
+  <ul>
+    <li><strong>Cliente Móvil (Capacitor):</strong> Responsable de la interfaz de usuario, navegación, renderizado de datos y experiencia del usuario. No realiza cálculos financieros ni validaciones de negocio críticas.</li>
+    <li><strong>Backend (Node.js/Express):</strong> Responsable de toda la lógica de negocio: autenticación, autorización por roles, cálculos fiscales, validación de inventario, gestión de transacciones y persistencia de datos.</li>
+    <li><strong>Base de Datos (MySQL 8.0):</strong> Capa de persistencia relacional que almacena todos los datos del negocio con integridad referencial garantizada.</li>
+  </ul>
+
+  <div class="arch-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│                    CLIENTE MÓVIL (Capacitor v5)                     │
+│         HTML5 / CSS3 / JavaScript ES6+ / Web APIs / PWA             │
+│    Android 8.0+ (WebView)          iOS 13+ (WKWebView)              │
+└──────────────────────────────┬──────────────────────────────────────┘
+                               │ HTTPS / JSON (Authorization: Bearer JWT)
+                               │ Puerto 3000 | Emulador: 10.0.2.2:3000
+                               ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│               BACKEND REST (Node.js v18+ / Express v4)              │
+│                    http://localhost:3000                             │
+│                                                                     │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌───────────────────┐   │
+│  │ Auth Middleware  │  │  Routes Layer    │  │ Business Logic    │   │
+│  │ JWT verifyToken  │  │  /api/usuarios   │  │ IVA 19% calc      │   │
+│  │ RBAC check       │  │  /api/productos  │  │ Comisión 10%      │   │
+│  │ bcryptjs hash    │  │  /api/carrito    │  │ Stock validation  │   │
+│  └─────────────────┘  │  /api/pedidos    │  │ Atomic TX         │   │
+│                        │  /api/tienda     │  └───────────────────┘   │
+│                        │  /api/chat       │                          │
+│                        │  /api/admin      │                          │
+│                        │  /api/notifs     │                          │
+│                        └─────────────────┘                          │
+└──────────────────────────────┬──────────────────────────────────────┘
+                               │ TCP / Puerto 3306 — mysql2 Connection Pool
+                               │ Host: 149.130.178.228 | Max: 30 conexiones
+                               ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                  BASE DE DATOS CENTRAL (MySQL 8.0)                  │
+│          Host: 149.130.178.228:3306 | BD: commercity_v2             │
+│                                                                     │
+│  usuarios · roles · usuario_roles · productos · pedidos             │
+│  pedidos_detalle · carrito · notificaciones · calificaciones        │
+│  mensajes_chat · reportes · categorias                              │
+└─────────────────────────────────────────────────────────────────────┘
+  </div>
+
+  <h2 class="doc-h2" id="s2-2">2.2 Funciones Principales del Producto</h2>
+
+  <p>CommerCity Mobile provee las siguientes capacidades funcionales de alto nivel:</p>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>Función</th><th>Descripción Resumida</th><th>Rol Beneficiado</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>F-01</td><td>Autenticación JWT Segura</td><td>Login real con validación en MySQL, token con expiración y control de roles</td><td>Todos</td></tr>
+      <tr><td>F-02</td><td>Exploración de Catálogo</td><td>Listado de productos paginado con filtros por categoría y búsqueda textual</td><td>Comprador</td></tr>
+      <tr><td>F-03</td><td>Carrito Persistente en Servidor</td><td>Carrito sincronizado con BD, control de stock y expiración automática a 7 días</td><td>Comprador</td></tr>
+      <tr><td>F-04</td><td>Checkout con Cálculo Backend</td><td>Pasarela con IVA 19% y comisión 10% calculados exclusivamente por el servidor</td><td>Comprador</td></tr>
+      <tr><td>F-05</td><td>Historial de Compras</td><td>Seguimiento de pedidos con estados y opción de cancelación</td><td>Comprador</td></tr>
+      <tr><td>F-06</td><td>Panel de Tienda</td><td>CRUD de productos, gestión de stock, actualización de envíos y métricas financieras</td><td>Vendedor</td></tr>
+      <tr><td>F-07</td><td>Mensajería Directa</td><td>Chat en tiempo real entre comprador y vendedor con historial persistente</td><td>Todos</td></tr>
+      <tr><td>F-08</td><td>Notificaciones Push</td><td>Alertas operacionales sobre pedidos, mensajes y actualizaciones del sistema</td><td>Todos</td></tr>
+      <tr><td>F-09</td><td>Sistema de Calificaciones</td><td>Valoración de vendedores post-compra con puntuación 1-5 estrellas y comentario</td><td>Comprador</td></tr>
+      <tr><td>F-10</td><td>Consola Administrativa</td><td>Dashboard global, moderación de reportes y gestión de usuarios/productos</td><td>Administrador</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="doc-h2" id="s2-3">2.3 Perfiles de Usuario y Roles RBAC</h2>
+
+  <p>El sistema implementa un modelo de Control de Acceso Basado en Roles (RBAC) gestionado en la tabla <code>usuario_roles</code> de la base de datos <code>commercity_v2</code>. Un usuario puede tener múltiples roles simultáneamente (por ejemplo: un usuario puede ser COMPRADOR y VENDEDOR al mismo tiempo).</p>
+
+  <table>
+    <thead>
+      <tr><th>Rol</th><th>ID en BD</th><th>Permisos Principales</th><th>Vistas Habilitadas</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-blue">comprador</span></td>
+        <td><code>comprador</code> (rol_id = 1)</td>
+        <td>Navegar catálogo, gestionar carrito, realizar compras, ver historial, calificar vendedores, usar chat, reportar contenido</td>
+        <td>page-home, page-carrito, page-historial, page-perfil, page-chat, page-mensajes</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-green">vendedor</span></td>
+        <td><code>vendedor</code> (rol_id = 2)</td>
+        <td>Todo lo del comprador + publicar productos, editar stock, gestionar pedidos entrantes, ver métricas de tienda, configurar datos bancarios</td>
+        <td>page-tienda, page-pedidos, modal #add-prod-modal, modal #edit-prod-modal</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-red">administrador</span></td>
+        <td><code>administrador</code> (rol_id = 3)</td>
+        <td>Acceso total al sistema: métricas globales, suspensión de usuarios, moderación de reportes, gestión de productos, visualización de toda la plataforma</td>
+        <td>page-admin, ajustes-admin, acceso a todos los modales de administración</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="doc-h2" id="s2-4">2.4 Restricciones Generales</h2>
+
+  <p>El sistema está sujeto a las siguientes restricciones de diseño e implementación:</p>
+
+  <ul>
+    <li><strong>Sin cálculos financieros en cliente:</strong> Ningún cálculo de IVA, comisión, subtotal o total se realizará en el código JavaScript del cliente. Todos los montos provienen exclusivamente del backend.</li>
+    <li><strong>Autenticación obligatoria para transacciones (con excepción del Carrito):</strong> Toda operación transaccional y de gestión en servidor exige cabecera <code>Authorization: Bearer &lt;token&gt;</code>, con la <strong>excepción explícita del carrito de compras</strong> (<code>/api/carrito</code>), el cual opera sin JWT mediante el identificador <code>comprador_id</code>.</li>
+    <li><strong>Compatibilidad de plataforma:</strong> El aplicativo debe funcionar correctamente en Android 8.0 (API 26) o superior e iOS 13 o superior.</li>
+    <li><strong>Puerto de Backend fijo:</strong> El backend opera exclusivamente en el puerto 3000. En emulador Android se accede mediante la IP especial <code>10.0.2.2</code>.</li>
+    <li><strong>Base de datos centralizada:</strong> No se permite persistencia local de datos críticos del negocio. Los datos maestros residen exclusivamente en MySQL <code>commercity_v2</code>.</li>
+    <li><strong>Lenguaje de la interfaz:</strong> El idioma de la aplicación es español (es-CO).</li>
+    <li><strong>Conformidad tributaria:</strong> El IVA se calcula conforme a la legislación tributaria colombiana vigente (19% sobre productos gravados).</li>
+  </ul>
+
+  <h2 class="doc-h2" id="s2-5">2.5 Suposiciones y Dependencias</h2>
+
+  <p>El presente SRS asume las siguientes condiciones del entorno:</p>
+
+  <ul>
+    <li>El servidor backend Node.js/Express está en ejecución y accesible en <code>http://localhost:3000</code> durante el desarrollo y pruebas.</li>
+    <li>La base de datos MySQL <code>commercity_v2</code> está disponible en el host <code>149.130.178.228:3306</code> con el esquema relacional completo y migrado.</li>
+    <li>Los dispositivos móviles objetivo tienen acceso a internet estable para comunicarse con el backend.</li>
+    <li>El entorno de emulador Android utiliza la convención de IP <code>10.0.2.2</code> para acceder al <code>localhost</code> del equipo anfitrión.</li>
+    <li>Las dependencias del backend (<code>bcryptjs</code>, <code>jsonwebtoken</code>, <code>mysql2</code>, <code>express</code>, <code>cors</code>, <code>dotenv</code>) están instaladas y actualizadas según <code>package.json</code>.</li>
+    <li>El módulo de carga de imágenes (multipart/form-data) dispone de almacenamiento en servidor o CDN configurado.</li>
+  </ul>
+
+  <hr class="section-divider">
+
+  <!-- ===== SECCIÓN 3: REQUERIMIENTOS FUNCIONALES ===== -->
+  <h1 class="doc-h1" id="s3"><span class="section-number">3.</span> Requerimientos Funcionales (RF)</h1>
+
+  <p>Los requerimientos funcionales describen <em>qué debe hacer el sistema</em> en términos de comportamiento observable, entradas aceptadas, salidas producidas y estados que debe mantener. Cada requerimiento recibe un identificador único, un nombre descriptivo, una descripción detallada, el criterio de aceptación medible, la prioridad y la trazabilidad con el endpoint de la API.</p>
+
+  <div class="callout callout-info">
+    <strong>📋 Convención de Identificadores</strong>
+    Los identificadores siguen el patrón <code>RF-[número]</code> para Requerimientos Funcionales. La prioridad sigue la convención MoSCoW: M = Must Have (Debe tener), S = Should Have (Debería tener), C = Could Have (Podría tener).
+  </div>
+
+  <!-- 3.1 Autenticación -->
+  <h2 class="doc-h2" id="s3-1">3.1 Módulo de Autenticación y Cuentas</h2>
+
+  <p>Este módulo gestiona el ciclo de vida completo de la identidad del usuario: registro, autenticación, recuperación de credenciales y cierre de sesión. Todos los flujos dependen de la API REST del backend y la base de datos <code>commercity_v2</code>.</p>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-01</span>
+      <span class="req-title">Inicio de Sesión Real con JWT</span>
+    </div>
+    <p><strong>Descripción:</strong> El sistema debe autenticar al usuario enviando sus credenciales (correo electrónico y contraseña) al endpoint <code>POST /api/usuarios/login</code>. El backend verifica las credenciales contra la tabla <code>usuarios</code> de MySQL, comparando la contraseña usando <code>bcryptjs.compare()</code>. Al ser correctas, retorna un token JWT firmado con algoritmo HMAC-SHA256 con expiración de 7 días, junto con el objeto de usuario que incluye el array de roles obtenido de la tabla <code>usuario_roles</code>.</p>
+    <p><strong>Flujo detallado:</strong></p>
+    <ol>
+      <li>El usuario ingresa correo y contraseña en <code>page-login</code> y presiona "Iniciar Sesión".</li>
+      <li>La app llama a <code>CommerCityAPI.auth.login(email, password)</code> que ejecuta <code>POST /api/usuarios/login</code> con body <code>{ email, password }</code>.</li>
+      <li>El backend consulta: <code>SELECT u.id, u.nombre_completo, u.email, u.password, GROUP_CONCAT(r.nombre) as roles_str FROM usuarios u LEFT JOIN usuario_roles ur ON u.id = ur.usuario_id LEFT JOIN roles r ON ur.rol_id = r.id WHERE u.email = ?</code>.</li>
+      <li>El backend retorna <code>{ mensaje, token, usuario: { id, nombre, email, roles: ["COMPRADOR", "VENDEDOR"] } }</code>.</li>
+      <li>La app almacena el token en <code>localStorage</code> bajo la clave <code>commercity_auth_token</code> y los datos de usuario en <code>commercity_auth_user</code>.</li>
+      <li>La función <code>setRole(isSeller, isAdmin)</code> actualiza la interfaz según los roles recibidos y navega a la pantalla correspondiente (<code>page-home</code> o <code>page-admin</code>).</li>
+    </ol>
+    <p><strong>Criterio de Aceptación:</strong> Un usuario con credenciales válidas obtiene token JWT, sus roles se asignan correctamente y la interfaz refleja sus permisos en menos de 2 segundos. Un usuario con credenciales inválidas recibe el mensaje "Credenciales inválidas" y permanece en la pantalla de login.</p>
+    <p><strong>Manejo de errores:</strong> HTTP 401 → Limpiar sesión local + toast de error. HTTP 400 → Toast de campo faltante. HTTP 500 → Toast de "Error del servidor, intenta más tarde".</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>POST /api/usuarios/login</span></div>
+      <div class="req-meta-item">Pantalla: <span>page-login</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-02</span>
+      <span class="req-title">Registro de Nuevo Usuario</span>
+    </div>
+    <p><strong>Descripción:</strong> El sistema debe permitir el registro de nuevos usuarios mediante el formulario de <code>page-registro</code>. El cliente envía los datos a <code>POST /api/usuarios/register</code> con payload <code>{ email, password, nombre_completo }</code>. No existe <code>solicita_vendedor</code>: el backend siempre asigna el rol base <code>comprador</code>. Si el correo electrónico ya existe, el servidor responde <code>HTTP 400</code> (Bad Request). Si el usuario requiere rol de comerciante, posteriormente utiliza el endpoint <code>PATCH /api/usuarios/me/rol</code> con <code>{ rol: "vendedor" }</code>.</p>
+    <p><strong>Validaciones requeridas en formulario:</strong></p>
+    <ul>
+      <li>Nombre completo: obligatorio.</li>
+      <li>Correo electrónico: formato válido RFC 5322, obligatorio.</li>
+      <li>Contraseña: mínimo 8 caracteres, obligatorio.</li>
+      <li>Confirmación de contraseña: debe coincidir con el campo de contraseña.</li>
+    </ul>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>POST /api/usuarios/register</span></div>
+      <div class="req-meta-item">Pantalla: <span>page-registro</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-03</span>
+      <span class="req-title">Recuperación y Restablecimiento de Contraseña</span>
+    </div>
+    <p><strong>Descripción:</strong> El sistema permite al usuario solicitar el restablecimiento de su contraseña enviando su correo electrónico a <code>POST /api/usuarios/recover</code> con <code>{ email }</code>. El servidor genera un token temporal con vigencia estricta de <strong>5 minutos</strong>. El restablecimiento efectivo se ejecuta mediante <code>POST /api/usuarios/reset-password</code> enviando <code>{ token, nuevaPassword }</code> dentro de la ventana de expiración.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>S — Should Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>POST /api/usuarios/recover &amp; reset-password</span></div>
+      <div class="req-meta-item">Expiración Token: <span>5 minutos</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-04</span>
+      <span class="req-title">Cierre de Sesión Seguro</span>
+    </div>
+    <p><strong>Descripción:</strong> Al ejecutar el cierre de sesión, el sistema debe eliminar completamente los datos de autenticación del almacenamiento local del cliente: la clave <code>commercity_auth_token</code> y la clave <code>commercity_auth_user</code> de <code>localStorage</code>. La función <code>CommerCityAPI.clearSession()</code> gestiona esta limpieza. Posteriormente, la interfaz debe restablecer el estado de roles (<code>isSeller = false</code>, <code>isAdmin = false</code>) y navegar obligatoriamente a <code>page-login</code>.</p>
+    <p><strong>Expiración automática de sesión:</strong> Cuando cualquier petición al backend retorna HTTP 401 o HTTP 403, el interceptor de la función <code>request()</code> en <code>api.js</code> ejecuta automáticamente <code>clearSession()</code>, muestra el toast "Sesión expirada o no autorizada. Inicia sesión nuevamente." y navega a <code>page-login</code>.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Acción: <span>localStorage.clear() + navTo('login')</span></div>
+      <div class="req-meta-item">Pantalla: <span>Todas (header/menú)</span></div>
+    </div>
+  </div>
+
+  <!-- 3.2 Catálogo -->
+  <h2 class="doc-h2" id="s3-2">3.2 Módulo de Catálogo y Búsqueda</h2>
+
+  <p>Este módulo permite a todos los usuarios explorar el catálogo de productos disponibles en la plataforma. El catálogo se alimenta en tiempo real desde la base de datos MySQL mediante el endpoint de productos.</p>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-10</span>
+      <span class="req-title">Consulta de Catálogo Principal</span>
+    </div>
+    <p><strong>Descripción:</strong> La pantalla principal (<code>page-home</code>) debe cargar automáticamente al inicializarse el sistema el listado de productos disponibles desde <code>GET /api/productos</code>. Los parámetros query aceptados por el backend son: <code>page</code>, <code>limit</code>, <code>nombre</code>, <code>categoria</code> y <code>vendedor</code>. La respuesta viene envuelta en <code>{ success: true, data: [...] }</code>.</p>
+    <p><strong>Renderizado:</strong> Cada producto se muestra como una tarjeta con imagen, nombre, precio (con descuento si aplica), rating del vendedor y botón de "Agregar al carrito". Los productos con stock 0 deben mostrarse con indicador "Agotado" y el botón de carrito deshabilitado.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>GET /api/productos</span></div>
+      <div class="req-meta-item">Pantalla: <span>page-home</span></div>
+      <div class="req-meta-item">Auth: <span>No requerida</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-11</span>
+      <span class="req-title">Detalle de Producto</span>
+    </div>
+    <p><strong>Descripción:</strong> Al seleccionar cualquier tarjeta de producto en el catálogo, el sistema abre el modal <code>#pd-modal</code> y carga los datos completos desde <code>GET /api/productos/:id</code>, obteniendo la respuesta estructurada en <code>{ success, data }</code> con fotos, descripción, inventario en tiempo real, vendedor y reseñas.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>GET /api/productos/:id</span></div>
+      <div class="req-meta-item">Pantalla: <span>Modal #pd-modal</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-12</span>
+      <span class="req-title">Búsqueda en Tiempo Real</span>
+    </div>
+    <p><strong>Descripción:</strong> El campo de búsqueda (<code>#search-input</code>) en la pantalla principal debe permitir búsqueda textual de productos. Al escribir en el campo, el sistema debe ejecutar la consulta <code>GET /api/productos?nombre={término}</code> con un debounce de 400ms para evitar peticiones excesivas. Los resultados deben reemplazar dinámicamente el contenido de <code>#home-prod-grid</code>. Si la búsqueda no retorna resultados, el sistema muestra el mensaje "No encontramos productos para tu búsqueda".</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>S — Should Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>GET /api/productos?nombre=...</span></div>
+      <div class="req-meta-item">Debounce: <span>400ms</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-13</span>
+      <span class="req-title">Mis Productos (Vendedor)</span>
+    </div>
+    <p><strong>Descripción:</strong> La vista de perfil del vendedor (<code>page-perfil</code>) lista exclusivamente los productos publicados por el usuario autenticado consultando <code>GET /api/productos?vendedor={id}</code>. Cada producto listado muestra stock actual, precio, estado de publicación y controles de edición.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>S — Should Have</span></div>
+      <div class="req-meta-item">Rol requerido: <span>vendedor</span></div>
+      <div class="req-meta-item">Pantalla: <span>page-perfil</span></div>
+    </div>
+  </div>
+
+  <!-- 3.3 Carrito -->
+  <h2 class="doc-h2" id="s3-3">3.3 Módulo de Carrito de Compras (Excepción sin JWT)</h2>
+
+  <p>El carrito de compras es la <strong>excepción a la autenticación obligatoria con JWT</strong>. No exige encabezado Bearer JWT: la sesión se asocia mediante el parámetro <code>comprador_id</code>.</p>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-30</span>
+      <span class="req-title">Persistencia del Carrito en Servidor sin JWT</span>
+    </div>
+    <p><strong>Descripción:</strong> La pantalla <code>page-carrito</code> consulta los ítems activos mediante <code>GET /api/carrito?comprador_id={id}</code> (sin cabecera JWT). Retorna la lista de ítems correspondientes al comprador.</p>
+    <p><strong>Badges de conteo:</strong> Los contadores de ítems en el carrito (<code>#sidebar-cart-badge</code> y <code>#bnav-cart-dot</code>) se actualizan en tiempo real tras cada operación.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>GET /api/carrito?comprador_id=...</span></div>
+      <div class="req-meta-item">Auth: <span>Sin JWT (excepción)</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-31</span>
+      <span class="req-title">Agregar Producto al Carrito</span>
+    </div>
+    <p><strong>Descripción:</strong> Al agregar un ítem desde <code>#pd-modal</code>, se ejecuta <code>POST /api/carrito</code> con payload <code>{ comprador_id, producto_id, cantidad }</code> (sin JWT). El servidor valida disponibilidad de stock y responde <code>HTTP 201 Created</code>.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>POST /api/carrito</span></div>
+      <div class="req-meta-item">Respuesta: <span>201 Created</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-32</span>
+      <span class="req-title">Modificar Cantidad de Ítems en Carrito</span>
+    </div>
+    <p><strong>Descripción:</strong> En <code>page-carrito</code>, los controles <code>cartQty</code> ejecutan <code>PATCH /api/carrito/:productoId?comprador_id={id}</code> con body <code>{ cantidad }</code> (sin JWT). El backend valida el inventario antes de autorizar el cambio.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>PATCH /api/carrito/:productoId?comprador_id=...</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-33</span>
+      <span class="req-title">Eliminar Ítem del Carrito</span>
+    </div>
+    <p><strong>Descripción:</strong> La acción <code>cartRemove</code> ejecuta <code>DELETE /api/carrito/:productoId?comprador_id={id}</code> (sin JWT). El backend remueve el producto del carrito para el comprador y actualiza los badges visuales.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>DELETE /api/carrito/:productoId?comprador_id=...</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-34</span>
+      <span class="req-title">Caducidad Automática del Carrito</span>
+    </div>
+    <p><strong>Descripción:</strong> Los carritos sin actividad durante un período de 7 días (604.800.000 milisegundos) deben ser purgados automáticamente por el sistema.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>S — Should Have</span></div>
+      <div class="req-meta-item">Período: <span>7 días de inactividad</span></div>
+    </div>
+  </div>
+
+  <!-- 3.4 Pedidos y Checkout -->
+  <h2 class="doc-h2" id="s3-4">3.4 Módulo de Pedidos, Checkout y Pagos</h2>
+
+  <div class="callout callout-danger">
+    <strong>⚠️ Regla de Negocio Crítica — Cálculo Exclusivo en Servidor</strong>
+    Ningún cálculo de Subtotal, IVA (19%) o Comisión de Plataforma (10%) puede realizarse en el código JavaScript del cliente móvil. Todos los montos deben obtenerse desde el endpoint <code>GET /api/pedidos/resumen</code> y renderizarse directamente en la interfaz. El código legacy de cálculo local (<code>const subtotal = Math.round(total / 1.19)</code>) está DEPRECADO y eliminado.
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-38</span>
+      <span class="req-title">Validación de Dirección de Entrega</span>
+    </div>
+    <p><strong>Descripción:</strong> En la confirmación de compra, el sistema exige que el comprador provea <code>direccion_envio</code> con una longitud mínima de 5 caracteres obligatorios para autorizar la transacción.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Validación: <span>Longitud mínima 5 caracteres</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-40</span>
+      <span class="req-title">Resumen Financiero Certificado (Pasarela)</span>
+    </div>
+    <p><strong>Descripción:</strong> Al abrir la pasarela de pago (<code>#pasarela-modal</code> mediante <code>openPasarela()</code>), la app consulta <code>GET /api/pedidos/resumen</code> con JWT y renderiza los montos provistos por el servidor: subtotal, iva (19%), comision_plataforma (10%) y total.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>GET /api/pedidos/resumen</span></div>
+      <div class="req-meta-item">Pantalla: <span>Modal #pasarela-modal</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-41</span>
+      <span class="req-title">Confirmación Atómica de Transacción y Pagos</span>
+    </div>
+    <p><strong>Descripción:</strong> Al confirmar el pago en la pasarela, se envía <code>POST /api/pedidos/confirmar-pago</code> (con Bearer JWT). El payload recibe:</p>
+    <pre><code>{
+  "direccion_envio": "Calle 45 # 12-34", // Mínimo 5 caracteres
+  "metodo_pago": "tarjeta" | "transferencia" | "pse",
+  "numero_tarjeta": "4111...", // Requerido si metodo_pago es tarjeta (Valida Luhn, RF118)
+  "nombre_tarjeta": "Juan Perez" // Requerido si metodo_pago es tarjeta
+}</code></pre>
+    <p><strong>Respuesta Backend (201 Created):</strong> Retorna <code>{ pedido_id, estado_pago: "Aprobado", total_neto, iva, total, distribucion_90_10 }</code>. No se utilizan campos obsoletos como <code>datos_transaccion</code> ni <code>direccion_entrega_id</code>.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>POST /api/pedidos/confirmar-pago</span></div>
+      <div class="req-meta-item">Respuesta: <span>201 Created</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-42</span>
+      <span class="req-title">Historial y Seguimiento de Pedidos</span>
+    </div>
+    <p><strong>Descripción:</strong> La pantalla <code>page-historial</code> muestra el historial de compras consultando <code>GET /api/historial/compras</code> con filtrado por estado (Pendiente, En Camino, Entregado, Cancelado).</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>GET /api/historial/compras</span></div>
+      <div class="req-meta-item">Pantalla: <span>page-historial</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-43</span>
+      <span class="req-title">Cancelación de Compra (Línea de Detalle)</span>
+    </div>
+    <p><strong>Descripción:</strong> El comprador puede solicitar la cancelación de una compra en estado Pendiente ejecutando <code>POST /api/historial/compras/:id/cancelar</code>, donde <code>:id</code> es el identificador de la línea del pedido (detalle) en estado Pendiente. El backend restituye el inventario y actualiza la compra a Cancelado.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>S — Should Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>POST /api/historial/compras/:id/cancelar</span></div>
+    </div>
+  </div>
+
+  <!-- 3.5 Tienda Vendedor -->
+  <h2 class="doc-h2" id="s3-5">3.5 Módulo de Tienda y Ventas (Vendedor)</h2>
+
+  <p>Este módulo está disponible exclusivamente para usuarios con el rol <strong>VENDEDOR</strong>. Provee todas las herramientas necesarias para que los comerciantes gestionen su presencia en la plataforma.</p>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-50</span>
+      <span class="req-title">Resumen Financiero de la Tienda</span>
+    </div>
+    <p><strong>Descripción:</strong> La pantalla principal del panel de tienda (<code>page-tienda</code>) debe mostrar un dashboard con las métricas financieras del comerciante consultando <code>GET /api/tienda/resumen</code>. El backend filtra los datos exclusivamente para el usuario autenticado (vendedor). La respuesta incluye:</p>
+    <ul>
+      <li><strong>Ventas totales:</strong> Número total de pedidos completados.</li>
+      <li><strong>Ingresos brutos:</strong> Suma total de las ventas antes de la retención de comisión.</li>
+      <li><strong>Comisión retenida (10%):</strong> Monto acumulado de comisión descontado por la plataforma.</li>
+      <li><strong>Balance neto:</strong> Ingresos brutos menos comisión retenida. Monto disponible para dispersión bancaria.</li>
+      <li><strong>Pedidos pendientes:</strong> Cantidad de pedidos en estado "Pendiente" que requieren atención.</li>
+    </ul>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>GET /api/tienda/resumen</span></div>
+      <div class="req-meta-item">Rol: <span>VENDEDOR</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-51</span>
+      <span class="req-title">Publicación de Nuevos Productos</span>
+    </div>
+    <p><strong>Descripción:</strong> El vendedor puede publicar nuevos productos mediante el modal <code>#add-prod-modal</code>. El formulario recopila: nombre del producto, descripción, precio, descuento (opcional, en %), stock inicial, categoría, e imagen del producto. La imagen se envía como <code>multipart/form-data</code> a <code>POST /api/productos</code>. El backend procesa la imagen, la almacena en el CDN/servidor y registra el producto en la tabla <code>productos</code> vinculado al <code>vendedor_id</code> del usuario autenticado.</p>
+    <p><strong>Validaciones del formulario:</strong></p>
+    <ul>
+      <li>Nombre: obligatorio, máximo 150 caracteres.</li>
+      <li>Precio: obligatorio, valor positivo mayor a $0.</li>
+      <li>Stock: obligatorio, entero no negativo.</li>
+      <li>Categoría: selección de lista predefinida.</li>
+      <li>Imagen: obligatoria, formatos JPG/PNG/WebP, máximo 5 MB.</li>
+    </ul>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>POST /api/productos (multipart)</span></div>
+      <div class="req-meta-item">Pantalla: <span>Modal #add-prod-modal</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-50</span>
+      <span class="req-title">Panel de Tienda y Métricas del Vendedor</span>
+    </div>
+    <p><strong>Descripción:</strong> La pantalla de tienda (<code>page-tienda</code>) y pedidos consulta las métricas consolidadas del comerciante mediante endpoints especializados:</p>
+    <ul>
+      <li><code>GET /api/tienda/dashboard/stats</code>: Métricas consolidadas de ventas, pedidos y balance de tienda.</li>
+      <li><code>GET /api/tienda/ventas</code>: Registro detallado de ventas y pedidos entrantes.</li>
+      <li><code>GET /api/tienda/ingresos</code>: Desglose financiero con liquidación neta y retención de comisión (10%).</li>
+      <li><code>GET /api/tienda/validacion</code>: Estado de validación comercial y acreditación de la tienda.</li>
+    </ul>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoints: <span>/api/tienda/dashboard/stats, ventas, ingresos, validacion</span></div>
+      <div class="req-meta-item">Rol: <span>vendedor</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-51</span>
+      <span class="req-title">Publicación de Nuevos Productos</span>
+    </div>
+    <p><strong>Descripción:</strong> El vendedor puede publicar nuevos productos mediante el modal <code>#add-prod-modal</code> enviando FormData con imagen a <code>POST /api/productos</code> (Bearer JWT).</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>POST /api/productos (multipart)</span></div>
+      <div class="req-meta-item">Pantalla: <span>Modal #add-prod-modal</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-52</span>
+      <span class="req-title">Edición de Productos y Control de Stock</span>
+    </div>
+    <p><strong>Descripción:</strong> El vendedor puede modificar sus productos existentes mediante <code>PUT /api/productos/:id</code> con FormData multipart. El backend valida la propiedad del producto antes de actualizar.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>PUT /api/productos/:id</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-53</span>
+      <span class="req-title">Actualización del Estado de Envíos</span>
+    </div>
+    <p><strong>Descripción:</strong> El vendedor avanza el despacho del pedido en <code>PATCH /api/pedidos/:id/estado</code> enviando <code>{ estado: "En camino" | "Entregado" }</code>. Este cambio genera una notificación automática al comprador.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>PATCH /api/pedidos/:id/estado</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-54</span>
+      <span class="req-title">Configuración de Cuenta Bancaria del Vendedor</span>
+    </div>
+    <p><strong>Descripción:</strong> El vendedor registra y consulta sus datos bancarios de liquidación a través de las rutas dedicadas: <code>GET/POST/PUT /api/tienda/mi-cuenta-bancaria</code> y consulta la versión enmascarada para visualización segura en UI con <code>GET /api/tienda/mi-cuenta-bancaria/masked</code>.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>S — Should Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>/api/tienda/mi-cuenta-bancaria</span></div>
+    </div>
+  </div>
+
+  <!-- 3.6 Social -->
+  <h2 class="doc-h2" id="s3-6">3.6 Módulo Social, Calificaciones y Notificaciones</h2>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-80</span>
+      <span class="req-title">Notificaciones Operacionales</span>
+    </div>
+    <p><strong>Descripción:</strong> Gestión completa de alertas mediante <code>GET /api/notificaciones</code>, conteo de alertas pendientes con <code>GET /api/notificaciones/no-leidas</code>, marcado masivo en <code>PATCH /api/notificaciones/leidas</code> y marcado individual con <code>PATCH /api/notificaciones/:id/leida</code>.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>/api/notificaciones/*</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-84 / RF-107</span>
+      <span class="req-title">Calificación de Vendedores</span>
+    </div>
+    <p><strong>Descripción:</strong> Tras la entrega de un pedido, el comprador califica al vendedor mediante <code>POST /api/calificaciones/vendedor</code> con payload <code>{ pedido_id, vendedor_id, estrellas (1-5), comentario }</code> (RF107, máximo una calificación por pedido).</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>S — Should Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>POST /api/calificaciones/vendedor</span></div>
+      <div class="req-meta-item">Restricción: <span>1 calificación por pedido (RF107)</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-86</span>
+      <span class="req-title">Reportes de Contenido y Moderación</span>
+    </div>
+    <p><strong>Descripción:</strong> Envío de reportes de productos o usuarios vía <code>POST /api/reportes</code> con <code>{ tipo: "Producto" | "Usuario", motivo, producto_id | usuario_reportado_id }</code> junto con archivo opcional de evidencia en multipart/form-data.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>S — Should Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>POST /api/reportes (multipart)</span></div>
+    </div>
+  </div>
+
+  <!-- 3.7 Admin -->
+  <h2 class="doc-h2" id="s3-7">3.7 Módulo de Administración de Plataforma</h2>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-90</span>
+      <span class="req-title">Dashboard de Métricas y Estadísticas Globales</span>
+    </div>
+    <p><strong>Descripción:</strong> La consola de administración consulta estadísticas consolidadas en <code>GET /api/admin/stats</code> (ventas, volumen de usuarios, comisión acumulada, reportes activos) restringido a rol <code>administrador</code>.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>GET /api/admin/stats</span></div>
+      <div class="req-meta-item">Rol: <span>administrador</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-91</span>
+      <span class="req-title">Gestión Administrativa de Usuarios, Productos y Reportes</span>
+    </div>
+    <p><strong>Descripción:</strong> Gestión integral de usuarios, catálogo y moderación bajo el prefijo <code>/api/admin/*</code> (<code>/api/admin/usuarios</code>, <code>/api/admin/productos</code>, <code>/api/admin/reportes</code>).</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>M — Must Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>/api/admin/*</span></div>
+    </div>
+  </div>
+
+  <!-- 3.8 Chat -->
+  <h2 class="doc-h2" id="s3-8">3.8 Módulo de Mensajería y Chat</h2>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-85</span>
+      <span class="req-title">Conversaciones y Mensajes de Chat</span>
+    </div>
+    <p><strong>Descripción:</strong> El chat se gestiona mediante:</p>
+    <ul>
+      <li><code>GET /api/chat/conversaciones</code>: Consulta de conversaciones activas ordenadas cronológicamente.</li>
+      <li><code>GET /api/chat/mensajes/:usuarioId</code>: Historial completo con el usuario interlocutor.</li>
+      <li><code>POST /api/chat</code>: Envío de mensaje en multipart con archivo opcional adjunto.</li>
+      <li><code>PATCH /api/chat/mensajes/:id/leido</code>: Marcado de lectura por mensaje.</li>
+    </ul>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>S — Should Have</span></div>
+      <div class="req-meta-item">Endpoints: <span>/api/chat/*</span></div>
+    </div>
+  </div>
+
+  <!-- 3.9 Perfil -->
+  <h2 class="doc-h2" id="s3-9">3.9 Módulo de Perfil de Usuario</h2>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id">RF-95</span>
+      <span class="req-title">Consulta de Perfil de Usuario</span>
+    </div>
+    <p><strong>Descripción:</strong> Consulta del perfil personal del usuario autenticado vía <code>GET /api/usuarios/me</code> con Bearer JWT. Para activación de vendedor se utiliza <code>PATCH /api/usuarios/me/rol</code>.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Prioridad: <span>S — Should Have</span></div>
+      <div class="req-meta-item">Endpoint: <span>GET /api/usuarios/me &amp; PATCH /api/usuarios/me/rol</span></div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ===== SECCIÓN 4: MATRIZ DE MAPEO ===== -->
+  <h1 class="doc-h1" id="s4"><span class="section-number">4.</span> Matriz de Mapeo: Pantallas / Modales vs Endpoints API</h1>
+
+  <p>La siguiente matriz establece la correspondencia exacta entre cada pantalla o modal de la interfaz móvil de CommerCity y el endpoint de la API REST que consume. Esta tabla es la referencia técnica primaria para la alineación con los diagramas de casos de uso, diagramas de secuencia UML y los casos de prueba del equipo de QA.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Pantalla / Modal</th>
+        <th>Endpoint</th>
+        <th>Verbo</th>
+        <th>Auth</th>
+        <th>Payload / Params</th>
+        <th>Respuesta y Efecto en UI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>page-login</code></td>
+        <td><code>/api/usuarios/login</code></td>
+        <td><span class="ep-verb post">POST</span></td>
+        <td>No</td>
+        <td><code>{ email, password }</code></td>
+        <td>Retorna <code>{ token, usuario: { id, nombre, email, roles: ["comprador", ...] } }</code> (roles en minúscula). Almacena JWT y navega a home o admin.</td>
+      </tr>
+      <tr>
+        <td><code>page-registro</code></td>
+        <td><code>/api/usuarios/register</code></td>
+        <td><span class="ep-verb post">POST</span></td>
+        <td>No</td>
+        <td><code>{ email, password, nombre_completo }</code></td>
+        <td>Asigna rol base <code>comprador</code>. Retorna 201 o 400 si email duplicado (sin <code>solicita_vendedor</code>).</td>
+      </tr>
+      <tr>
+        <td>Cambio de Rol</td>
+        <td><code>/api/usuarios/me/rol</code></td>
+        <td><span class="ep-verb patch">PATCH</span></td>
+        <td>Bearer JWT</td>
+        <td><code>{ rol: "vendedor" }</code></td>
+        <td>Actualiza rol en BD a vendedor y habilita panel de comercio.</td>
+      </tr>
+      <tr>
+        <td><code>page-recuperar</code></td>
+        <td><code>/api/usuarios/recover</code></td>
+        <td><span class="ep-verb post">POST</span></td>
+        <td>No</td>
+        <td><code>{ email }</code></td>
+        <td>Envía token de restablecimiento temporal (expira a los 5 minutos).</td>
+      </tr>
+      <tr>
+        <td><code>page-restablecer</code></td>
+        <td><code>/api/usuarios/reset-password</code></td>
+        <td><span class="ep-verb post">POST</span></td>
+        <td>No</td>
+        <td><code>{ token, nuevaPassword }</code></td>
+        <td>Actualiza contraseña en BD (válido dentro de los 5 min). Redirige a login.</td>
+      </tr>
+      <tr>
+        <td><code>page-perfil</code></td>
+        <td><code>/api/usuarios/me</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT</td>
+        <td>—</td>
+        <td>Retorna datos de perfil del usuario autenticado vía JWT.</td>
+      </tr>
+      <tr>
+        <td>Cuenta Bancaria Vendedor</td>
+        <td><code>/api/tienda/mi-cuenta-bancaria</code></td>
+        <td><span class="ep-verb get">GET</span> / <span class="ep-verb post">POST</span> / <span class="ep-verb put">PUT</span></td>
+        <td>Bearer JWT (vendedor)</td>
+        <td>POST/PUT: <code>{ entidad, tipo_cuenta, numero_cuenta, titular }</code></td>
+        <td>Gestiona información bancaria de dispersión del comerciante.</td>
+      </tr>
+      <tr>
+        <td>Cuenta Bancaria Enmascarada</td>
+        <td><code>/api/tienda/mi-cuenta-bancaria/masked</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT (vendedor)</td>
+        <td>—</td>
+        <td>Retorna cuenta bancaria enmascarada para renderizado seguro en UI.</td>
+      </tr>
+      <tr>
+        <td><code>page-home</code></td>
+        <td><code>/api/productos</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>No</td>
+        <td><code>?page=1&amp;limit=20&amp;nombre=...&amp;categoria=...&amp;vendedor=...</code></td>
+        <td>Retorna <code>{ success: true, data: [...] }</code>. Alimenta <code>#home-prod-grid</code> y filtros.</td>
+      </tr>
+      <tr>
+        <td>Modal <code>#pd-modal</code></td>
+        <td><code>/api/productos/:id</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>No</td>
+        <td>Param URL: <code>id</code></td>
+        <td>Retorna <code>{ success, data }</code> con detalle completo: stock, descripción, vendedor, reseñas.</td>
+      </tr>
+      <tr>
+        <td><code>page-carrito</code></td>
+        <td><code>/api/carrito</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>No (Sin JWT)</td>
+        <td>Query: <code>?comprador_id=...</code></td>
+        <td>Lista ítems del carrito según <code>comprador_id</code> en <code>#carrito-items</code>.</td>
+      </tr>
+      <tr>
+        <td>Modal <code>#pd-modal</code> (btn agregar)</td>
+        <td><code>/api/carrito</code></td>
+        <td><span class="ep-verb post">POST</span></td>
+        <td>No (Sin JWT)</td>
+        <td><code>{ comprador_id, producto_id, cantidad }</code></td>
+        <td>Responde 201 Created, valida stock y actualiza badges de carrito.</td>
+      </tr>
+      <tr>
+        <td><code>cartQty</code> en Carrito</td>
+        <td><code>/api/carrito/:productoId</code></td>
+        <td><span class="ep-verb patch">PATCH</span></td>
+        <td>No (Sin JWT)</td>
+        <td>Query: <code>?comprador_id=...</code> <br> Body: <code>{ cantidad }</code></td>
+        <td>Actualiza cantidad para el comprador, revalida stock y refresca subtotales.</td>
+      </tr>
+      <tr>
+        <td><code>cartRemove</code> en Carrito</td>
+        <td><code>/api/carrito/:productoId</code></td>
+        <td><span class="ep-verb delete">DELETE</span></td>
+        <td>No (Sin JWT)</td>
+        <td>Query: <code>?comprador_id=...</code></td>
+        <td>Elimina producto del carrito para el comprador. Refresca vista y badges.</td>
+      </tr>
+      <tr>
+        <td>Modal <code>#pasarela-modal</code></td>
+        <td><code>/api/pedidos/resumen</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT</td>
+        <td>—</td>
+        <td>Retorna desglose oficial <code>{ subtotal, iva, comision, total }</code>. Inyecta montos certificados.</td>
+      </tr>
+      <tr>
+        <td><code>processPago()</code> en Pasarela</td>
+        <td><code>/api/pedidos/confirmar-pago</code></td>
+        <td><span class="ep-verb post">POST</span></td>
+        <td>Bearer JWT</td>
+        <td><code>{ direccion_envio (min 5 car.), metodo_pago: "tarjeta"|"transferencia"|"pse", numero_tarjeta?, nombre_tarjeta? }</code></td>
+        <td>Valida Luhn (RF118) si tarjeta. Responde 201 con <code>pedido_id</code>, <code>estado_pago: "Aprobado"</code>, <code>total_neto</code>, <code>iva</code>, <code>total</code>, <code>distribucion_90_10</code>.</td>
+      </tr>
+      <tr>
+        <td><code>page-historial</code></td>
+        <td><code>/api/historial/compras</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT</td>
+        <td>Query: <code>?estado=todos</code></td>
+        <td>Renderiza historial de compras con detalles y filtros por estado.</td>
+      </tr>
+      <tr>
+        <td>Cancelar Compra (Historial)</td>
+        <td><code>/api/historial/compras/:id/cancelar</code></td>
+        <td><span class="ep-verb post">POST</span></td>
+        <td>Bearer JWT</td>
+        <td><code>:id</code> = línea del pedido (detalle) en estado <code>Pendiente</code></td>
+        <td>Cancela la línea de compra, restituye inventario y actualiza UI.</td>
+      </tr>
+      <tr>
+        <td><code>page-tienda</code> (Dashboard Stats)</td>
+        <td><code>/api/tienda/dashboard/stats</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT (vendedor)</td>
+        <td>—</td>
+        <td>Retorna métricas consolidadas de ventas, pedidos y balance de tienda.</td>
+      </tr>
+      <tr>
+        <td><code>page-pedidos</code> (Ventas)</td>
+        <td><code>/api/tienda/ventas</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT (vendedor)</td>
+        <td>—</td>
+        <td>Lista ventas y pedidos entrantes para despacho.</td>
+      </tr>
+      <tr>
+        <td>Ingresos de Tienda</td>
+        <td><code>/api/tienda/ingresos</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT (vendedor)</td>
+        <td>—</td>
+        <td>Retorna desglose financiero de ingresos brutos, comisión 10% y balance neto.</td>
+      </tr>
+      <tr>
+        <td>Validación de Tienda</td>
+        <td><code>/api/tienda/validacion</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT (vendedor)</td>
+        <td>—</td>
+        <td>Verifica estado de acreditación y validación del comerciante.</td>
+      </tr>
+      <tr>
+        <td>Modal <code>#od-modal</code> (Avanzar Envío)</td>
+        <td><code>/api/pedidos/:id/estado</code></td>
+        <td><span class="ep-verb patch">PATCH</span></td>
+        <td>Bearer JWT (vendedor)</td>
+        <td><code>{ estado: "En camino" | "Entregado" }</code></td>
+        <td>Vendedor avanza estado del envío; dispara notificación al comprador.</td>
+      </tr>
+      <tr>
+        <td>Modal <code>#add-prod-modal</code></td>
+        <td><code>/api/productos</code></td>
+        <td><span class="ep-verb post">POST</span></td>
+        <td>Bearer JWT (vendedor)</td>
+        <td>FormData: nombre, precio, stock, categoria, imagen…</td>
+        <td>Crea producto en BD con foto en servidor. Refresca catálogo.</td>
+      </tr>
+      <tr>
+        <td>Modal <code>#edit-prod-modal</code></td>
+        <td><code>/api/productos/:id</code></td>
+        <td><span class="ep-verb put">PUT</span></td>
+        <td>Bearer JWT (vendedor)</td>
+        <td>FormData actualizado</td>
+        <td>Modifica producto existente. Impacta catálogo en tiempo real.</td>
+      </tr>
+      <tr>
+        <td>Modal <code>#rating-modal</code></td>
+        <td><code>/api/calificaciones/vendedor</code></td>
+        <td><span class="ep-verb post">POST</span></td>
+        <td>Bearer JWT</td>
+        <td><code>{ pedido_id, vendedor_id, estrellas (1-5), comentario }</code></td>
+        <td>Registra reseña (RF107, una calificación por pedido). Recalcula promedio.</td>
+      </tr>
+      <tr>
+        <td>Panel <code>#notifs-panel</code></td>
+        <td><code>/api/notificaciones</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT</td>
+        <td>—</td>
+        <td>Lista todas las notificaciones recibidas por el usuario.</td>
+      </tr>
+      <tr>
+        <td>Notificaciones No Leídas</td>
+        <td><code>/api/notificaciones/no-leidas</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT</td>
+        <td>—</td>
+        <td>Retorna alertas pendientes de lectura para contador/badge.</td>
+      </tr>
+      <tr>
+        <td>Marcar Todas Leídas</td>
+        <td><code>/api/notificaciones/leidas</code></td>
+        <td><span class="ep-verb patch">PATCH</span></td>
+        <td>Bearer JWT</td>
+        <td>—</td>
+        <td>Marca todas las notificaciones como leídas en BD. Apaga badge.</td>
+      </tr>
+      <tr>
+        <td>Marcar Notificación Leída</td>
+        <td><code>/api/notificaciones/:id/leida</code></td>
+        <td><span class="ep-verb patch">PATCH</span></td>
+        <td>Bearer JWT</td>
+        <td>—</td>
+        <td>Marca una notificación específica como leída en BD.</td>
+      </tr>
+      <tr>
+        <td><code>page-mensajes</code></td>
+        <td><code>/api/chat/conversaciones</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT</td>
+        <td>—</td>
+        <td>Lista conversaciones activas ordenadas cronológicamente.</td>
+      </tr>
+      <tr>
+        <td><code>page-chat</code> (Historial)</td>
+        <td><code>/api/chat/mensajes/:usuarioId</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT</td>
+        <td>Param URL: <code>usuarioId</code></td>
+        <td>Carga historial de mensajes con el usuario interlocutor.</td>
+      </tr>
+      <tr>
+        <td><code>page-chat</code> (Enviar)</td>
+        <td><code>/api/chat</code></td>
+        <td><span class="ep-verb post">POST</span></td>
+        <td>Bearer JWT</td>
+        <td>Multipart FormData: texto y archivo adjunto opcional</td>
+        <td>Envía mensaje directo con soporte de archivo multimedia.</td>
+      </tr>
+      <tr>
+        <td>Marcar Mensaje Leído</td>
+        <td><code>/api/chat/mensajes/:id/leido</code></td>
+        <td><span class="ep-verb patch">PATCH</span></td>
+        <td>Bearer JWT</td>
+        <td>—</td>
+        <td>Marca un mensaje individual como leído en BD.</td>
+      </tr>
+      <tr>
+        <td>Modal <code>#report-modal</code></td>
+        <td><code>/api/reportes</code></td>
+        <td><span class="ep-verb post">POST</span></td>
+        <td>Bearer JWT</td>
+        <td>Multipart FormData: <code>{ tipo: "Producto"|"Usuario", motivo, producto_id | usuario_reportado_id }</code> + evidencia opcional</td>
+        <td>Crea ticket de moderación con archivo de evidencia para revisión admin.</td>
+      </tr>
+      <tr>
+        <td><code>page-admin</code> (Dashboard)</td>
+        <td><code>/api/admin/stats</code></td>
+        <td><span class="ep-verb get">GET</span></td>
+        <td>Bearer JWT (administrador)</td>
+        <td>—</td>
+        <td>Métricas y estadísticas globales: usuarios, ventas, comisiones, reportes.</td>
+      </tr>
+      <tr>
+        <td>Moderación y Gestión Admin</td>
+        <td><code>/api/admin/*</code></td>
+        <td><span class="ep-verb get">GET</span> / <span class="ep-verb patch">PATCH</span></td>
+        <td>Bearer JWT (administrador)</td>
+        <td>Sub-rutas bajo <code>/api/admin/*</code> (usuarios, productos, reportes)</td>
+        <td>Gestión administrativa integral directamente en base de datos.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="section-divider">
+
+  <!-- ===== SECCIÓN 5: REQUERIMIENTOS NO FUNCIONALES ===== -->
+  <h1 class="doc-h1" id="s5"><span class="section-number">5.</span> Requerimientos No Funcionales (RNF)</h1>
+
+  <p>Los requerimientos no funcionales (RNF) describen <em>cómo debe comportarse el sistema</em> en términos de atributos de calidad. No describen funcionalidades específicas sino las propiedades y restricciones del sistema en su conjunto. Estos requerimientos son tan vinculantes como los funcionales y deben verificarse durante las pruebas de aceptación.</p>
+
+  <h2 class="doc-h2" id="s5-1">5.1 Seguridad</h2>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-01</span>
+      <span class="req-title">Cifrado de Comunicaciones</span>
+    </div>
+    <p>Todas las comunicaciones entre el cliente móvil y el servidor backend en ambiente de producción deben realizarse sobre <strong>HTTPS con TLS 1.3</strong>. Los certificados SSL deben ser emitidos por una Autoridad Certificadora reconocida. En desarrollo se acepta HTTP en <code>localhost</code>. Ningún dato sensible (credenciales, tokens, información financiera) puede transmitirse sin cifrado en producción.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Métrica: <span>100% de peticiones en producción sobre HTTPS/TLS 1.3</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-02</span>
+      <span class="req-title">Protección de Contraseñas</span>
+    </div>
+    <p>Las contraseñas de usuario nunca deben almacenarse en texto plano en la base de datos. El backend utiliza <code>bcryptjs</code> con un factor de costo mínimo de 10 (2^10 iteraciones) para el hashing de contraseñas antes de almacenarlas. El cliente nunca debe almacenar contraseñas en ningún medio de persistencia local.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Librería: <span>bcryptjs v2.4.3+ — bcrypt cost 10+</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-03</span>
+      <span class="req-title">Gestión Segura de Tokens JWT</span>
+    </div>
+    <p>Los tokens JWT deben firmarse utilizando el algoritmo <strong>HMAC-SHA256 (HS256)</strong> con una clave secreta de al menos 256 bits almacenada en variable de entorno (<code>.env</code>, nunca en código fuente). Los tokens tienen expiración de 7 días (<code>expiresIn: '7d'</code>). El cliente detecta tokens expirados (HTTP 401/403) y elimina la sesión local de inmediato. Los tokens nunca deben almacenarse en cookies sin el atributo <code>HttpOnly</code>.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Algoritmo: <span>HS256</span></div>
+      <div class="req-meta-item">Expiración: <span>7 días</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-04</span>
+      <span class="req-title">Control de Acceso Basado en Roles (RBAC)</span>
+    </div>
+    <p>El backend debe verificar el rol del usuario en <strong>cada petición a endpoints protegidos</strong>, no solo en el login. El middleware <code>verifyToken</code> debe validar la firma del JWT y extraer los roles. Los endpoints del prefijo <code>/api/admin</code> deben rechazar con HTTP 403 cualquier petición cuyo token no contenga el rol ADMINISTRADOR. Los endpoints de <code>/api/tienda</code> y <code>/api/productos</code> (POST/PUT) requieren rol VENDEDOR.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Verificación: <span>En cada petición (middleware)</span></div>
+    </div>
+  </div>
+
+  <h2 class="doc-h2" id="s5-2">5.2 Rendimiento y Escalabilidad</h2>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-05</span>
+      <span class="req-title">Tiempo de Respuesta</span>
+    </div>
+    <p>Los endpoints del catálogo de productos (<code>GET /api/productos</code>) deben retornar respuesta en <strong>menos de 350 ms</strong> bajo carga estándar (hasta 100 usuarios concurrentes). Los endpoints de autenticación deben responder en menos de 500 ms. Las operaciones de checkout (transacciones complejas) pueden tomar hasta 2 segundos. El cliente debe mostrar indicadores de carga (spinners) para cualquier operación que supere los 300 ms.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Catálogo: <span>&lt;350ms</span></div>
+      <div class="req-meta-item">Auth: <span>&lt;500ms</span></div>
+      <div class="req-meta-item">Checkout: <span>&lt;2000ms</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-06</span>
+      <span class="req-title">Optimización de Imágenes</span>
+    </div>
+    <p>Las imágenes de productos enviadas por los vendedores deben ser comprimidas en el backend antes de su almacenamiento. Las imágenes mostradas en el catálogo deben cargarse de forma optimizada (lazy loading), utilizando miniaturas para las listas y la imagen completa solo en el modal de detalle. El tamaño máximo por imagen en carga es de 5 MB.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Max tamaño: <span>5 MB por imagen</span></div>
+      <div class="req-meta-item">Estrategia: <span>Lazy Loading en listas</span></div>
+    </div>
+  </div>
+
+  <h2 class="doc-h2" id="s5-3">5.3 Disponibilidad y Tolerancia a Fallos</h2>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-07</span>
+      <span class="req-title">Pool de Conexiones a Base de Datos</span>
+    </div>
+    <p>El backend debe gestionar las conexiones a MySQL mediante un <strong>pool de conexiones</strong> con la librería <code>mysql2</code>. El pool debe configurarse con un máximo de <strong>30 conexiones concurrentes</strong>. Las conexiones inactivas deben liberarse automáticamente. En caso de pérdida de conectividad con la base de datos, el servidor debe retornar respuestas de error apropiadas (HTTP 503) sin caída del proceso Node.js.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Pool máx: <span>30 conexiones</span></div>
+      <div class="req-meta-item">Fallback: <span>In-memory DB para desarrollo</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-08</span>
+      <span class="req-title">Manejo Graceful de Errores</span>
+    </div>
+    <p>El cliente móvil debe interceptar todos los errores de red y API, mostrando mensajes descriptivos al usuario sin exponer detalles técnicos internos. La función <code>request()</code> en <code>api.js</code> implementa el interceptor central. Los códigos de error deben manejarse según el siguiente esquema: 400 (solicitud incorrecta), 401/403 (sesión expirada → logout), 404 (recurso no encontrado), 500 (error del servidor). Ningún <code>console.error</code> sin manejador debe detener la aplicación.</p>
+  </div>
+
+  <h2 class="doc-h2" id="s5-4">5.4 Usabilidad y Compatibilidad</h2>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-09</span>
+      <span class="req-title">Compatibilidad de Plataforma</span>
+    </div>
+    <p>El aplicativo debe operar de manera fluida y sin errores visuales ni funcionales en:</p>
+    <ul>
+      <li><strong>Android:</strong> Versión 8.0 (API 26) o superior. Motor de renderizado: Android WebView (Chromium).</li>
+      <li><strong>iOS:</strong> Versión 13.0 o superior. Motor de renderizado: WKWebView (WebKit).</li>
+      <li><strong>Navegador de desarrollo:</strong> Chrome 100+ / Firefox 100+ / Safari 14+.</li>
+    </ul>
+    <div class="req-meta">
+      <div class="req-meta-item">Android min: <span>API 26 (v8.0)</span></div>
+      <div class="req-meta-item">iOS min: <span>iOS 13.0</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-10</span>
+      <span class="req-title">Diseño Responsivo Adaptativo</span>
+    </div>
+    <p>El diseño de la interfaz debe adaptarse a dos breakpoints: <strong>Mobile</strong> (viewport ≤ 860px) para uso en dispositivos móviles en modo app, y <strong>Desktop/Tablet</strong> (&gt;860px) para uso en navegador web. En modo mobile, la navegación principal es la barra inferior (<code>.bnav</code>). En modo desktop, se utiliza la barra lateral (<code>.sidebar</code>). La transición entre breakpoints debe ser fluida sin recarga de página.</p>
+  </div>
+
+  <h2 class="doc-h2" id="s5-5">5.5 Integridad y Consistencia de Datos</h2>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-11</span>
+      <span class="req-title">Aislamiento de Transacciones Financieras</span>
+    </div>
+    <p>Las transacciones de checkout deben ejecutarse con nivel de aislamiento <strong>READ COMMITTED</strong> en MySQL para prevenir condiciones de carrera (<em>race conditions</em>) que podrían resultar en ventas sobre inventario agotado. El backend debe implementar bloqueo optimista o pesimista según el volumen de la operación para garantizar la consistencia del stock.</p>
+    <div class="req-meta">
+      <div class="req-meta-item">Aislamiento: <span>READ COMMITTED</span></div>
+      <div class="req-meta-item">Patrón: <span>Transacción atómica con ROLLBACK</span></div>
+    </div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-12</span>
+      <span class="req-title">Precisión Fiscal</span>
+    </div>
+    <p>Todos los cálculos monetarios deben realizarse en el backend con precisión de centavo (2 decimales). El IVA del 19% y la comisión del 10% no deben presentar errores de redondeo que generen discrepancias entre lo mostrado al usuario y lo registrado en la base de datos. Se deben usar operaciones aritméticas de punto flotante controladas, preferiblemente con librería de decimales de precisión.</p>
+  </div>
+
+  <h2 class="doc-h2" id="s5-6">5.6 Mantenibilidad y Extensibilidad</h2>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-13</span>
+      <span class="req-title">Arquitectura Modular del Backend</span>
+    </div>
+    <p>El código del backend debe organizarse en módulos separados por dominio funcional en el directorio <code>/routes</code>: <code>auth.routes.js</code>, <code>products.routes.js</code>, <code>cart.routes.js</code>, <code>orders.routes.js</code>, <code>tienda.routes.js</code>, <code>chat.routes.js</code>, <code>notifs.routes.js</code>, <code>admin.routes.js</code>. El servidor central (<code>server.js</code>) únicamente registra los routers. El middleware de autenticación debe centralizarse en <code>/middleware/auth.js</code>.</p>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <span class="req-id rnf">RNF-14</span>
+      <span class="req-title">Cliente HTTP Centralizado</span>
+    </div>
+    <p>El cliente móvil debe utilizar el módulo <code>CommerCityAPI</code> (<code>www/api.js</code>) como único punto de comunicación con el backend. Ninguna pantalla o módulo de la aplicación puede realizar peticiones directas con <code>fetch()</code> sin pasar por este wrapper centralizado. Esto garantiza la inyección automática del token JWT, el manejo uniforme de errores y la gestión centralizada de la URL base.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ===== SECCIÓN 6: ARQUITECTURA TÉCNICA ===== -->
+  <h1 class="doc-h1" id="s6"><span class="section-number">6.</span> Arquitectura Técnica y Parámetros de Infraestructura</h1>
+
+  <h2 class="doc-h2" id="s6-1">6.1 Parámetros de Red y Base de Datos</h2>
+
+  <table>
+    <thead>
+      <tr><th>Parámetro</th><th>Valor</th><th>Observación</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>API Base URL (desarrollo)</td><td><code>http://localhost:3000</code></td><td>Puerto fijo, NO usar 5000 ni otros</td></tr>
+      <tr><td>API Base URL (emulador Android)</td><td><code>http://10.0.2.2:3000</code></td><td>IP especial para acceder al localhost del host desde AVD</td></tr>
+      <tr><td>DBMS</td><td>MySQL 8.0+</td><td>Servidor de producción centralizado</td></tr>
+      <tr><td>Host Base de Datos</td><td><code>149.130.178.228</code></td><td>Conexión exclusiva del backend, nunca expuesto al cliente</td></tr>
+      <tr><td>Puerto BD</td><td><code>3306</code></td><td>Puerto estándar MySQL</td></tr>
+      <tr><td>Nombre de Base de Datos</td><td><code>commercity_v2</code></td><td>Esquema relacional centralizado</td></tr>
+      <tr><td>Usuario BD</td><td><code>commercity_user</code></td><td>Credenciales gestionadas en <code>.env</code></td></tr>
+      <tr><td>Formato de Intercambio</td><td><code>application/json</code></td><td>UTF-8 en todas las peticiones</td></tr>
+      <tr><td>Pool máximo de conexiones</td><td>30</td><td>Configurado en <code>config/db.js</code></td></tr>
+      <tr><td>JWT Expiración</td><td>7 días (<code>7d</code>)</td><td>Configurado en <code>auth.routes.js</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="doc-h2" id="s6-2">6.2 Esquema Relacional MySQL (<code>commercity_v2</code>)</h2>
+
+  <p>A continuación se detalla la estructura de las tablas principales de la base de datos relacional <code>commercity_v2</code> que soporta el sistema CommerCity Mobile:</p>
+
+  <h3 class="doc-h3">Tabla: <code>usuarios</code></h3>
+  <table>
+    <thead><tr><th>Campo</th><th>Tipo</th><th>Restricciones</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>INT UNSIGNED</td><td>PK, AUTO_INCREMENT</td><td>Identificador único del usuario</td></tr>
+      <tr><td><code>nombre_completo</code></td><td>VARCHAR(150)</td><td>NOT NULL</td><td>Nombre completo del usuario</td></tr>
+      <tr><td><code>email</code></td><td>VARCHAR(200)</td><td>UNIQUE, NOT NULL</td><td>Correo electrónico (identificador de login)</td></tr>
+      <tr><td><code>password</code></td><td>VARCHAR(255)</td><td>NOT NULL</td><td>Hash bcrypt de la contraseña</td></tr>
+      <tr><td><code>telefono</code></td><td>VARCHAR(20)</td><td>NULL</td><td>Número telefónico de contacto</td></tr>
+      <tr><td><code>direccion</code></td><td>TEXT</td><td>NULL</td><td>Dirección de entrega registrada</td></tr>
+      <tr><td><code>ciudad</code></td><td>VARCHAR(100)</td><td>NULL</td><td>Ciudad de residencia</td></tr>
+      <tr><td><code>foto_perfil</code></td><td>VARCHAR(500)</td><td>NULL</td><td>URL de la foto de perfil en CDN</td></tr>
+      <tr><td><code>cuenta_bancaria</code></td><td>JSON</td><td>NULL</td><td>Datos bancarios para dispersión (solo vendedores)</td></tr>
+      <tr><td><code>estado</code></td><td>ENUM('activo','suspendido','eliminado')</td><td>DEFAULT 'activo'</td><td>Estado de la cuenta en la plataforma</td></tr>
+      <tr><td><code>created_at</code></td><td>TIMESTAMP</td><td>DEFAULT NOW()</td><td>Fecha de registro</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="doc-h3">Tabla: <code>roles</code></h3>
+  <table>
+    <thead><tr><th>Campo</th><th>Tipo</th><th>Restricciones</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>INT UNSIGNED</td><td>PK</td><td>ID del rol</td></tr>
+      <tr><td><code>nombre</code></td><td>ENUM('comprador','vendedor','administrador')</td><td>UNIQUE, NOT NULL</td><td>Nombre del rol en BD (minúsculas: comprador, vendedor, administrador)</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="doc-h3">Tabla: <code>usuario_roles</code></h3>
+  <table>
+    <thead><tr><th>Campo</th><th>Tipo</th><th>Restricciones</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><code>usuario_id</code></td><td>INT UNSIGNED</td><td>FK → usuarios.id</td><td>Referencia al usuario</td></tr>
+      <tr><td><code>rol_id</code></td><td>INT UNSIGNED</td><td>FK → roles.id</td><td>Referencia al rol asignado</td></tr>
+      <tr><td colspan="4"><em>PK compuesta: (usuario_id, rol_id) — Soporte para multirrol</em></td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="doc-h3">Tabla: <code>productos</code></h3>
+  <table>
+    <thead><tr><th>Campo</th><th>Tipo</th><th>Restricciones</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>INT UNSIGNED</td><td>PK, AUTO_INCREMENT</td><td>Identificador único del producto</td></tr>
+      <tr><td><code>vendedor_id</code></td><td>INT UNSIGNED</td><td>FK → usuarios.id, NOT NULL</td><td>Propietario del producto</td></tr>
+      <tr><td><code>nombre</code></td><td>VARCHAR(150)</td><td>NOT NULL</td><td>Nombre del producto</td></tr>
+      <tr><td><code>descripcion</code></td><td>TEXT</td><td>NULL</td><td>Descripción extendida</td></tr>
+      <tr><td><code>precio</code></td><td>DECIMAL(10,2)</td><td>NOT NULL</td><td>Precio base en COP</td></tr>
+      <tr><td><code>descuento</code></td><td>DECIMAL(5,2)</td><td>DEFAULT 0</td><td>Porcentaje de descuento (0-100)</td></tr>
+      <tr><td><code>stock</code></td><td>INT UNSIGNED</td><td>NOT NULL, DEFAULT 0</td><td>Unidades disponibles en inventario</td></tr>
+      <tr><td><code>categoria</code></td><td>VARCHAR(80)</td><td>NOT NULL</td><td>Categoría del producto</td></tr>
+      <tr><td><code>imagen_url</code></td><td>VARCHAR(500)</td><td>NULL</td><td>URL de imagen en CDN</td></tr>
+      <tr><td><code>estado</code></td><td>ENUM('activo','pausado','eliminado')</td><td>DEFAULT 'activo'</td><td>Visibilidad en el catálogo</td></tr>
+      <tr><td><code>created_at</code></td><td>TIMESTAMP</td><td>DEFAULT NOW()</td><td>Fecha de publicación</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="doc-h3">Tabla: <code>pedidos</code></h3>
+  <table>
+    <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>INT UNSIGNED PK AUTO_INCREMENT</td><td>Identificador único del pedido</td></tr>
+      <tr><td><code>comprador_id</code></td><td>INT UNSIGNED FK → usuarios.id</td><td>Usuario que realizó la compra</td></tr>
+      <tr><td><code>subtotal</code></td><td>DECIMAL(12,2)</td><td>Subtotal antes de impuestos</td></tr>
+      <tr><td><code>iva</code></td><td>DECIMAL(12,2)</td><td>IVA calculado al 19%</td></tr>
+      <tr><td><code>comision_plataforma</code></td><td>DECIMAL(12,2)</td><td>Comisión CommerCity al 10%</td></tr>
+      <tr><td><code>total</code></td><td>DECIMAL(12,2)</td><td>Total a pagar por el comprador</td></tr>
+      <tr><td><code>estado</code></td><td>ENUM('Pendiente','En Camino','Entregado','Cancelado')</td><td>Estado del pedido</td></tr>
+      <tr><td><code>metodo_pago</code></td><td>VARCHAR(50)</td><td>Método de pago utilizado</td></tr>
+      <tr><td><code>direccion_envio</code></td><td>TEXT</td><td>Dirección de entrega al momento del pedido</td></tr>
+      <tr><td><code>created_at</code></td><td>TIMESTAMP DEFAULT NOW()</td><td>Fecha y hora de la transacción</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="doc-h3">Tabla: <code>mensajes_chat</code></h3>
+  <table>
+    <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>INT UNSIGNED PK AUTO_INCREMENT</td><td>ID del mensaje</td></tr>
+      <tr><td><code>emisor_id</code></td><td>INT UNSIGNED FK → usuarios.id</td><td>Usuario que envió el mensaje</td></tr>
+      <tr><td><code>receptor_id</code></td><td>INT UNSIGNED FK → usuarios.id</td><td>Usuario destinatario</td></tr>
+      <tr><td><code>tipo_mensaje</code></td><td>ENUM('texto','imagen','sistema')</td><td>Tipo de contenido del mensaje</td></tr>
+      <tr><td><code>mensaje</code></td><td>TEXT</td><td>Contenido del mensaje</td></tr>
+      <tr><td><code>enviado_at</code></td><td>TIMESTAMP DEFAULT NOW()</td><td>Fecha y hora de envío</td></tr>
+      <tr><td><code>leido</code></td><td>TINYINT(1) DEFAULT 0</td><td>0 = no leído, 1 = leído</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="doc-h2" id="s6-3">6.3 Stack Tecnológico Completo</h2>
+
+  <table>
+    <thead><tr><th>Capa</th><th>Tecnología</th><th>Versión</th><th>Rol</th></tr></thead>
+    <tbody>
+      <tr><td>Frontend</td><td>HTML5 / CSS3 / JavaScript (ES6+)</td><td>—</td><td>Interfaz de usuario de la app móvil</td></tr>
+      <tr><td>Runtime Móvil</td><td>Ionic Capacitor</td><td>v5</td><td>Empaquetado nativo para Android e iOS</td></tr>
+      <tr><td>Backend Framework</td><td>Node.js + Express.js</td><td>v18+ / v4.21</td><td>API REST centralizada</td></tr>
+      <tr><td>Autenticación</td><td>jsonwebtoken (JWT)</td><td>v9.0.2</td><td>Tokens de sesión firmados HS256</td></tr>
+      <tr><td>Hashing</td><td>bcryptjs</td><td>v2.4.3</td><td>Protección de contraseñas</td></tr>
+      <tr><td>Base de Datos</td><td>MySQL</td><td>8.0+</td><td>Persistencia relacional central</td></tr>
+      <tr><td>Driver BD</td><td>mysql2</td><td>v3.12.0</td><td>Conexión y pool con MySQL</td></tr>
+      <tr><td>CORS</td><td>cors</td><td>v2.8.5</td><td>Política de origen cruzado del backend</td></tr>
+      <tr><td>Variables de Entorno</td><td>dotenv</td><td>v16.4.7</td><td>Configuración segura de credenciales</td></tr>
+      <tr><td>Build Android</td><td>Gradle</td><td>v8+</td><td>Compilación del APK nativo</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="doc-h2" id="s6-4">6.4 Modelo de Autenticación JWT</h2>
+
+  <p>El flujo de autenticación implementado en CommerCity sigue el patrón estándar de autenticación sin estado (stateless) con JWT:</p>
+
+  <div class="flow-step">
+    <div class="flow-num">1</div>
+    <div class="flow-content"><strong>Solicitud de Login:</strong> El cliente envía <code>POST /api/usuarios/login</code> con <code>{ email, password }</code> en JSON.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">2</div>
+    <div class="flow-content"><strong>Verificación en BD:</strong> El backend consulta MySQL con JOIN en <code>usuario_roles</code>. Si el hash <code>bcrypt</code> coincide, procede a generar el token.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">3</div>
+    <div class="flow-content"><strong>Generación del Token:</strong> <code>jwt.sign({ id, nombre, email, roles }, JWT_SECRET, { expiresIn: '7d' })</code>. El payload incluye los roles del usuario.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">4</div>
+    <div class="flow-content"><strong>Almacenamiento en Cliente:</strong> El token se guarda en <code>localStorage</code> bajo la clave <code>commercity_auth_token</code>. El objeto de usuario en <code>commercity_auth_user</code>.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">5</div>
+    <div class="flow-content"><strong>Uso en Peticiones Protegidas:</strong> El wrapper <code>CommerCityAPI.request()</code> en <code>api.js</code> inyecta automáticamente el header <code>Authorization: Bearer &lt;token&gt;</code> en cada petición.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">6</div>
+    <div class="flow-content"><strong>Verificación en Backend:</strong> El middleware <code>verifyToken</code> en <code>/middleware/auth.js</code> valida la firma del JWT con <code>jwt.verify()</code> y extrae el payload. Adjunta el usuario a <code>req.user</code>.</div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">7</div>
+    <div class="flow-content"><strong>Expiración/Invalidación:</strong> HTTP 401/403 → El interceptor de <code>api.js</code> limpia la sesión local y redirige a <code>page-login</code> con toast informativo.</div>
+  </div>
+
+  <h2 class="doc-h2" id="s6-5">6.5 Cliente HTTP Centralizado (<code>api.js</code>)</h2>
+
+  <p>El módulo <code>CommerCityAPI</code> implementado en <code>www/api.js</code> centraliza toda la comunicación HTTP de la aplicación móvil:</p>
+
+  <pre><code>// Detección inteligente del host según plataforma de ejecución
+const BASE_URL = (window.Capacitor?.getPlatform() === 'android')
+  ? 'http://10.0.2.2:3000'   // Emulador Android → host machine
+  : 'http://localhost:3000'; // Desarrollo web estándar
+
+// Interceptor central: inyecta JWT y maneja errores 401/403
+async function request(endpoint, options = {}) {
+  const token = getToken();
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+    ...options.headers
+  };
+
+  const res = await fetch(`${BASE_URL}${endpoint}`, { ...options, headers });
+
+  if (res.status === 401 || res.status === 403) {
+    clearSession();          // Elimina token y datos locales
+    showToast('Sesión expirada. Inicia sesión nuevamente.', 'error');
+    navTo('login');          // Redirige a pantalla de login
+    return null;
+  }
+  // ...
+}</code></pre>
+
+  <p>La API expone métodos de conveniencia agrupados por dominio: <code>CommerCityAPI.auth</code>, <code>CommerCityAPI.productos</code>, <code>CommerCityAPI.carrito</code>, <code>CommerCityAPI.pedidos</code>, <code>CommerCityAPI.tienda</code>, <code>CommerCityAPI.chat</code>, <code>CommerCityAPI.notificaciones</code>, <code>CommerCityAPI.admin</code>.</p>
+
+  <hr class="section-divider">
+
+  <!-- ===== SECCIÓN 7: REGLAS DE NEGOCIO ===== -->
+  <h1 class="doc-h1" id="s7"><span class="section-number">7.</span> Reglas de Negocio</h1>
+
+  <p>Las reglas de negocio definen las políticas y restricciones que rigen el comportamiento del sistema en términos comerciales y operativos. Son invariantes que deben mantenerse independientemente de la capa técnica que las implemente.</p>
+
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Regla de Negocio</th><th>Descripción</th><th>Implementación</th></tr>
+    </thead>
+    <tbody>
+      <tr class="risk-low">
+        <td><strong>RN-01</strong></td>
+        <td>Cálculo Exclusivo en Backend</td>
+        <td>Ningún cálculo de IVA (19%), comisión (10%) o total de orden puede realizarse en el cliente móvil. Todos los montos financieros provienen del backend.</td>
+        <td>Endpoint <code>GET /api/pedidos/resumen</code></td>
+      </tr>
+      <tr>
+        <td><strong>RN-02</strong></td>
+        <td>IVA del 19%</td>
+        <td>El Impuesto al Valor Agregado se aplica a todos los productos gravados según la normativa tributaria colombiana (Ley 1819/2016). El IVA es responsabilidad legal del vendedor, retenido y reportado por la plataforma.</td>
+        <td>Cálculo en backend: <code>iva = subtotal * 0.19</code></td>
+      </tr>
+      <tr>
+        <td><strong>RN-03</strong></td>
+        <td>Comisión de Plataforma 10%</td>
+        <td>CommerCity retiene el 10% del valor bruto de cada transacción completada como comisión de intermediación. Este monto se descuenta del balance neto del vendedor en la liquidación.</td>
+        <td>Cálculo en backend: <code>comision = subtotal * 0.10</code></td>
+      </tr>
+      <tr>
+        <td><strong>RN-04</strong></td>
+        <td>Stock No Negativo</td>
+        <td>El stock de un producto nunca puede ser negativo. Si una transacción intenta descontar más unidades de las disponibles, la transacción es rechazada con HTTP 400 y se hace ROLLBACK de la operación completa.</td>
+        <td>Validación en backend antes de SQL UPDATE</td>
+      </tr>
+      <tr>
+        <td><strong>RN-05</strong></td>
+        <td>Carrito Expirado a 7 Días</td>
+        <td>Los ítems de carrito sin actividad por más de 7 días consecutivos son eliminados automáticamente del sistema. El usuario es notificado si intenta acceder a un carrito expirado.</td>
+        <td>Job programado en backend</td>
+      </tr>
+      <tr>
+        <td><strong>RN-06</strong></td>
+        <td>Asignación Automática de Rol COMPRADOR</td>
+        <td>Todo usuario nuevo registrado en la plataforma recibe automáticamente el rol COMPRADOR como rol base, independientemente de si también solicita el rol VENDEDOR.</td>
+        <td>Lógica en <code>POST /api/usuarios/registro</code></td>
+      </tr>
+      <tr>
+        <td><strong>RN-07</strong></td>
+        <td>Cancelación Solo en Estado Pendiente</td>
+        <td>Un pedido solo puede ser cancelado por el comprador cuando su estado es "Pendiente". Los pedidos "En Camino" o "Entregados" no admiten cancelación directa por el cliente.</td>
+        <td>Validación en <code>POST /api/historial/cancelar/:id</code></td>
+      </tr>
+      <tr>
+        <td><strong>RN-08</strong></td>
+        <td>Restitución de Stock en Cancelación</td>
+        <td>Al cancelar un pedido, el stock de todos los productos incluidos debe restituirse automáticamente en la tabla <code>productos</code> en la misma transacción SQL de cancelación.</td>
+        <td>Transacción SQL en backend</td>
+      </tr>
+      <tr>
+        <td><strong>RN-09</strong></td>
+        <td>Una Calificación por Pedido</td>
+        <td>Un comprador solo puede registrar una calificación al vendedor por cada pedido completado ("Entregado"). No se permiten calificaciones múltiples para el mismo pedido.</td>
+        <td>Restricción UNIQUE en BD</td>
+      </tr>
+      <tr>
+        <td><strong>RN-10</strong></td>
+        <td>Propiedad de Productos</td>
+        <td>Un vendedor solo puede editar o eliminar productos que él mismo publicó. El backend verifica que el <code>vendedor_id</code> del producto coincida con el <code>id</code> del usuario autenticado en el JWT.</td>
+        <td>Validación en backend: <code>WHERE id = ? AND vendedor_id = ?</code></td>
+      </tr>
+      <tr>
+        <td><strong>RN-11</strong></td>
+        <td>Correo Electrónico Único</td>
+        <td>El correo electrónico de cada usuario debe ser único en el sistema. No se permiten registros duplicados de email. El intento de registro con un email existente retorna HTTP 409 (Conflict).</td>
+        <td>Restricción UNIQUE en columna <code>email</code></td>
+      </tr>
+      <tr>
+        <td><strong>RN-12</strong></td>
+        <td>Dirección Requerida para Checkout</td>
+        <td>El proceso de checkout no puede completarse si el comprador no tiene una dirección de entrega registrada en su perfil. El sistema bloquea la pasarela de pago y solicita el registro de la dirección.</td>
+        <td>Validación en frontend + backend</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="section-divider">
+
+  <!-- ===== SECCIÓN 8: DIAGRAMAS DE FLUJO ===== -->
+  <h1 class="doc-h1" id="s8"><span class="section-number">8.</span> Diagrama de Flujo de Datos y Secuencias</h1>
+
+  <h2 class="doc-h2">8.1 Flujo de Autenticación</h2>
+
+  <div class="arch-box">
+┌──────────────────────────────────────────────────────────────────────┐
+│                    FLUJO DE INICIO DE SESIÓN                         │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  USUARIO          APP MÓVIL              BACKEND           MySQL     │
+│                                                                      │
+│    │  Ingresa email/pass  │                  │                │      │
+│    │────────────────────→ │                  │                │      │
+│    │                      │ POST /api/usuarios/login          │      │
+│    │                      │ { email, password }               │      │
+│    │                      │──────────────────→│               │      │
+│    │                      │                  │ SELECT usuarios│      │
+│    │                      │                  │ JOIN roles     │      │
+│    │                      │                  │────────────────→│     │
+│    │                      │                  │←────────────────│     │
+│    │                      │                  │ bcrypt.compare │      │
+│    │                      │                  │ jwt.sign(...)  │      │
+│    │                      │ 200 OK { token, usuario }         │      │
+│    │                      │←──────────────────│               │      │
+│    │                      │ localStorage.setItem(token)       │      │
+│    │                      │ setRole(isSeller, isAdmin)        │      │
+│    │ navTo('home'/'admin') │                  │               │      │
+│    │←────────────────────  │                  │               │      │
+│                                                                      │
+│  [ERROR] Credenciales inválidas:                                     │
+│    │                      │ 401 Unauthorized                  │      │
+│    │                      │←──────────────────│               │      │
+│    │  Toast de error      │                  │                │      │
+│    │←────────────────────  │                  │               │      │
+└──────────────────────────────────────────────────────────────────────┘
+  </div>
+
+  <h2 class="doc-h2">8.2 Flujo de Checkout y Confirmación de Pago</h2>
+
+  <div class="arch-box">
+┌──────────────────────────────────────────────────────────────────────┐
+│                    FLUJO DE CHECKOUT Y PAGO                          │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  COMPRADOR        APP MÓVIL           BACKEND              MySQL     │
+│                                                                      │
+│    │  Clic "Pagar"  │                    │                  │        │
+│    │──────────────→ │                    │                  │        │
+│    │                │ GET /api/pedidos/resumen (Bearer JWT)  │        │
+│    │                │──────────────────→ │                  │        │
+│    │                │                   │ SELECT carrito+productos    │
+│    │                │                   │──────────────────→ │       │
+│    │                │                   │←────────────────── │       │
+│    │                │                   │ Calcular:                  │
+│    │                │                   │  subtotal                  │
+│    │                │                   │  iva = subtotal * 0.19     │
+│    │                │                   │  comision = subtotal * 0.10│
+│    │                │                   │  total = subtotal + iva    │
+│    │                │ { subtotal, iva, comision, total }     │        │
+│    │                │←──────────────────│                   │        │
+│    │  Muestra montos│                   │                   │        │
+│    │←────────────── │                   │                   │        │
+│    │                │                   │                   │        │
+│    │  Confirma pago │                   │                   │        │
+│    │──────────────→ │                   │                   │        │
+│    │                │ POST /api/pedidos/confirmar-pago       │        │
+│    │                │──────────────────→│                   │        │
+│    │                │                   │  BEGIN TRANSACTION│        │
+│    │                │                   │  Verificar stock           │
+│    │                │                   │  UPDATE stock              │
+│    │                │                   │  INSERT INTO pedidos       │
+│    │                │                   │  INSERT INTO pedidos_detalle│
+│    │                │                   │  DELETE FROM carrito       │
+│    │                │                   │  INSERT notificaciones     │
+│    │                │                   │  COMMIT           │        │
+│    │                │ { pedido_id, comprobante, "APROBADO" } │        │
+│    │                │←──────────────────│                   │        │
+│    │  ✅ ¡Pago Exitoso! + Comprobante   │                   │        │
+│    │←────────────── │                   │                   │        │
+└──────────────────────────────────────────────────────────────────────┘
+  </div>
+
+  <h2 class="doc-h2">8.3 Flujo de Rol RBAC en el Frontend</h2>
+
+  <div class="arch-box">
+┌──────────────────────────────────────────────────────────────────────┐
+│                 CONTROL DE ROLES EN LA INTERFAZ                      │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  Login exitoso → roles = ["COMPRADOR", "VENDEDOR"]                  │
+│                                                                      │
+│  setRole():                                                          │
+│    isSeller = roles.includes("VENDEDOR")      → true                 │
+│    isAdmin  = roles.includes("ADMINISTRADOR") → false                │
+│                                                                      │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │ Visibilidad de UI según rol:                                 │   │
+│  │                                                              │   │
+│  │ SIEMPRE visibles: Home, Carrito, Historial, Chat, Perfil    │   │
+│  │                                                              │   │
+│  │ if (isSeller):                                               │   │
+│  │   → Mostrar: Tienda, Pedidos (Vendor), Add/Edit Producto    │   │
+│  │                                                              │   │
+│  │ if (isAdmin):                                                │   │
+│  │   → Mostrar: page-admin, Métricas globales, Moderación      │   │
+│  │   → navTo('admin') automático en login                      │   │
+│  │                                                              │   │
+│  │ if (!isAdmin && !isSeller):                                  │   │
+│  │   → Interfaz solo de comprador (modo básico)                │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+└──────────────────────────────────────────────────────────────────────┘
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ===== SECCIÓN 9: ANÁLISIS DE RIESGOS ===== -->
+  <h1 class="doc-h1" id="s9"><span class="section-number">9.</span> Análisis de Riesgos</h1>
+
+  <p>El siguiente análisis identifica los principales riesgos técnicos y de negocio asociados al desarrollo y operación de CommerCity Mobile v2.0, junto con las estrategias de mitigación propuestas.</p>
+
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Riesgo</th><th>Impacto</th><th>Probabilidad</th><th>Nivel</th><th>Mitigación</th></tr>
+    </thead>
+    <tbody>
+      <tr class="risk-high">
+        <td>R-01</td>
+        <td>Race Condition en Stock</td>
+        <td>Alto</td>
+        <td>Media</td>
+        <td>🔴 Alto</td>
+        <td>Transacciones SQL con nivel READ COMMITTED y bloqueo de filas durante el checkout.</td>
+      </tr>
+      <tr class="risk-high">
+        <td>R-02</td>
+        <td>Pérdida de Conectividad BD</td>
+        <td>Alto</td>
+        <td>Baja</td>
+        <td>🔴 Alto</td>
+        <td>Pool de conexiones con reconexión automática. Fallback a in-memory DB en desarrollo. Respuestas HTTP 503 controladas.</td>
+      </tr>
+      <tr class="risk-med">
+        <td>R-03</td>
+        <td>Token JWT Comprometido</td>
+        <td>Alto</td>
+        <td>Baja</td>
+        <td>🟡 Medio</td>
+        <td>Expiración de 7 días. HTTPS en producción. Clave secreta JWT en variables de entorno (.env), nunca en código fuente.</td>
+      </tr>
+      <tr class="risk-med">
+        <td>R-04</td>
+        <td>Elevación de Privilegios</td>
+        <td>Alto</td>
+        <td>Baja</td>
+        <td>🟡 Medio</td>
+        <td>Verificación de roles en cada petición del backend (middleware). El cliente solo oculta UI pero el backend rechaza operaciones no autorizadas.</td>
+      </tr>
+      <tr class="risk-med">
+        <td>R-05</td>
+        <td>Inyección SQL</td>
+        <td>Alto</td>
+        <td>Baja</td>
+        <td>🟡 Medio</td>
+        <td>Uso de queries parametrizadas con <code>mysql2</code>. Nunca concatenación de strings en queries SQL.</td>
+      </tr>
+      <tr class="risk-med">
+        <td>R-06</td>
+        <td>Discrepancia de Cálculos Fiscales</td>
+        <td>Medio</td>
+        <td>Media</td>
+        <td>🟡 Medio</td>
+        <td>Centralización de todos los cálculos en el backend. Eliminación del código legacy de cálculo en cliente.</td>
+      </tr>
+      <tr class="risk-low">
+        <td>R-07</td>
+        <td>Carga de Imágenes Pesadas</td>
+        <td>Bajo</td>
+        <td>Alta</td>
+        <td>🟢 Bajo</td>
+        <td>Validación de tamaño máximo (5 MB) en cliente y backend. Compresión automática en el servidor. Lazy loading en listas.</td>
+      </tr>
+      <tr class="risk-low">
+        <td>R-08</td>
+        <td>Compatibilidad de Versiones Android/iOS</td>
+        <td>Medio</td>
+        <td>Baja</td>
+        <td>🟢 Bajo</td>
+        <td>Pruebas en emuladores de versiones mínimas soportadas (Android 8.0 / iOS 13). Testing en Capacitor.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="section-divider">
+
+  <!-- ===== SECCIÓN 10: CRITERIOS DE ACEPTACIÓN ===== -->
+  <h1 class="doc-h1" id="s10"><span class="section-number">10.</span> Criterios de Aceptación y Cierre de Sprint 2</h1>
+
+  <p>Los siguientes criterios deben ser verificados y aprobados para considerar el Sprint 2 como completado. Cada criterio es medible y verificable por el equipo de desarrollo y el coordinador del proyecto.</p>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>Criterio de Aceptación</th><th>Método de Verificación</th><th>Estado</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>CA-01</td>
+        <td><strong>Autenticación Real JWT:</strong> El login consume exclusivamente <code>POST /api/usuarios/login</code>. No existe ningún código de autenticación mock (credenciales hardcodeadas, roles por email) en producción.</td>
+        <td>Revisión de código + test de login con usuario real en MySQL</td>
+        <td><span class="badge badge-orange">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td>CA-02</td>
+        <td><strong>Cero Cálculos Financieros en Cliente:</strong> La pasarela de pago obtiene subtotal, IVA y total exclusivamente del endpoint <code>GET /api/pedidos/resumen</code>. No existe código de cálculo local de IVA o comisión en <code>app.js</code> activo.</td>
+        <td>Revisión de código + interceptar petición de red en DevTools para verificar valores</td>
+        <td><span class="badge badge-orange">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td>CA-03</td>
+        <td><strong>Control RBAC Funcional:</strong> La interfaz refleja correctamente los permisos según los roles retornados por la BD. Un usuario solo COMPRADOR no puede acceder a <code>page-tienda</code> ni <code>page-admin</code>.</td>
+        <td>Prueba con usuarios de diferentes roles. Verificar que el backend rechaza peticiones con rol inadecuado (HTTP 403).</td>
+        <td><span class="badge badge-orange">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td>CA-04</td>
+        <td><strong>Conectividad BD Verificada:</strong> El backend conecta exitosamente a <code>commercity_v2</code> en <code>149.130.178.228:3306</code>. La función <code>isLiveDb()</code> retorna <code>true</code> en el entorno de integración.</td>
+        <td>Ejecutar <code>node test-api.js</code> y verificar respuestas reales de MySQL</td>
+        <td><span class="badge badge-orange">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td>CA-05</td>
+        <td><strong>Checkout Atómico:</strong> La confirmación de pago ejecuta correctamente la transacción SQL atómica: descuento de stock + creación de pedido + vaciado de carrito en una sola operación ACID.</td>
+        <td>Prueba de compra completa. Verificar en MySQL que stock fue descontado y pedido creado. Probar caso de fallo (stock insuficiente) para verificar ROLLBACK.</td>
+        <td><span class="badge badge-orange">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td>CA-06</td>
+        <td><strong>Cobertura de Endpoints:</strong> El 100% de los endpoints listados en la Sección 4 (Matriz de Mapeo) tienen al menos una pantalla o modal que los consume y una respuesta verificable.</td>
+        <td>Revisión de la matriz de mapeo contra el código de rutas del backend</td>
+        <td><span class="badge badge-orange">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td>CA-07</td>
+        <td><strong>Alineación con Casos de Uso:</strong> Los identificadores de pantallas y modales del SRS coinciden 1:1 con los diagramas de secuencia y casos de uso elaborados por el coordinador (Yepes), permitiendo la trazabilidad completa de requerimientos.</td>
+        <td>Revisión cruzada entre este SRS y los diagramas UML del equipo</td>
+        <td><span class="badge badge-orange">Pendiente</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="section-divider">
+
+  <!-- ===== SECCIÓN 11: PLAN DE VERIFICACIÓN ===== -->
+  <h1 class="doc-h1" id="s11"><span class="section-number">11.</span> Plan de Verificación y Pruebas</h1>
+
+  <h2 class="doc-h2">11.1 Tipos de Pruebas</h2>
+
+  <table>
+    <thead>
+      <tr><th>Tipo</th><th>Descripción</th><th>Herramientas</th><th>Cobertura Objetivo</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Pruebas Unitarias de Backend</td><td>Verificación de cada route handler de forma aislada con mocks de BD</td><td>Jest / Mocha</td><td>Módulos auth, productos, carrito</td></tr>
+      <tr><td>Pruebas de Integración API</td><td>Pruebas end-to-end de todos los endpoints con BD real de staging</td><td>Postman / Insomnia / curl</td><td>100% de endpoints del SRS</td></tr>
+      <tr><td>Pruebas de Seguridad</td><td>Verificación de RBAC: intentar acceder a endpoints admin/vendedor sin rol correspondiente</td><td>Manual + Postman</td><td>Todos los endpoints protegidos</td></tr>
+      <tr><td>Pruebas de Interfaz (UI)</td><td>Verificar renderizado correcto de datos en cada pantalla y modal</td><td>Chrome DevTools / Emulador Android</td><td>Todas las pantallas del SRS</td></tr>
+      <tr><td>Pruebas de Carga</td><td>Simular 100 usuarios concurrentes accediendo al catálogo</td><td>Artillery / k6</td><td>Endpoints de alta demanda</td></tr>
+      <tr><td>Pruebas de Regresión</td><td>Verificar que cambios en una funcionalidad no rompen otras</td><td>Suite automatizada</td><td>Módulos críticos: auth, checkout</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="doc-h2">11.2 Casos de Prueba Prioritarios</h2>
+
+  <table>
+    <thead>
+      <tr><th>ID Caso</th><th>Módulo</th><th>Escenario</th><th>Resultado Esperado</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>CP-001</td><td>Auth</td><td>Login con credenciales válidas de usuario MySQL</td><td>HTTP 200, token JWT en respuesta, navegación a home</td></tr>
+      <tr><td>CP-002</td><td>Auth</td><td>Login con contraseña incorrecta</td><td>HTTP 401, toast de error, permanece en login</td></tr>
+      <tr><td>CP-003</td><td>Auth</td><td>Petición a endpoint protegido sin token</td><td>HTTP 401, clearSession(), navTo('login')</td></tr>
+      <tr><td>CP-004</td><td>RBAC</td><td>Usuario COMPRADOR accede a <code>/api/tienda/resumen</code></td><td>HTTP 403 Forbidden del backend</td></tr>
+      <tr><td>CP-005</td><td>Carrito</td><td>Agregar producto con stock disponible</td><td>HTTP 201, ítem en carrito, badge actualizado</td></tr>
+      <tr><td>CP-006</td><td>Carrito</td><td>Agregar producto con stock = 0</td><td>HTTP 400, toast "Sin stock disponible"</td></tr>
+      <tr><td>CP-007</td><td>Checkout</td><td>Confirmar pago con datos válidos</td><td>HTTP 200, pedido creado, carrito vaciado, stock descontado</td></tr>
+      <tr><td>CP-008</td><td>Checkout</td><td>Verificar que <code>#pas-iva</code> muestra valor del backend</td><td>El valor mostrado = <code>subtotal * 0.19</code> del servidor</td></tr>
+      <tr><td>CP-009</td><td>Checkout</td><td>Checkout con stock agotado en concurrencia</td><td>HTTP 400 + ROLLBACK, stock no modificado</td></tr>
+      <tr><td>CP-010</td><td>Chat</td><td>Enviar mensaje entre comprador y vendedor</td><td>HTTP 201, mensaje persiste en MySQL, aparece en sala de chat</td></tr>
+      <tr><td>CP-011</td><td>Admin</td><td>Suspender usuario con rol ADMINISTRADOR</td><td>HTTP 200, estado en BD cambia a 'suspendido'</td></tr>
+      <tr><td>CP-012</td><td>Vendedor</td><td>Publicar producto con imagen (multipart)</td><td>HTTP 201, producto en BD con URL de imagen en CDN</td></tr>
+    </tbody>
+  </table>
+
+  <hr class="section-divider">
+
+  <!-- ===== SECCIÓN 12: HISTORIAL DE CAMBIOS ===== -->
+  <h1 class="doc-h1" id="s12"><span class="section-number">12.</span> Historial de Revisiones y Control de Cambios</h1>
+
+  <table>
+    <thead>
+      <tr><th>Versión</th><th>Fecha</th><th>Autor</th><th>Descripción de Cambios</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1.0</td>
+        <td>Mayo 2026</td>
+        <td>Equipo CommerCity</td>
+        <td>Versión inicial del SRS. Documentación de la arquitectura de prototipo con persistencia local (localStorage, datos mock).</td>
+      </tr>
+      <tr>
+        <td>2.0</td>
+        <td>Agosto 2026</td>
+        <td>Jhon Jairo Parra Obando</td>
+        <td>Actualización completa para Sprint 2. Incorporación de especificación de integración con API REST. Definición de endpoints, contratos de datos y eliminación de lógica mock. Adición de matriz de mapeo pantallas-endpoints.</td>
+      </tr>
+      <tr>
+        <td>3.0</td>
+        <td>Septiembre 2026</td>
+        <td>Jhon Jairo Parra Obando</td>
+        <td>Edición completa y extendida. Adición de secciones: reglas de negocio, análisis de riesgos, plan de pruebas, criterios de aceptación, esquema detallado de base de datos, flujos de autenticación, diagramas de secuencia ASCII, stack tecnológico completo y página de aprobaciones. Incorporación del estándar ISO/IEC/IEEE 29148:2018.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="section-divider">
+
+  <!-- ===== SECCIÓN 13: APROBACIONES ===== -->
+  <h1 class="doc-h1" id="s13"><span class="section-number">13.</span> Aprobaciones y Firmas</h1>
+
+  <p>El presente documento de Especificación de Requerimientos de Software (SRS-CCM-2026-V3) requiere la aprobación formal de los siguientes roles antes de proceder con la implementación de los módulos especificados:</p>
+
+  <div class="approval-grid">
+    <div class="approval-box">
+      <p><strong>Elaborado por</strong></p>
+      <p class="annotation">Responsable de la documentación de requerimientos, arquitectura técnica y redacción del SRS.</p>
+      <div class="sig-line"></div>
+      <p class="sig-name">Jhon Jairo Parra Obando</p>
+      <p class="sig-role">Autor del SRS / Desarrollador Principal<br>THE BLACK CODE JSB</p>
+      <p class="annotation" style="margin-top:10px;">Fecha: Septiembre 2026</p>
+    </div>
+
+    <div class="approval-box">
+      <p><strong>Revisado por</strong></p>
+      <p class="annotation">Coordinador de Casos de Uso y diagramas de secuencia. Responsable de la trazabilidad con UML.</p>
+      <div class="sig-line"></div>
+      <p class="sig-name">Coordinación de Arquitectura</p>
+      <p class="sig-role">Coordinador de Casos de Uso / UML<br>THE BLACK CODE JSB</p>
+      <p class="annotation" style="margin-top:10px;">Fecha: ______________</p>
+    </div>
+
+    <div class="approval-box">
+      <p><strong>Aprobado por</strong></p>
+      <p class="annotation">Director técnico del proyecto. Aprueba la especificación para su implementación en Sprint 2.</p>
+      <div class="sig-line"></div>
+      <p class="sig-name">Dirección Técnica</p>
+      <p class="sig-role">Director Técnico del Proyecto<br>THE BLACK CODE JSB</p>
+      <p class="annotation" style="margin-top:10px;">Fecha: ______________</p>
+    </div>
+
+    <div class="approval-box">
+      <p><strong>Verificado por QA</strong></p>
+      <p class="annotation">Equipo de calidad. Confirma que los criterios de aceptación son verificables y medibles.</p>
+      <div class="sig-line"></div>
+      <p class="sig-name">Equipo de Calidad</p>
+      <p class="sig-role">QA / Testing Lead<br>THE BLACK CODE JSB</p>
+      <p class="annotation" style="margin-top:10px;">Fecha: ______________</p>
+    </div>
+  </div>
+
+  <div class="callout callout-info" style="margin-top:40px;">
+    <strong>📋 Nota Legal</strong>
+    Este documento es propiedad de THE BLACK CODE JSB y contiene información confidencial del proyecto CommerCity. Queda prohibida su reproducción, distribución o divulgación a terceros sin autorización expresa por escrito del autor responsable (Jhon Jairo Parra Obando). Uso estrictamente interno del equipo de desarrollo.
+  </div>
+
+  <div style="text-align:center; margin-top:60px; padding:30px; border-top: 2px solid var(--border);">
+    <p style="font-size:9pt; color:var(--text-light);">
+      <strong>SRS-CCM-2026-V3</strong> · CommerCity Mobile v2.0 · THE BLACK CODE JSB<br>
+      Autor: <strong>Jhon Jairo Parra Obando</strong> · Versión 3.0 · Septiembre 2026<br>
+      Estándar: IEEE Std 830-1998 / ISO/IEC/IEEE 29148:2018
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>

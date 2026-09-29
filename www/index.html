@@ -104,6 +104,9 @@
             <button class="btn-primary" onclick="handleLogin()">Entrar →</button>
             <div class="divider"><span>o</span></div>
             <button class="btn-ghost" onclick="navigate('registro')">Crear cuenta nueva</button>
+            <div style="text-align:center;margin-top:16px;">
+              <a class="link" onclick="openServerModal()" style="font-size:12px;opacity:0.75;cursor:pointer;">⚙️ Configurar Servidor API (IP)</a>
+            </div>
           </div>
         </div>
       </div>
@@ -295,19 +298,20 @@
             <div class="cat-wrap">
               <button class="cat-btn" onclick="toggleCatMenu(event)">Categorías ▾</button>
               <div class="cat-dropdown" id="cat-dropdown">
-                <div class="cat-item">⌚ Relojes</div>
-                <div class="cat-item">👟 Calzado</div>
-                <div class="cat-item">👜 Bolsos</div>
-                <div class="cat-item">💻 Tecnología</div>
-                <div class="cat-item">🌿 Hogar</div>
-                <div class="cat-item">💄 Belleza</div>
+                <div class="cat-item" onclick="filterCategory('todos')">🌟 Todas</div>
+                <div class="cat-item" onclick="filterCategory('Relojes')">⌚ Relojes</div>
+                <div class="cat-item" onclick="filterCategory('Calzado')">👟 Calzado</div>
+                <div class="cat-item" onclick="filterCategory('Accesorios')">👜 Accesorios</div>
+                <div class="cat-item" onclick="filterCategory('Tecnología')">💻 Tecnología</div>
+                <div class="cat-item" onclick="filterCategory('Hogar')">🌿 Hogar</div>
+                <div class="cat-item" onclick="filterCategory('Belleza')">💄 Belleza</div>
               </div>
             </div>
           </div>
           <div class="tb-center">
             <div class="tb-search">
               <span>🔍</span>
-              <input type="text" placeholder="Buscar productos..." />
+              <input type="text" id="home-search-input" placeholder="Buscar productos..." oninput="handleSearch(this.value)" />
             </div>
           </div>
           <div class="tb-right">
@@ -717,6 +721,20 @@
           <button class="btn-orange" style="width:auto;padding:10px 16px;white-space:nowrap;flex-shrink:0;" onclick="becomeSeller()">Cambiar a vendedor</button>
         </div>
 
+        <div class="aj-section">
+          <h3 class="aj-section-ttl">Conexión con Servidor API</h3>
+          <p class="aj-section-sub">Configura la IP y puerto del backend (ej: http://10.0.2.2:3000 en emulador o la IP local de tu PC en celular físico)</p>
+          <div class="input-group">
+            <label>URL Base del Backend</label>
+            <input type="text" placeholder="http://10.0.2.2:3000 o http://192.168.1.X:3000" id="aj-server-url" />
+          </div>
+          <div id="aj-server-status" style="font-size:13px;margin-bottom:12px;color:var(--text-muted);">Estado: Listo para conectar</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn-orange" style="width:auto;padding:10px 18px;" onclick="saveApiServerConfig()">Guardar URL</button>
+            <button class="btn-ghost" style="width:auto;padding:10px 18px;margin-top:0;" onclick="testApiServerConnection()">Probar Conexión</button>
+          </div>
+        </div>
+
         <div class="aj-danger-section">
           <h3 style="color:var(--danger);font-weight:700;margin-bottom:4px;">Elimina tu cuenta</h3>
           <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Una vez elimines tu cuenta, todos tus datos serán borrados permanentemente. Esta acción no se puede deshacer.</p>
@@ -728,12 +746,14 @@
     
     <div class="page" id="page-mensajes">
       <div class="main-content">
-        <div class="mensajes-header">
-          <div style="flex: 1;"></div>
-          <span class="inner-topbar-title" style="color:var(--orange);">Mensajes</span>
-          <div style="flex: 1; display: flex; gap: 8px; justify-content: flex-end;">
+        <div class="mensajes-header" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+          <button class="btn-back-sm-new" onclick="navigate('home')" style="display:flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:#fff; border-radius:20px; padding:6px 14px; font-size:12px; cursor:pointer;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <span>Volver</span>
+          </button>
+          <span class="inner-topbar-title" style="color:var(--orange); font-size:18px; font-weight:700;">Mensajes</span>
+          <div style="display: flex; gap: 8px; justify-content: flex-end;">
             <button class="icon-btn icon-white" style="width:34px;height:34px;border:none;background:transparent;" onclick="toggleNotifs(event)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></button>
-            <button class="btn-orange" style="width:auto;padding:6px 14px;font-size:12px;margin:0;">+ Nuevo</button>
           </div>
         </div>
         
@@ -741,9 +761,9 @@
           <span class="msgs-search-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </span>
-          <input type="text" class="msgs-search-input" placeholder="Buscar conversación..." />
+          <input type="text" class="msgs-search-input" placeholder="Buscar conversación..." id="chat-search-input" onkeyup="filterChatConversations(this.value)" />
         </div>
-        <div class="chat-list">
+        <div class="chat-list" id="chat-list-container">
           <div class="chat-li unread" onclick="openChat('Marco Valero','M','#7c3aed')">
             <div class="chat-li-ava" style="background:linear-gradient(135deg,#7c3aed,#a855f7);">M</div>
             <div class="chat-li-body">
@@ -1532,6 +1552,35 @@
       </div>
     </div>
 
+    <!-- MODAL DE CONFIGURACIÓN DE SERVIDOR API -->
+    <div class="modal-overlay" id="server-modal" onclick="closeServerModalOnOverlay(event)">
+      <div class="modal-card" style="max-width:440px;">
+        <div class="modal-hdr">
+          <h2 class="modal-ttl">⚙️ Servidor API Backend</h2>
+          <button class="modal-close" onclick="closeServerModal()">✕</button>
+        </div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">
+          Configura la dirección IP y puerto del servidor backend de CommerCity:
+          <br><br>
+          • <strong>Emulador Android:</strong> <code>http://10.0.2.2:3000</code><br>
+          • <strong>Celular físico:</strong> <code>http://&lt;IP-de-tu-PC&gt;:3000</code><br>
+          • <strong>Navegador Web:</strong> <code>http://localhost:3000</code>
+        </p>
+        <div class="input-group">
+          <label>URL del Servidor</label>
+          <input type="text" id="modal-server-url" placeholder="http://10.0.2.2:3000" />
+        </div>
+        <div id="modal-server-status" style="font-size:13px;margin-bottom:16px;color:var(--text-muted);">
+          Estado: Listo para conectar
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button class="btn-ghost" style="width:auto;padding:10px 16px;" onclick="testModalServerConnection()">Probar Ping</button>
+          <button class="btn-primary" style="width:auto;padding:10px 18px;" onclick="saveModalServerConfig()">Guardar y Aplicar</button>
+        </div>
+      </div>
+    </div>
+
+  <script src="api.js"></script>
   <script src="app.js"></script>
 
   
