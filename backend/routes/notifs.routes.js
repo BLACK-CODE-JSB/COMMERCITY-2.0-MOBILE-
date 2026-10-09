@@ -10,8 +10,8 @@ router.get('/', (req, res) => {
   return res.json({ notificaciones: memoryDb.notifications });
 });
 
-// PATCH /api/notificaciones/marcar-leidas
-router.patch('/marcar-leidas', (req, res) => {
+// PATCH /api/notificaciones/leidas & /api/notificaciones/marcar-leidas
+router.patch(['/leidas', '/marcar-leidas'], (req, res) => {
   memoryDb.notifications.forEach(n => n.leida = true);
   return res.json({ mensaje: 'Notificaciones marcadas como leídas' });
 });

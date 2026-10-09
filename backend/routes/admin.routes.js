@@ -6,8 +6,8 @@ const { verifyToken, requireRole } = require('../middleware/auth');
 router.use(verifyToken);
 router.use(requireRole('ADMINISTRADOR'));
 
-// GET /api/admin/metricas
-router.get('/metricas', (req, res) => {
+// GET /api/admin/stats & /api/admin/metricas
+router.get(['/stats', '/metricas'], (req, res) => {
   const totalVentas = memoryDb.orders.reduce((acc, curr) => acc + (typeof curr.total === 'number' ? curr.total : 1500000), 0);
   const comisionAcumulada = Math.round(totalVentas * 0.10);
 

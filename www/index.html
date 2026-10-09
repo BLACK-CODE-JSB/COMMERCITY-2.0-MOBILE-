@@ -175,6 +175,10 @@
           <h2 class="auth-card-title">Restablecer contraseña</h2>
           <p class="auth-card-sub">Crea una nueva contraseña segura para tu cuenta.</p>
           <div class="input-icon-group" style="margin-top:20px;">
+            <span class="ii-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-1.5 1.5L13 10m-3-3l7 7-7 7-7-7 7-7z"></path><circle cx="7.5" cy="15.5" r="2.5"></circle></svg></span>
+            <input type="text" placeholder="Token de recuperación (expira en 5 min)" id="reset-token" />
+          </div>
+          <div class="input-icon-group">
             <span class="ii-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
             <input type="password" placeholder="Ingresa tu nueva contraseña" id="new-pass" />
             <button class="ii-eye" onclick="togglePwd('new-pass',this)" tabindex="-1">👁️</button>
@@ -185,6 +189,9 @@
             <button class="ii-eye" onclick="togglePwd('new-pass2',this)" tabindex="-1">👁️</button>
           </div>
           <button class="btn-primary" onclick="handleRestablecer()">Restablecer contraseña</button>
+          <div style="text-align:center;margin-top:16px;">
+            <a class="link" onclick="navigate('login')">← Volver al inicio de sesión</a>
+          </div>
         </div>
       </div>
     </div>

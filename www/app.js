@@ -421,20 +421,51 @@ async function handleRegistro() {
   setTimeout(() => navigate('home'), 900);
 }
 
-function handleRecuperar() {
+async function handleRecuperar() {
   const e = document.getElementById('rec-email')?.value.trim();
   if (!e) { toast('⚠️ Ingresa tu correo electrónico'); return; }
-  toast('📧 Enlace enviado a tu correo');
-  setTimeout(() => navigate('login'), 1400);
+
+  try {
+    if (window.CommerCityAPI) {
+      const res = await window.CommerCityAPI.auth.recover(e);
+      toast(res?.mensaje || '📧 Instrucciones enviadas a tu correo');
+      if (res?.token) {
+        localStorage.setItem('commercity_reset_token', res.token);
+        const tokInput = document.getElementById('reset-token');
+        if (tokInput) tokInput.value = res.token;
+      }
+    } else {
+      toast('📧 Enlace de recuperación enviado a tu correo');
+    }
+    setTimeout(() => navigate('restablecer'), 1400);
+  } catch (err) {
+    console.warn('Error en recuperación:', err);
+    toast(err.message || '⚠️ Error al solicitar recuperación');
+  }
 }
 
-function handleRestablecer() {
+async function handleRestablecer() {
+  const token = document.getElementById('reset-token')?.value?.trim() || localStorage.getItem('commercity_reset_token');
   const a = document.getElementById('new-pass')?.value;
   const b = document.getElementById('new-pass2')?.value;
   if (!a || !b) { toast('⚠️ Completa todos los campos'); return; }
   if (a !== b) { toast('⚠️ Las contraseñas no coinciden'); return; }
-  toast('✅ ¡Contraseña restablecida!');
-  setTimeout(() => navigate('login'), 900);
+  if (!token) { toast('⚠️ Ingresa el token de recuperación (expira en 5 min)'); return; }
+
+  try {
+    if (window.CommerCityAPI) {
+      const res = await window.CommerCityAPI.auth.resetPassword(token, a);
+      toast(res?.mensaje || '✅ ¡Contraseña restablecida exitosamente!');
+      localStorage.removeItem('commercity_reset_token');
+      setTimeout(() => navigate('login'), 900);
+    } else {
+      toast('✅ ¡Contraseña restablecida!');
+      setTimeout(() => navigate('login'), 900);
+    }
+  } catch (err) {
+    console.warn('Error en restablecer contraseña:', err);
+    toast(err.message || '⚠️ Token inválido o expirado (ventana de 5 min)');
+  }
 }
 
 function handleLogout() {

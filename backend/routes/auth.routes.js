@@ -76,11 +76,12 @@ router.post('/login', async (req, res) => {
   });
 });
 
-// POST /api/usuarios/registro
-router.post('/registro', async (req, res) => {
-  const { nombre, email, password, solicita_vendedor } = req.body;
+// POST /api/usuarios/register & /api/usuarios/registro
+router.post(['/register', '/registro'], async (req, res) => {
+  const { nombre, email, password, nombre_completo, solicita_vendedor } = req.body;
+  const userNombre = nombre || nombre_completo;
 
-  if (!nombre || !email || !password) {
+  if (!userNombre || !email || !password) {
     return res.status(400).json({ mensaje: 'Nombre, email y contraseña son obligatorios.' });
   }
 
@@ -95,9 +96,10 @@ router.post('/registro', async (req, res) => {
         return res.status(409).json({ mensaje: 'El correo electrónico ya está registrado.' });
       }
 
+      const hashedPassword = await bcrypt.hash(password, 10);
       const [result] = await pool.query(
-        'INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)',
-        [nombre, email, password]
+        'INSERT INTO usuarios (nombre_completo, email, password) VALUES (?, ?, ?)',
+        [userNombre, email, hashedPassword]
       );
       const userId = result.insertId;
 
@@ -109,12 +111,12 @@ router.post('/registro', async (req, res) => {
         }
       }
 
-      const token = jwt.sign({ id: userId, nombre, email, roles }, JWT_SECRET, { expiresIn: '7d' });
+      const token = jwt.sign({ id: userId, nombre: userNombre, email, roles }, JWT_SECRET, { expiresIn: '7d' });
       return res.status(201).json({
         mensaje: 'Usuario registrado exitosamente',
         usuarioId: userId,
         token,
-        usuario: { id: userId, nombre, email, roles }
+        usuario: { id: userId, nombre: userNombre, email, roles }
       });
     } catch (err) {
       console.error('Error en registro MySQL:', err);
@@ -129,7 +131,7 @@ router.post('/registro', async (req, res) => {
 
   const newUser = {
     id: memoryDb.users.length + 1,
-    nombre,
+    nombre: userNombre,
     email,
     password,
     roles
@@ -150,22 +152,60 @@ router.post('/registro', async (req, res) => {
   });
 });
 
-// POST /api/usuarios/recuperar
-router.post('/recuperar', (req, res) => {
+// POST /api/usuarios/recover & /api/usuarios/recuperar
+router.post(['/recover', '/recuperar'], (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ mensaje: 'Email requerido.' });
-  return res.json({ exito: true, mensaje: 'Instrucciones enviadas a su correo.' });
+  
+  // Genera token firmado que expira en 5 minutos según RF4
+  const token = jwt.sign({ email, purpose: 'pwd_reset' }, JWT_SECRET, { expiresIn: '5m' });
+  return res.json({
+    exito: true,
+    mensaje: 'Instrucciones enviadas a su correo. El token es válido por 5 minutos.',
+    token
+  });
 });
 
-// POST /api/usuarios/restablecer-password
-router.post('/restablecer-password', (req, res) => {
-  const { token, nuevaPassword } = req.body;
-  if (!token || !nuevaPassword) return res.status(400).json({ mensaje: 'Token y nueva clave requeridos.' });
-  return res.json({ exito: true, mensaje: 'Contraseña actualizada exitosamente.' });
+// POST /api/usuarios/reset-password & /api/usuarios/restablecer-password
+router.post(['/reset-password', '/restablecer-password'], async (req, res) => {
+  const { token, password, nuevaPassword } = req.body;
+  const newPass = password || nuevaPassword;
+  if (!token || !newPass) {
+    return res.status(400).json({ mensaje: 'Token y nueva clave requeridos.' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (decoded.purpose !== 'pwd_reset') {
+      return res.status(400).json({ mensaje: 'Token no válido para restablecimiento de contraseña.' });
+    }
+
+    if (isLiveDb()) {
+      try {
+        const pool = getPool();
+        const hashed = await bcrypt.hash(newPass, 10);
+        await pool.query('UPDATE usuarios SET password = ? WHERE email = ?', [hashed, decoded.email]);
+      } catch (err) {
+        console.error('Error al actualizar password en MySQL:', err);
+      }
+    }
+
+    const user = memoryDb.users.find(u => u.email.toLowerCase() === decoded.email.toLowerCase());
+    if (user) {
+      user.password = newPass;
+    }
+
+    return res.json({ exito: true, mensaje: 'Contraseña actualizada exitosamente.' });
+  } catch (err) {
+    if (err.name === 'TokenExpiredError') {
+      return res.status(400).json({ mensaje: 'El token de recuperación ha expirado (límite 5 minutos).' });
+    }
+    return res.status(400).json({ mensaje: 'Token de recuperación inválido.' });
+  }
 });
 
-// GET /api/usuarios/perfil
-router.get('/perfil', verifyToken, (req, res) => {
+// GET /api/usuarios/me & /api/usuarios/perfil
+router.get(['/me', '/perfil'], verifyToken, (req, res) => {
   return res.json({
     id: req.user.id,
     nombre: req.user.nombre,

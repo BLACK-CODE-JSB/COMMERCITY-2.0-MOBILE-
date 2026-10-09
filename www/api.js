@@ -130,11 +130,24 @@ const CommerCityAPI = (() => {
         method: 'POST',
         body: JSON.stringify({ email, password })
       }),
-      registro: (datos) => request('/api/usuarios/registro', {
+      register: (datos) => request('/api/usuarios/register', {
         method: 'POST',
         body: JSON.stringify(datos)
       }),
-      perfil: () => request('/api/usuarios/perfil')
+      registro: (datos) => request('/api/usuarios/register', {
+        method: 'POST',
+        body: JSON.stringify(datos)
+      }),
+      me: () => request('/api/usuarios/me'),
+      perfil: () => request('/api/usuarios/me'),
+      recover: (email) => request('/api/usuarios/recover', {
+        method: 'POST',
+        body: JSON.stringify({ email })
+      }),
+      resetPassword: (token, password) => request('/api/usuarios/reset-password', {
+        method: 'POST',
+        body: JSON.stringify({ token, password, nuevaPassword: password })
+      })
     },
     productos: {
       listar: (categoria, q) => {
@@ -145,7 +158,9 @@ const CommerCityAPI = (() => {
         return request(`/api/productos${queryStr}`);
       },
       obtener: (id) => request(`/api/productos/${id}`),
-      crear: (datos) => request('/api/productos', { method: 'POST', body: JSON.stringify(datos) })
+      crear: (datos) => request('/api/productos', { method: 'POST', body: JSON.stringify(datos) }),
+      actualizar: (id, datos) => request(`/api/productos/${id}`, { method: 'PUT', body: JSON.stringify(datos) }),
+      eliminar: (id) => request(`/api/productos/${id}`, { method: 'DELETE' })
     },
     carrito: {
       obtener: () => request('/api/carrito'),
@@ -168,23 +183,62 @@ const CommerCityAPI = (() => {
       })
     },
     admin: {
-      metricas: () => request('/api/admin/metricas')
+      stats: () => request('/api/admin/stats'),
+      metricas: () => request('/api/admin/stats')
     },
     tienda: {
-      resumen: () => request('/api/tienda/resumen'),
-      pedidos: () => request('/api/tienda/pedidos')
+      dashboardStats: () => request('/api/tienda/dashboard/stats'),
+      resumen: () => request('/api/tienda/dashboard/stats'),
+      ventas: (estado) => {
+        const query = estado && estado !== 'todos' ? `?estado=${encodeURIComponent(estado)}` : '';
+        return request(`/api/tienda/ventas${query}`);
+      },
+      pedidos: (estado) => {
+        const query = estado && estado !== 'todos' ? `?estado=${encodeURIComponent(estado)}` : '';
+        return request(`/api/tienda/ventas${query}`);
+      },
+      ingresos: () => request('/api/tienda/ingresos'),
+      validacion: () => request('/api/tienda/validacion'),
+      cuentaBancaria: () => request('/api/tienda/mi-cuenta-bancaria'),
+      cuentaBancariaMasked: () => request('/api/tienda/mi-cuenta-bancaria/masked'),
+      actualizarCuentaBancaria: (datos) => request('/api/tienda/mi-cuenta-bancaria', {
+        method: 'POST',
+        body: JSON.stringify(datos)
+      })
     },
     chat: {
       conversaciones: () => request('/api/chat/conversaciones'),
       mensajes: (partnerId) => request(`/api/chat/mensajes/${partnerId}`),
-      enviar: (partnerId, mensaje) => request(`/api/chat/mensajes/${partnerId}`, {
+      enviar: (partnerId, mensaje) => request('/api/chat', {
         method: 'POST',
-        body: JSON.stringify({ mensaje })
+        body: JSON.stringify({ id: partnerId, receptor_id: partnerId, mensaje })
       })
     },
     notificaciones: {
       listar: () => request('/api/notificaciones'),
-      marcarLeidas: () => request('/api/notificaciones/marcar-leidas', { method: 'PATCH' })
+      marcarLeidas: () => request('/api/notificaciones/leidas', { method: 'PATCH' }),
+      leidas: () => request('/api/notificaciones/leidas', { method: 'PATCH' })
+    },
+    seguidores: {
+      perfilPublico: (id) => request(`/api/usuarios/${id}/publico`),
+      seguir: (id) => request(`/api/usuarios/${id}/seguir`, { method: 'POST' }),
+      dejarDeSeguir: (id) => request(`/api/usuarios/${id}/seguir`, { method: 'DELETE' }),
+      seguidores: (id) => request(`/api/usuarios/${id}/seguidores`),
+      siguiendo: (id) => request(`/api/usuarios/${id}/siguiendo`)
+    },
+    calificaciones: {
+      calificarVendedor: (datos) => request('/api/calificaciones/vendedor', {
+        method: 'POST',
+        body: JSON.stringify(datos)
+      }),
+      obtenerVendedor: (vendedorId) => request(`/api/calificaciones/vendedor/${vendedorId}`)
+    },
+    historial: {
+      compras: (estado) => {
+        const query = estado && estado !== 'todos' ? `?estado=${encodeURIComponent(estado)}` : '';
+        return request(`/api/historial/compras${query}`);
+      },
+      cancelar: (lineaId) => request(`/api/historial/compras/${lineaId}/cancelar`, { method: 'POST' })
     }
   };
 

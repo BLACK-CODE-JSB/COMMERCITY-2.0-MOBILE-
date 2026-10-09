@@ -140,11 +140,16 @@ router.get('/mensajes/:partnerId', async (req, res) => {
   });
 });
 
-// POST /api/chat/mensajes/:partnerId
-router.post('/mensajes/:partnerId', async (req, res) => {
+// POST /api/chat (el id va en el body) & POST /api/chat/mensajes/:partnerId
+router.post(['/', '/mensajes/:partnerId'], async (req, res) => {
   const currentUserId = req.user.id;
-  const partnerId = Number(req.params.partnerId);
+  const rawPartnerId = req.params.partnerId || req.body.id || req.body.receptor_id || req.body.partnerId;
+  const partnerId = Number(rawPartnerId);
   const { mensaje } = req.body;
+
+  if (!partnerId) {
+    return res.status(400).json({ mensaje: 'El ID del destinatario es requerido en el body (id o receptor_id).' });
+  }
 
   if (!mensaje || !mensaje.trim()) {
     return res.status(400).json({ mensaje: 'El texto del mensaje no puede estar vacío.' });
